@@ -77,6 +77,7 @@ class LEDSimulator(LEDController):
 
                 simulator = LEDSimulator(led_count=120, rows=12, cols=10)
         """
+        super().__init__(host="simulator", led_count=led_count)
         if rows * cols != led_count:
             raise ValueError(
                 f"rows ({rows}) x cols ({cols}) = {rows * cols} "

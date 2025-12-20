@@ -112,7 +112,7 @@ class WLEDHTTPController(LEDController):
                 controller.update(leds)
         """
         payload = {"on": True, "seg": [{"id": 0, "i": leds}]}
-        
+
         for attempt in range(self.max_retries):
             try:
                 requests.post(self.url, json=payload, timeout=self.timeout)
