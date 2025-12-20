@@ -61,9 +61,7 @@ class TestWLEDHTTPController:
 
     def test_init_custom_retries(self):
         """Test HTTP controller initialization with custom retry count."""
-        controller = WLEDHTTPController(
-            host="wled.local", led_count=100, max_retries=5
-        )
+        controller = WLEDHTTPController(host="wled.local", led_count=100, max_retries=5)
 
         assert controller.host == "wled.local"
         assert controller.led_count == 100
@@ -115,7 +113,9 @@ class TestWLEDHTTPController:
 
     def test_update_retries_on_timeout(self):
         """Test that update retries on timeout."""
-        controller = WLEDHTTPController(host="192.168.1.100", led_count=2, max_retries=3)
+        controller = WLEDHTTPController(
+            host="192.168.1.100", led_count=2, max_retries=3
+        )
         leds = [[255, 0, 0], [0, 255, 0]]
 
         with patch("ble2wled.wled.requests.post") as mock_post:
@@ -133,7 +133,9 @@ class TestWLEDHTTPController:
 
     def test_update_retries_on_connection_error(self):
         """Test that update retries on connection error."""
-        controller = WLEDHTTPController(host="192.168.1.100", led_count=2, max_retries=3)
+        controller = WLEDHTTPController(
+            host="192.168.1.100", led_count=2, max_retries=3
+        )
         leds = [[255, 0, 0]]
 
         with patch("ble2wled.wled.requests.post") as mock_post:
@@ -146,7 +148,9 @@ class TestWLEDHTTPController:
 
     def test_update_retries_on_read_timeout(self):
         """Test that update retries on ReadTimeout."""
-        controller = WLEDHTTPController(host="192.168.1.100", led_count=1, max_retries=2)
+        controller = WLEDHTTPController(
+            host="192.168.1.100", led_count=1, max_retries=2
+        )
         leds = [[100, 100, 100]]
 
         with patch("ble2wled.wled.requests.post") as mock_post:
@@ -162,7 +166,9 @@ class TestWLEDHTTPController:
 
     def test_update_continues_on_request_exception(self):
         """Test that other RequestException types continue gracefully through loop."""
-        controller = WLEDHTTPController(host="192.168.1.100", led_count=1, max_retries=3)
+        controller = WLEDHTTPController(
+            host="192.168.1.100", led_count=1, max_retries=3
+        )
         leds = [[50, 50, 50]]
 
         with patch("ble2wled.wled.requests.post") as mock_post:
@@ -187,7 +193,9 @@ class TestWLEDHTTPController:
 
     def test_update_sleep_before_retry(self):
         """Test that update sleeps before retry."""
-        controller = WLEDHTTPController(host="192.168.1.100", led_count=1, max_retries=2)
+        controller = WLEDHTTPController(
+            host="192.168.1.100", led_count=1, max_retries=2
+        )
         leds = [[0, 0, 0]]
 
         with patch("ble2wled.wled.requests.post") as mock_post:
@@ -249,9 +257,7 @@ class TestWLEDUDPController:
     def test_init_custom_port(self):
         """Test UDP controller initialization with custom port."""
         with patch("ble2wled.wled.socket.socket"):
-            controller = WLEDUDPController(
-                host="wled.local", led_count=100, port=21325
-            )
+            controller = WLEDUDPController(host="wled.local", led_count=100, port=21325)
 
             assert controller.host == "wled.local"
             assert controller.led_count == 100
@@ -266,9 +272,7 @@ class TestWLEDUDPController:
             controller = WLEDUDPController(host="192.168.1.100", led_count=60)
 
             # Verify socket was created with correct parameters
-            mock_socket_class.assert_called_once_with(
-                socket.AF_INET, socket.SOCK_DGRAM
-            )
+            mock_socket_class.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
             assert controller.sock == mock_socket
 
     def test_update_sends_drgb_packet(self):
@@ -322,8 +326,8 @@ class TestWLEDUDPController:
             packet, _ = mock_socket.sendto.call_args[0]
 
             # Expected: DRGB + RGB triplets
-            expected = b"DRGB" + bytes([255, 0, 0]) + bytes([0, 255, 0]) + bytes(
-                [0, 0, 255]
+            expected = (
+                b"DRGB" + bytes([255, 0, 0]) + bytes([0, 255, 0]) + bytes([0, 0, 255])
             )
             assert packet == expected
 
@@ -390,9 +394,7 @@ class TestWLEDUDPController:
             mock_socket = MagicMock()
             mock_socket_class.return_value = mock_socket
 
-            controller = WLEDUDPController(
-                host="test.host", led_count=1, port=9999
-            )
+            controller = WLEDUDPController(host="test.host", led_count=1, port=9999)
             leds = [[100, 100, 100]]
 
             controller.update(leds)
@@ -445,10 +447,7 @@ class TestControllerIntegration:
             udp_controller.update(leds)
 
             packet, _ = mock_socket.sendto.call_args[0]
-            udp_leds = [
-                list(packet[i : i + 3])
-                for i in range(4, len(packet), 3)
-            ]
+            udp_leds = [list(packet[i : i + 3]) for i in range(4, len(packet), 3)]
 
         # Both should have same LED data
         assert http_leds == leds

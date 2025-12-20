@@ -224,8 +224,10 @@ class MockBeaconGenerator:
         self.rssi_range = rssi_range
         self.beacon_ids = [f"beacon_{i}" for i in range(num_beacons)]
         self.positions = {bid: i / num_beacons for i, bid in enumerate(self.beacon_ids)}
-        self.rssi_base = {bid: rssi_range[0] + (i / num_beacons) * (rssi_range[1] - rssi_range[0])
-                          for i, bid in enumerate(self.beacon_ids)}
+        self.rssi_base = {
+            bid: rssi_range[0] + (i / num_beacons) * (rssi_range[1] - rssi_range[0])
+            for i, bid in enumerate(self.beacon_ids)
+        }
         self._time = 0.0
 
     def update(self, time_delta: float = 0.1) -> dict:

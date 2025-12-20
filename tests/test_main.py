@@ -272,7 +272,11 @@ class TestRunWledBeacons:
                         # May be called multiple times due to iteration
                         assert mock_color.call_count >= 1
                         # Check that it was called with correct arguments at least once
-                        calls = [c for c in mock_color.call_args_list if c[0] == ("abc123", -55, 0.9)]
+                        calls = [
+                            c
+                            for c in mock_color.call_args_list
+                            if c[0] == ("abc123", -55, 0.9)
+                        ]
                         assert len(calls) >= 1
 
     def test_run_wled_beacons_different_update_intervals(self):
@@ -289,7 +293,9 @@ class TestRunWledBeacons:
                     mock_sleep.side_effect = [None, KeyboardInterrupt()]
 
                     try:
-                        run_wled_beacons(controller, 10, state, update_interval=interval)
+                        run_wled_beacons(
+                            controller, 10, state, update_interval=interval
+                        )
                     except KeyboardInterrupt:
                         pass
 
@@ -436,4 +442,3 @@ class TestRunWledBeacons:
 
                         # add_trail should only be called in second iteration
                         assert mock_trail.call_count == 1
-

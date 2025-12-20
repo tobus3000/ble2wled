@@ -210,15 +210,10 @@ def main(
     if use_mqtt:
         mqtt_stats = MQTTStatistics()
         beacon_state = StatisticsTrackingBeaconState(
-            mqtt_stats,
-            timeout_seconds=3.0,
-            fade_out_seconds=2.0
+            mqtt_stats, timeout_seconds=3.0, fade_out_seconds=2.0
         )
     else:
-        beacon_state = BeaconState(
-            timeout_seconds=3.0,
-            fade_out_seconds=2.0
-        )
+        beacon_state = BeaconState(timeout_seconds=3.0, fade_out_seconds=2.0)
 
     beacon_runner = BeaconRunner(led_count)
 
@@ -253,7 +248,9 @@ def main(
     print("=" * 80)
     print(f"LED Count: {led_count} ({rows}x{cols} grid)")
     if use_mqtt:
-        print(f"Beacon Source: MQTT ({mqtt_broker}:{mqtt_port}, location={mqtt_location})")
+        print(
+            f"Beacon Source: MQTT ({mqtt_broker}:{mqtt_port}, location={mqtt_location})"
+        )
     else:
         print(f"Beacon Source: Mock Generator ({num_beacons} beacons)")
     print(f"Update Interval: {update_interval:.2f}s")
@@ -312,7 +309,7 @@ def main(
                     f"{stats['rate']:6.1f} msg/s | "
                     f"Beacons: {active_beacons:2d} | "
                     f"FPS: {fps:5.1f} | "
-                    f"Time: {int(elapsed//60):02d}:{int(elapsed%60):02d}",
+                    f"Time: {int(elapsed // 60):02d}:{int(elapsed % 60):02d}",
                     end="",
                     flush=True,
                 )

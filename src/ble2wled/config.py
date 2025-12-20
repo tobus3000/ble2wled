@@ -410,9 +410,7 @@ class Config:
         level = os.getenv("LOG_LEVEL", "INFO").upper()
         valid_levels = ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
         if level not in valid_levels:
-            raise ValueError(
-                f"LOG_LEVEL must be one of {valid_levels}, got {level}"
-            )
+            raise ValueError(f"LOG_LEVEL must be one of {valid_levels}, got {level}")
         return level
 
     def validate(self) -> None:

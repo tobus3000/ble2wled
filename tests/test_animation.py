@@ -7,7 +7,6 @@ Tests for BeaconRunner and add_trail function covering:
 - Edge cases and boundary conditions
 """
 
-
 from ble2wled.animation import BeaconRunner, add_trail
 
 
@@ -136,8 +135,8 @@ class TestAddTrail:
         add_trail(leds, position=0, color=color, trail_length=3, fade_factor=0.5)
 
         assert leds[0][0] == 100  # Current position
-        assert leds[9][0] == 50   # Wrapped position -1
-        assert leds[8][0] == 25   # Wrapped position -2
+        assert leds[9][0] == 50  # Wrapped position -1
+        assert leds[8][0] == 25  # Wrapped position -2
 
     def test_add_trail_green_color(self):
         """Test trail with green color."""
@@ -199,8 +198,8 @@ class TestAddTrail:
         add_trail(leds, position=5, color=color, trail_length=3, fade_factor=0.0)
 
         assert leds[5] == [100, 0, 0]  # Current position has full brightness
-        assert leds[4] == [0, 0, 0]    # Fade: 100 * 0^1 = 0
-        assert leds[3] == [0, 0, 0]    # Fade: 100 * 0^2 = 0
+        assert leds[4] == [0, 0, 0]  # Fade: 100 * 0^1 = 0
+        assert leds[3] == [0, 0, 0]  # Fade: 100 * 0^2 = 0
 
     def test_add_trail_unit_fade_factor(self):
         """Test with fade factor of 1.0 (no fading)."""
@@ -210,9 +209,9 @@ class TestAddTrail:
         add_trail(leds, position=5, color=color, trail_length=3, fade_factor=1.0)
 
         # All trail positions should have same brightness
-        assert leds[5] == [50, 0, 0]   # 50 * 1^0
-        assert leds[4] == [50, 0, 0]   # 50 * 1^1
-        assert leds[3] == [50, 0, 0]   # 50 * 1^2
+        assert leds[5] == [50, 0, 0]  # 50 * 1^0
+        assert leds[4] == [50, 0, 0]  # 50 * 1^1
+        assert leds[3] == [50, 0, 0]  # 50 * 1^2
 
     def test_add_trail_long_trail(self):
         """Test with trail longer than LED array."""
@@ -247,7 +246,9 @@ class TestAddTrail:
             leds = [[0, 0, 0] for _ in range(10)]
             color = (100, 0, 0)
 
-            add_trail(leds, position=position, color=color, trail_length=2, fade_factor=0.5)
+            add_trail(
+                leds, position=position, color=color, trail_length=2, fade_factor=0.5
+            )
 
             assert leds[position][0] == 100
 
@@ -296,13 +297,15 @@ class TestAddTrail:
         color = (200, 0, 0)
         fade_factor = 0.7
 
-        add_trail(leds, position=5, color=color, trail_length=4, fade_factor=fade_factor)
+        add_trail(
+            leds, position=5, color=color, trail_length=4, fade_factor=fade_factor
+        )
 
         expected = [
-            int(200 * (0.7 ** 0)),  # 200
-            int(200 * (0.7 ** 1)),  # 140
-            int(200 * (0.7 ** 2)),  # 98
-            int(200 * (0.7 ** 3)),  # 68
+            int(200 * (0.7**0)),  # 200
+            int(200 * (0.7**1)),  # 140
+            int(200 * (0.7**2)),  # 98
+            int(200 * (0.7**3)),  # 68
         ]
 
         assert leds[5][0] == expected[0]
@@ -359,12 +362,14 @@ class TestAddTrail:
         color = (100, 0, 0)
         fade_factor = 0.33  # Float value
 
-        add_trail(leds, position=5, color=color, trail_length=3, fade_factor=fade_factor)
+        add_trail(
+            leds, position=5, color=color, trail_length=3, fade_factor=fade_factor
+        )
 
         # Should handle float multiplication and int conversion
         assert leds[5][0] == 100
         assert leds[4][0] == int(100 * 0.33)
-        assert leds[3][0] == int(100 * (0.33 ** 2))
+        assert leds[3][0] == int(100 * (0.33**2))
 
 
 class TestAnimationIntegration:

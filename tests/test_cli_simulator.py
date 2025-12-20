@@ -34,7 +34,7 @@ class TestMQTTStatistics:
         assert stats.total_messages == 0
         assert stats.messages_by_beacon == {}
         assert stats.last_message_time is None
-        assert hasattr(stats, 'lock')
+        assert hasattr(stats, "lock")
 
     def test_record_message_single(self):
         """Test recording a single message."""
@@ -106,7 +106,9 @@ class TestMQTTStatistics:
         # Rate should be messages / elapsed time
         assert result["rate"] > 0
         assert result["elapsed"] > 0
-        assert result["rate"] <= result["total"] / result["elapsed"] * 1.1  # Allow 10% margin
+        assert (
+            result["rate"] <= result["total"] / result["elapsed"] * 1.1
+        )  # Allow 10% margin
 
     def test_record_message_thread_safety(self):
         """Test that recording messages is thread-safe."""
@@ -201,13 +203,19 @@ class TestHandleInterrupt:
 class TestMainFunction:
     """Tests for main() function."""
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_with_default_parameters(self, mock_time, mock_sleep, mock_beacon_state_cls,
-                                          mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_with_default_parameters(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_beacon_state_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test main with default parameters."""
         # Setup mocks
         mock_time.side_effect = [0, 0.1, 0.2, 0.3]  # For duration check
@@ -229,13 +237,19 @@ class TestMainFunction:
         mock_beacon_state_cls.assert_called_once()
         mock_beacon_runner_cls.assert_called_once_with(60)
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_with_custom_led_count(self, mock_time, mock_sleep, mock_beacon_state_cls,
-                                        mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_with_custom_led_count(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_beacon_state_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test main with custom LED count."""
         mock_time.side_effect = [0, 0.1, 0.2]
         mock_beacon_state = MagicMock()
@@ -251,18 +265,28 @@ class TestMainFunction:
         mock_simulator_cls.assert_called_once_with(led_count=120, rows=12, cols=10)
         mock_beacon_runner_cls.assert_called_once_with(120)
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.MockBeaconGenerator')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_mock_mode(self, mock_time, mock_sleep, mock_beacon_state_cls,
-                            mock_generator_cls, mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.MockBeaconGenerator")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_mock_mode(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_beacon_state_cls,
+        mock_generator_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test main with mock beacon generator."""
         # Use itertools.cycle to provide infinite time values
         import itertools
-        mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
+
+        mock_time.side_effect = itertools.cycle(
+            [0, 0, 0.06, 0.12]
+        )  # Will loop these values
 
         mock_beacon_state = MagicMock()
         mock_beacon_state.snapshot.return_value = {"beacon_001": (-50, 1.0)}
@@ -284,16 +308,25 @@ class TestMainFunction:
         # Verify generator.update was called
         assert mock_generator.update.called
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.EspresenseBeaconListener')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_mqtt_mode(self, mock_time, mock_sleep, mock_mqtt_listener_cls,
-                            mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.EspresenseBeaconListener")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_mqtt_mode(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_mqtt_listener_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test main with MQTT mode."""
         import itertools
-        mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
+
+        mock_time.side_effect = itertools.cycle(
+            [0, 0, 0.06, 0.12]
+        )  # Will loop these values
 
         mock_simulator = MagicMock()
         mock_simulator_cls.return_value = mock_simulator
@@ -307,7 +340,9 @@ class TestMainFunction:
         mock_mqtt_listener = MagicMock()
         mock_mqtt_listener_cls.return_value = mock_mqtt_listener
 
-        with patch('ble2wled.cli_simulator.StatisticsTrackingBeaconState') as mock_stats_state:
+        with patch(
+            "ble2wled.cli_simulator.StatisticsTrackingBeaconState"
+        ) as mock_stats_state:
             mock_stats_state.return_value = mock_beacon_state
             main(
                 use_mqtt=True,
@@ -323,16 +358,25 @@ class TestMainFunction:
             assert call_kwargs["port"] == 1883
             assert call_kwargs["location"] == "bedroom"
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.EspresenseBeaconListener')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_mqtt_with_auth(self, mock_time, mock_sleep, mock_mqtt_listener_cls,
-                                 mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.EspresenseBeaconListener")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_mqtt_with_auth(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_mqtt_listener_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test main with MQTT authentication."""
         import itertools
-        mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
+
+        mock_time.side_effect = itertools.cycle(
+            [0, 0, 0.06, 0.12]
+        )  # Will loop these values
 
         mock_simulator = MagicMock()
         mock_simulator_cls.return_value = mock_simulator
@@ -346,7 +390,9 @@ class TestMainFunction:
         mock_mqtt_listener = MagicMock()
         mock_mqtt_listener_cls.return_value = mock_mqtt_listener
 
-        with patch('ble2wled.cli_simulator.StatisticsTrackingBeaconState') as mock_stats_state:
+        with patch(
+            "ble2wled.cli_simulator.StatisticsTrackingBeaconState"
+        ) as mock_stats_state:
             mock_stats_state.return_value = mock_beacon_state
             main(
                 use_mqtt=True,
@@ -363,29 +409,44 @@ class TestMainFunction:
             assert call_kwargs["username"] == "user"
             assert call_kwargs["password"] == "pass"
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_invalid_grid_dimensions(self, mock_time, mock_sleep, mock_beacon_state_cls,
-                                          mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_invalid_grid_dimensions(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_beacon_state_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test main with mismatched LED count and grid dimensions."""
         with pytest.raises(ValueError) as exc_info:
             main(led_count=60, rows=10, cols=7)  # 10 * 7 = 70, not 60
 
         assert "does not equal led_count" in str(exc_info.value)
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_update_interval(self, mock_time, mock_sleep, mock_beacon_state_cls,
-                                  mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_update_interval(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_beacon_state_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test that main uses specified update interval."""
         import itertools
-        mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
+
+        mock_time.side_effect = itertools.cycle(
+            [0, 0, 0.06, 0.12]
+        )  # Will loop these values
 
         mock_beacon_state = MagicMock()
         mock_beacon_state.snapshot.return_value = {}
@@ -403,19 +464,29 @@ class TestMainFunction:
         last_call = mock_sleep.call_args_list[-1]
         assert last_call[0][0] == 0.05
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.ble_beacon_to_rgb')
-    @patch('ble2wled.cli_simulator.add_trail')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_renders_beacons(self, mock_time, mock_sleep, mock_add_trail,
-                                  mock_beacon_to_rgb, mock_beacon_state_cls,
-                                  mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.ble_beacon_to_rgb")
+    @patch("ble2wled.cli_simulator.add_trail")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_renders_beacons(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_add_trail,
+        mock_beacon_to_rgb,
+        mock_beacon_state_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test that main renders beacons to simulator."""
         import itertools
-        mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
+
+        mock_time.side_effect = itertools.cycle(
+            [0, 0, 0.06, 0.12]
+        )  # Will loop these values
 
         mock_beacon_state = MagicMock()
         mock_beacon_state.snapshot.return_value = {"beacon_001": (-50, 0.8)}
@@ -435,13 +506,19 @@ class TestMainFunction:
         # Verify simulator.update was called
         assert mock_simulator.update.called
 
-    @patch('ble2wled.cli_simulator.LEDSimulator')
-    @patch('ble2wled.cli_simulator.BeaconRunner')
-    @patch('ble2wled.cli_simulator.BeaconState')
-    @patch('ble2wled.cli_simulator.time.sleep')
-    @patch('ble2wled.cli_simulator.time.time')
-    def test_main_respects_duration(self, mock_time, mock_sleep, mock_beacon_state_cls,
-                                    mock_beacon_runner_cls, mock_simulator_cls):
+    @patch("ble2wled.cli_simulator.LEDSimulator")
+    @patch("ble2wled.cli_simulator.BeaconRunner")
+    @patch("ble2wled.cli_simulator.BeaconState")
+    @patch("ble2wled.cli_simulator.time.sleep")
+    @patch("ble2wled.cli_simulator.time.time")
+    def test_main_respects_duration(
+        self,
+        mock_time,
+        mock_sleep,
+        mock_beacon_state_cls,
+        mock_beacon_runner_cls,
+        mock_simulator_cls,
+    ):
         """Test that main stops after specified duration."""
         # Set times that will exceed duration
         mock_time.side_effect = [0, 5.0, 10.0]  # Start at 0, then 5, then 10
@@ -464,76 +541,90 @@ class TestCLIArgumentParsing:
 
     def test_cli_defaults(self):
         """Test CLI with default arguments."""
-        with patch.object(sys, 'argv', ['cli_simulator']):
+        with patch.object(sys, "argv", ["cli_simulator"]):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 # Verify main was called with defaults
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['led_count'] == 60
-                assert call_kwargs['rows'] == 10
-                assert call_kwargs['cols'] == 6
-                assert call_kwargs['num_beacons'] == 3
-                assert call_kwargs['update_interval'] == 0.1
+                assert call_kwargs["led_count"] == 60
+                assert call_kwargs["rows"] == 10
+                assert call_kwargs["cols"] == 6
+                assert call_kwargs["num_beacons"] == 3
+                assert call_kwargs["update_interval"] == 0.1
 
     def test_cli_custom_led_count(self):
         """Test CLI with custom LED count."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--led-count', '120', '--rows', '12', '--cols', '10']):
+        with patch.object(
+            sys,
+            "argv",
+            ["cli_simulator", "--led-count", "120", "--rows", "12", "--cols", "10"],
+        ):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['led_count'] == 120
-                assert call_kwargs['rows'] == 12
-                assert call_kwargs['cols'] == 10
+                assert call_kwargs["led_count"] == 120
+                assert call_kwargs["rows"] == 12
+                assert call_kwargs["cols"] == 10
 
     def test_cli_custom_beacons(self):
         """Test CLI with custom beacon count."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--beacons', '10']):
+        with patch.object(sys, "argv", ["cli_simulator", "--beacons", "10"]):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['num_beacons'] == 10
+                assert call_kwargs["num_beacons"] == 10
 
     def test_cli_mqtt_mode(self):
         """Test CLI with MQTT mode enabled."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--mqtt', '--mqtt-broker', '192.168.1.100']):
+        with patch.object(
+            sys, "argv", ["cli_simulator", "--mqtt", "--mqtt-broker", "192.168.1.100"]
+        ):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['use_mqtt'] is True
-                assert call_kwargs['mqtt_broker'] == '192.168.1.100'
+                assert call_kwargs["use_mqtt"] is True
+                assert call_kwargs["mqtt_broker"] == "192.168.1.100"
 
     def test_cli_mqtt_with_auth(self):
         """Test CLI with MQTT authentication."""
-        with patch.object(sys, 'argv', [
-            'cli_simulator', '--mqtt',
-            '--mqtt-broker', 'broker.example.com',
-            '--mqtt-username', 'testuser',
-            '--mqtt-password', 'testpass'
-        ]):
+        with patch.object(
+            sys,
+            "argv",
+            [
+                "cli_simulator",
+                "--mqtt",
+                "--mqtt-broker",
+                "broker.example.com",
+                "--mqtt-username",
+                "testuser",
+                "--mqtt-password",
+                "testpass",
+            ],
+        ):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['mqtt_username'] == 'testuser'
-                assert call_kwargs['mqtt_password'] == 'testpass'
+                assert call_kwargs["mqtt_username"] == "testuser"
+                assert call_kwargs["mqtt_password"] == "testpass"
 
     def test_cli_invalid_led_count(self):
         """Test CLI rejects non-positive LED count."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--led-count', '0']):
+        with patch.object(sys, "argv", ["cli_simulator", "--led-count", "0"]):
             from ble2wled.cli_simulator import cli as cli_func
 
             with pytest.raises(SystemExit):
@@ -541,10 +632,19 @@ class TestCLIArgumentParsing:
 
     def test_cli_invalid_grid_dimensions(self):
         """Test CLI rejects mismatched grid dimensions."""
-        with patch.object(sys, 'argv', [
-            'cli_simulator', '--led-count', '60',
-            '--rows', '10', '--cols', '7'  # 10*7 = 70, not 60
-        ]):
+        with patch.object(
+            sys,
+            "argv",
+            [
+                "cli_simulator",
+                "--led-count",
+                "60",
+                "--rows",
+                "10",
+                "--cols",
+                "7",  # 10*7 = 70, not 60
+            ],
+        ):
             from ble2wled.cli_simulator import cli as cli_func
 
             with pytest.raises(SystemExit):
@@ -552,7 +652,7 @@ class TestCLIArgumentParsing:
 
     def test_cli_invalid_fade_factor(self):
         """Test CLI rejects invalid fade factor."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--fade-factor', '1.5']):
+        with patch.object(sys, "argv", ["cli_simulator", "--fade-factor", "1.5"]):
             from ble2wled.cli_simulator import cli as cli_func
 
             with pytest.raises(SystemExit):
@@ -560,7 +660,9 @@ class TestCLIArgumentParsing:
 
     def test_cli_invalid_mqtt_port(self):
         """Test CLI rejects invalid MQTT port."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--mqtt', '--mqtt-port', '99999']):
+        with patch.object(
+            sys, "argv", ["cli_simulator", "--mqtt", "--mqtt-port", "99999"]
+        ):
             from ble2wled.cli_simulator import cli as cli_func
 
             with pytest.raises(SystemExit):
@@ -568,27 +670,27 @@ class TestCLIArgumentParsing:
 
     def test_cli_duration_argument(self):
         """Test CLI with custom duration."""
-        with patch.object(sys, 'argv', ['cli_simulator', '--duration', '30.5']):
+        with patch.object(sys, "argv", ["cli_simulator", "--duration", "30.5"]):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['duration'] == 30.5
+                assert call_kwargs["duration"] == 30.5
 
     def test_cli_trail_settings(self):
         """Test CLI with custom trail settings."""
-        with patch.object(sys, 'argv', [
-            'cli_simulator',
-            '--trail-length', '15',
-            '--fade-factor', '0.5'
-        ]):
+        with patch.object(
+            sys,
+            "argv",
+            ["cli_simulator", "--trail-length", "15", "--fade-factor", "0.5"],
+        ):
             from ble2wled.cli_simulator import cli as cli_func
 
-            with patch('ble2wled.cli_simulator.main') as mock_main:
+            with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
 
                 call_kwargs = mock_main.call_args[1]
-                assert call_kwargs['trail_length'] == 15
-                assert call_kwargs['fade_factor'] == 0.5
+                assert call_kwargs["trail_length"] == 15
+                assert call_kwargs["fade_factor"] == 0.5

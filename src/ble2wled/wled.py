@@ -117,8 +117,11 @@ class WLEDHTTPController(LEDController):
             try:
                 requests.post(self.url, json=payload, timeout=self.timeout)
                 return  # Success
-            except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout,
-                    requests.exceptions.ConnectionError) as e:
+            except (
+                requests.exceptions.Timeout,
+                requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError,
+            ) as e:
                 if attempt < self.max_retries - 1:
                     logger.warning(
                         "HTTP timeout on attempt %d/%d for %s, retrying...",
