@@ -29,6 +29,10 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# Create _static directory if it doesn't exist
+static_path = Path(__file__).parent / '_static'
+static_path.mkdir(exist_ok=True)
+
 # -- Options for HTML output --------------------------------------------------
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
@@ -36,7 +40,6 @@ html_logo = None
 html_favicon = None
 
 html_theme_options = {
-    'display_version': True,
     'prev_next_buttons_location': 'bottom',
     'style_external_links': False,
     'vcs_pageview_mode': '',
@@ -53,6 +56,12 @@ autodoc_default_options = {
 }
 
 autosummary_generate = True
+
+# Suppress expected warnings that don't affect documentation quality
+suppress_warnings = [
+    'autodoc.duplicate_object_description',  # From autodoc generating both explicit and auto docs
+    'toctree.toc-duplicated',  # From modules in both api/modules and index
+]
 
 # -- Options for Napoleon extension -------------------------------------------
 napoleon_google_docstring = True
