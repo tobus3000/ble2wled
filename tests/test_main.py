@@ -9,7 +9,6 @@ Tests for run_wled_beacons function and main block execution covering:
 - Error handling
 """
 
-import logging
 from unittest.mock import MagicMock, Mock, call, patch
 
 import pytest

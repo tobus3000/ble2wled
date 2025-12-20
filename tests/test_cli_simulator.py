@@ -12,7 +12,7 @@ import signal
 import sys
 import threading
 import time
-from unittest.mock import MagicMock, Mock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -113,7 +113,7 @@ class TestMQTTStatistics:
         stats = MQTTStatistics()
 
         def record_messages(beacon_id, count):
-            for i in range(count):
+            for _ in range(count):
                 stats.record_message(beacon_id)
 
         threads = [
@@ -263,7 +263,7 @@ class TestMainFunction:
         # Use itertools.cycle to provide infinite time values
         import itertools
         mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
-        
+
         mock_beacon_state = MagicMock()
         mock_beacon_state.snapshot.return_value = {"beacon_001": (-50, 1.0)}
         mock_beacon_state_cls.return_value = mock_beacon_state
@@ -294,7 +294,7 @@ class TestMainFunction:
         """Test main with MQTT mode."""
         import itertools
         mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
-        
+
         mock_simulator = MagicMock()
         mock_simulator_cls.return_value = mock_simulator
         mock_beacon_runner = MagicMock()
@@ -333,7 +333,7 @@ class TestMainFunction:
         """Test main with MQTT authentication."""
         import itertools
         mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
-        
+
         mock_simulator = MagicMock()
         mock_simulator_cls.return_value = mock_simulator
         mock_beacon_runner = MagicMock()
@@ -386,7 +386,7 @@ class TestMainFunction:
         """Test that main uses specified update interval."""
         import itertools
         mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
-        
+
         mock_beacon_state = MagicMock()
         mock_beacon_state.snapshot.return_value = {}
         mock_beacon_state_cls.return_value = mock_beacon_state
@@ -416,7 +416,7 @@ class TestMainFunction:
         """Test that main renders beacons to simulator."""
         import itertools
         mock_time.side_effect = itertools.cycle([0, 0, 0.06, 0.12])  # Will loop these values
-        
+
         mock_beacon_state = MagicMock()
         mock_beacon_state.snapshot.return_value = {"beacon_001": (-50, 0.8)}
         mock_beacon_state_cls.return_value = mock_beacon_state

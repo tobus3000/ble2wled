@@ -9,7 +9,7 @@ Tests cover HTTP and UDP controllers with various scenarios:
 """
 
 import socket
-from unittest.mock import MagicMock, Mock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 import requests
