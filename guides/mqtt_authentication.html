@@ -57,7 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-env-file">Using .env File</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-environment-variables">Using Environment Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#backward-compatibility">Backward Compatibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-authentication">Optional Authentication</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cli-usage">CLI Usage</a><ul>
@@ -171,10 +171,9 @@
 </pre></div>
 </div>
 </section>
-<section id="backward-compatibility">
-<h3>Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Link to this heading"></a></h3>
-<p><strong>MQTT authentication is completely optional.</strong> If <code class="docutils literal notranslate"><span class="pre">MQTT_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">MQTT_PASSWORD</span></code> are not set, the system attempts to connect without authentication (as before).</p>
-<p>This ensures existing configurations continue to work without modification.</p>
+<section id="optional-authentication">
+<h3>Optional Authentication<a class="headerlink" href="#optional-authentication" title="Link to this heading"></a></h3>
+<p><strong>MQTT authentication is completely optional.</strong> If <code class="docutils literal notranslate"><span class="pre">MQTT_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">MQTT_PASSWORD</span></code> are not set, the system attempts to connect without authentication.</p>
 </section>
 </section>
 <section id="cli-usage">

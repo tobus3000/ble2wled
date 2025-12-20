@@ -693,10 +693,12 @@ or debugging configuration state.</p>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">config</span></code> module provides centralized configuration management for BLE2WLED using environment variables and .env files.</p>
-<p>Configuration is loaded from:
-1. .env file (if present)
-2. Environment variables
-3. Default values</p>
+<p>Configuration is loaded from:</p>
+<ol class="arabic simple">
+<li><p>.env file (if present)</p></li>
+<li><p>Environment variables</p></li>
+<li><p>Default values</p></li>
+</ol>
 <section id="quick-example">
 <h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>

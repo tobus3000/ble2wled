@@ -45,12 +45,11 @@ Set environment variables directly:
     export MQTT_USERNAME=mqtt_user
     export MQTT_PASSWORD=mqtt_secure_password
 
-Backward Compatibility
-~~~~~~~~~~~~~~~~~~~~~~
+Optional Authentication
+~~~~~~~~~~~~~~~~~~~~~~~
 
-**MQTT authentication is completely optional.** If ``MQTT_USERNAME`` and ``MQTT_PASSWORD`` are not set, the system attempts to connect without authentication (as before).
+**MQTT authentication is completely optional.** If ``MQTT_USERNAME`` and ``MQTT_PASSWORD`` are not set, the system attempts to connect without authentication.
 
-This ensures existing configurations continue to work without modification.
 
 CLI Usage
 ---------
