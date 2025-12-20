@@ -1,0 +1,762 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.mqtt - MQTT Beacon Listener &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.simulator - LED Simulator and Mock Beacons" href="simulator.html" />
+    <link rel="prev" title="ble2wled.wled - WLED Device Communication" href="wled.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.state"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.location"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.base_topic"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.base_topic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.__init__"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.on_connect"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.on_connect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.on_message"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.on_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener.start"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener.start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.mqtt.BeaconMQTTListener"><code class="docutils literal notranslate"><span class="pre">BeaconMQTTListener</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#espresensebeaconlistener">EspresenseBeaconListener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mqtt-message-format">MQTT Message Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-mqtt-listening">Basic MQTT Listening</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-configuration">With Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-wled-animation">With WLED Animation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-authentication">With Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-locations">Multiple Locations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connection-failures">Connection Failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication-failures">Authentication Failures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#no-beacons-received">No Beacons Received</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connection-refused">Connection Refused</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication-failed">Authentication Failed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#message-rate">Message Rate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#state-updates">State Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-per-second">Examples per Second</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/mqtt.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.mqtt">
+<span id="ble2wled-mqtt-mqtt-beacon-listener"></span><h1><a class="reference internal" href="#module-ble2wled.mqtt" title="ble2wled.mqtt"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code></a> - MQTT Beacon Listener<a class="headerlink" href="#module-ble2wled.mqtt" title="Link to this heading"></a></h1>
+<p>MQTT listener for BLE beacon data from espresense.</p>
+<p>This module provides the EspresenseBeaconListener class for receiving beacon
+data from espresense via MQTT.</p>
+<p>espresense is a distributed Bluetooth scanner that publishes BLE beacon
+locations to MQTT. This listener subscribes to beacon topics and updates
+the beacon state with RSSI values.</p>
+<dl class="simple">
+<dt>MQTT Topic Structure:</dt><dd><p>espresense/devices/{beacon_id}/{location}</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Listen for beacons from a specific location:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;living_room&#39;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.mqtt.</span></span><span class="sig-name descname"><span class="pre">EspresenseBeaconListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="states.html#ble2wled.states.BeaconState" title="ble2wled.states.BeaconState"><span class="pre">BeaconState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'balkon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1883</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/mqtt.html#EspresenseBeaconListener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Listens for BLE beacon data from espresense MQTT broker.</p>
+<p>Subscribes to espresense/devices/{beacon_id}/{location} topics and
+filters for messages from a specific location. Extracts beacon ID and
+RSSI from the topic and JSON payload.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.state" title="Link to this definition"></a></dt>
+<dd><p>BeaconState instance to update with beacon data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="states.html#ble2wled.states.BeaconState" title="ble2wled.states.BeaconState">BeaconState</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.location">
+<span class="sig-name descname"><span class="pre">location</span></span><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.location" title="Link to this definition"></a></dt>
+<dd><p>Location name to filter for (e.g., ‘balkon’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.base_topic">
+<span class="sig-name descname"><span class="pre">base_topic</span></span><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.base_topic" title="Link to this definition"></a></dt>
+<dd><p>Base MQTT topic prefix (‘espresense/devices’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="states.html#ble2wled.states.BeaconState" title="ble2wled.states.BeaconState"><span class="pre">BeaconState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'balkon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1883</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/mqtt.html#EspresenseBeaconListener.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize espresense beacon listener.</p>
+<p>Connects to MQTT broker and subscribes to beacon topics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<a class="reference internal" href="states.html#ble2wled.states.BeaconState" title="ble2wled.states.BeaconState"><em>BeaconState</em></a>) – BeaconState instance to update with beacon data.</p></li>
+<li><p><strong>broker</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – MQTT broker hostname or IP address.</p></li>
+<li><p><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Location name to filter for (e.g., ‘balkon’).
+Default: ‘balkon’.</p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – MQTT broker port. Default: 1883.</p></li>
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – MQTT broker username for authentication.
+Default: None (no authentication).</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – MQTT broker password for authentication.
+Default: None (no authentication).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create and start listener without authentication:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;bedroom&#39;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Create and start listener with authentication:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;bedroom&#39;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s1">&#39;mqtt_user&#39;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">&#39;mqtt_pass&#39;</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.on_connect">
+<span class="sig-name descname"><span class="pre">on_connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/mqtt.html#EspresenseBeaconListener.on_connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.on_connect" title="Link to this definition"></a></dt>
+<dd><p>Handle MQTT connection.</p>
+<p>Called when the client connects to the broker. Subscribes to beacon
+topics and logs connection status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>mqtt.Client</em>) – MQTT client instance.</p></li>
+<li><p><strong>userdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – User data (unused).</p></li>
+<li><p><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Connection flags (unused).</p></li>
+<li><p><strong>rc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Connection result code (unused).</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a callback method called by paho-mqtt library.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MQTTMessage</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/mqtt.html#EspresenseBeaconListener.on_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.on_message" title="Link to this definition"></a></dt>
+<dd><p>Handle incoming MQTT message from espresense.</p>
+<p>Parses topic and payload to extract beacon ID and RSSI. Validates
+data consistency and updates beacon state.</p>
+<p>Topic format: espresense/devices/{beacon_id}/{location}
+Payload format: {“id”: “…”, “rssi”: -50.5, …}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>mqtt.Client</em>) – MQTT client instance (unused).</p></li>
+<li><p><strong>userdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a>) – User data (unused).</p></li>
+<li><p><strong>msg</strong> (<em>mqtt.MQTTMessage</em>) – MQTT message with topic and payload.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>This method is called automatically by the MQTT library when
+messages arrive on subscribed topics.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a callback method called by paho-mqtt library.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.mqtt.EspresenseBeaconListener.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/mqtt.html#EspresenseBeaconListener.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.mqtt.EspresenseBeaconListener.start" title="Link to this definition"></a></dt>
+<dd><p>Start listening in background thread.</p>
+<p>Starts the MQTT client loop in a background daemon thread. Blocks
+until connection is established.</p>
+<p class="rubric">Example</p>
+<p>Start listening for beacons:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="c1"># Listener runs in background, updating beacon state</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.mqtt.BeaconMQTTListener">
+<span class="sig-prename descclassname"><span class="pre">ble2wled.mqtt.</span></span><span class="sig-name descname"><span class="pre">BeaconMQTTListener</span></span><a class="headerlink" href="#ble2wled.mqtt.BeaconMQTTListener" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ble2wled.mqtt.EspresenseBeaconListener" title="ble2wled.mqtt.EspresenseBeaconListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">EspresenseBeaconListener</span></code></a></p>
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">mqtt</span></code> module provides MQTT listener for receiving beacon data from espresense devices. It:</p>
+<ul class="simple">
+<li><p>Connects to MQTT broker</p></li>
+<li><p>Subscribes to beacon topic</p></li>
+<li><p>Updates beacon state with position and signal strength</p></li>
+<li><p>Handles connection failures gracefully</p></li>
+<li><p>Supports username/password authentication</p></li>
+</ul>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="c1"># Create beacon state tracker</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Create MQTT listener</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;living_room&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Start listening (non-blocking, runs in background)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Beacon state is updated automatically as messages arrive</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active beacons: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Stop listener</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<section id="espresensebeaconlistener">
+<h3>EspresenseBeaconListener<a class="headerlink" href="#espresensebeaconlistener" title="Link to this heading"></a></h3>
+<p>Listens for beacon data from espresense devices via MQTT.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_state</span></code> (BeaconState) - Beacon state to update</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">broker</span></code> (str) - MQTT broker hostname or IP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code> (int, default 1883) - MQTT port</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">location</span></code> (str) - Location/room identifier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">username</span></code> (str, optional) - MQTT username</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">password</span></code> (str, optional) - MQTT password</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client</span></code> - paho-mqtt client instance</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">start()</span></code> - Start listening (non-blocking, runs in background thread)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stop()</span></code> - Stop listening and disconnect</p></li>
+</ul>
+<p><strong>Behavior:</strong></p>
+<p>Subscribes to topic: <code class="docutils literal notranslate"><span class="pre">espresense/devices/{location}/#</span></code></p>
+<p>Handles message format:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.5</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;device_id&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aa:bb:cc:dd:ee:ff&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;rssi&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-45</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Device Name&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Basic listener</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.50&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;bedroom&#39;</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Listener with authentication</span>
+<span class="n">listener_auth</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.50&#39;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;bedroom&#39;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s1">&#39;mqtt_user&#39;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">&#39;mqtt_password&#39;</span>
+<span class="p">)</span>
+<span class="n">listener_auth</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
+<p>The MQTT topic is derived from location:</p>
+<ul class="simple">
+<li><p>Location: <code class="docutils literal notranslate"><span class="pre">living_room</span></code></p></li>
+<li><p>Topic: <code class="docutils literal notranslate"><span class="pre">espresense/devices/living_room/#</span></code></p></li>
+</ul>
+<p>This subscribes to all devices reporting from that location.</p>
+<p><strong>Topic format:</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">espresense/devices/{location}/{mac_address}</span></code></p>
+<p>Messages contain beacon distance, RSSI, and device info.</p>
+</section>
+<section id="mqtt-message-format">
+<h3>MQTT Message Format<a class="headerlink" href="#mqtt-message-format" title="Link to this heading"></a></h3>
+<p>espresense messages contain:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.5</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;device_id&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aa:bb:cc:dd:ee:ff&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;rssi&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-45</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Device Name&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The listener extracts:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - Unique beacon identifier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distance</span></code> - Estimated distance from device (meters)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rssi</span></code> - Signal strength (dBm)</p></li>
+</ul>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="basic-mqtt-listening">
+<h3>Basic MQTT Listening<a class="headerlink" href="#basic-mqtt-listening" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># Setup</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;test&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Start listening</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listening for beacon data...&quot;</span><span class="p">)</span>
+
+<span class="c1"># Let it collect data</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Check collected beacons</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">)</span><span class="si">}</span><span class="s2"> beacons&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">beacon</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2">: position=</span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">, rssi=</span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">rssi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Stop listening</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="with-configuration">
+<h3>With Configuration<a class="headerlink" href="#with-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="c1"># Load configuration from .env</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create listener with config</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">beacon_timeout_seconds</span><span class="p">,</span>
+    <span class="n">fade_out_seconds</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">beacon_fade_out_seconds</span>
+<span class="p">)</span>
+
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span>
+<span class="p">)</span>
+
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="with-wled-animation">
+<h3>With WLED Animation<a class="headerlink" href="#with-wled-animation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Setup</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;living_room&#39;</span>
+<span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Start MQTT listener</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Run animation (blocks)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span>
+        <span class="n">controller</span><span class="p">,</span>
+        <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span>
+    <span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="with-authentication">
+<h3>With Authentication<a class="headerlink" href="#with-authentication" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># With credentials for secured MQTT broker</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.50&#39;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;kitchen&#39;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s1">&#39;mqtt_user&#39;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">&#39;secure_password&#39;</span>
+<span class="p">)</span>
+
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="multiple-locations">
+<h3>Multiple Locations<a class="headerlink" href="#multiple-locations" title="Link to this heading"></a></h3>
+<p>Monitor multiple locations with separate listeners:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="c1"># Create state for each location</span>
+<span class="n">living_room_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">kitchen_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Create listeners</span>
+<span class="n">living_room_listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">living_room_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;living_room&#39;</span>
+<span class="p">)</span>
+
+<span class="n">kitchen_listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">kitchen_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;kitchen&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Start both</span>
+<span class="n">living_room_listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">kitchen_listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Process both state streams...</span>
+
+<span class="c1"># Stop both</span>
+<span class="n">living_room_listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="n">kitchen_listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<section id="connection-failures">
+<h3>Connection Failures<a class="headerlink" href="#connection-failures" title="Link to this heading"></a></h3>
+<p>The listener handles connection failures gracefully:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>  <span class="c1"># Non-existent broker</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;test&#39;</span>
+<span class="p">)</span>
+
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># Doesn&#39;t raise, just logs error</span>
+<span class="c1"># Check logs for connection errors</span>
+</pre></div>
+</div>
+</section>
+<section id="authentication-failures">
+<h3>Authentication Failures<a class="headerlink" href="#authentication-failures" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s1">&#39;wrong_user&#39;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">&#39;wrong_password&#39;</span>
+<span class="p">)</span>
+
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># Doesn&#39;t raise, but won&#39;t receive messages</span>
+<span class="c1"># Check logs: &quot;MQTT authentication failed&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="no-beacons-received">
+<h3>No Beacons Received<a class="headerlink" href="#no-beacons-received" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Check MQTT broker is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mosquitto_sub<span class="w"> </span>-h<span class="w"> </span>localhost<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;espresense/devices/test/#&quot;</span>
+</pre></div>
+</div>
+<p>If this doesn’t show messages, broker isn’t receiving espresense data.</p>
+</li>
+<li><p>Verify location matches espresense configuration</p></li>
+<li><p>Check authentication credentials</p></li>
+<li><p>Check network connectivity:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping<span class="w"> </span>&lt;mqtt-broker-ip&gt;
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="connection-refused">
+<h3>Connection Refused<a class="headerlink" href="#connection-refused" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Verify broker is running and accessible</p></li>
+<li><p>Check port (default 1883)</p></li>
+<li><p>Verify IP/hostname is correct</p></li>
+<li><p>Check firewall rules</p></li>
+</ol>
+</section>
+<section id="authentication-failed">
+<h3>Authentication Failed<a class="headerlink" href="#authentication-failed" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Verify username and password are correct</p></li>
+<li><p>Check user account exists in MQTT broker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mosquitto</span>
+sudo<span class="w"> </span>mosquitto_passwd<span class="w"> </span>-l<span class="w"> </span>/etc/mosquitto/passwd
+</pre></div>
+</div>
+</li>
+<li><p>Check broker authentication is enabled</p></li>
+</ol>
+</section>
+</section>
+<section id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h2>
+<section id="message-rate">
+<h3>Message Rate<a class="headerlink" href="#message-rate" title="Link to this heading"></a></h3>
+<p>MQTT listener receives messages for each detected beacon. Typical rates:</p>
+<ul class="simple">
+<li><p>1-5 beacons: 10-50 messages/second</p></li>
+<li><p>10+ beacons: 100+ messages/second</p></li>
+</ul>
+<p>The listener is non-blocking and handles high message rates efficiently.</p>
+</section>
+<section id="state-updates">
+<h3>State Updates<a class="headerlink" href="#state-updates" title="Link to this heading"></a></h3>
+<p>Beacon state is updated immediately as messages arrive. No polling needed.</p>
+</section>
+<section id="examples-per-second">
+<h3>Examples per Second<a class="headerlink" href="#examples-per-second" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Low: 1-2 messages/second (1-2 beacons with slow scan)</p></li>
+<li><p>Medium: 10-20 messages/second (3-5 beacons)</p></li>
+<li><p>High: 100+ messages/second (10+ beacons with fast scan)</p></li>
+</ul>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="states.html"><span class="doc">ble2wled.states - Beacon State Management</span></a> - Beacon state management</p></li>
+<li><p><a class="reference internal" href="../guides/mqtt_authentication.html"><span class="doc">MQTT Authentication</span></a> - MQTT authentication guide</p></li>
+<li><p><a class="reference internal" href="../guides/configuration.html"><span class="doc">Configuration</span></a> - Configuration reference</p></li>
+<li><p><a class="reference internal" href="../quickstart.html"><span class="doc">Quickstart</span></a> - Quick start with MQTT</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="wled.html" class="btn btn-neutral float-left" title="ble2wled.wled - WLED Device Communication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simulator.html" class="btn btn-neutral float-right" title="ble2wled.simulator - LED Simulator and Mock Beacons" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

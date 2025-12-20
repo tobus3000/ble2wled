@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.states &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ble2wled.states</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ble2wled.states</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Beacon state management with timeout and fade-out.</span>
+
+<span class="sd">This module provides the BeaconState class for tracking BLE beacons with</span>
+<span class="sd">automatic timeout and fade-out effects. Beacons update their \&quot;life\&quot; value</span>
+<span class="sd">from 1.0 (fully visible) to 0.0 (faded out) as they age.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Track beacons and get their current state::</span>
+
+<span class="sd">        state = BeaconState(timeout_seconds=6.0, fade_out_seconds=4.0)</span>
+<span class="sd">        state.update(&#39;beacon_1&#39;, -50)  # Update with RSSI</span>
+<span class="sd">        beacons = state.snapshot()     # Get current beacons</span>
+<span class="sd">        for beacon_id, (rssi, life) in beacons.items():</span>
+<span class="sd">            print(f\&quot;{beacon_id}: RSSI={rssi}, life={life}\&quot;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="BeaconState">
+<a class="viewcode-back" href="../../api/states.html#ble2wled.states.BeaconState">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BeaconState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages the state of detected beacons with automatic timeout and fade-out.</span>
+
+<span class="sd">    This class maintains a thread-safe collection of beacons with their RSSI</span>
+<span class="sd">    values and life metrics. Beacons automatically timeout when not updated</span>
+<span class="sd">    and fade out gracefully over a configurable period.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        timeout (float): Seconds before a beacon is considered timed out.</span>
+<span class="sd">        fade_out (float): Seconds to fade out after timeout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BeaconState.__init__">
+<a class="viewcode-back" href="../../api/states.html#ble2wled.states.BeaconState.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize beacon state tracker.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            timeout_seconds (float): Duration before a beacon is considered</span>
+<span class="sd">                timed out (no updates received). Default is 5.0 seconds.</span>
+<span class="sd">            fade_out_seconds (float): Duration to fade out the beacon after</span>
+<span class="sd">                timeout. Default is 3.0 seconds.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Create a beacon state tracker with 6-second timeout and 4-second fade::</span>
+
+<span class="sd">                state = BeaconState(timeout_seconds=6.0, fade_out_seconds=4.0)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout_seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fade_out</span> <span class="o">=</span> <span class="n">fade_out_seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beacons</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="BeaconState.update">
+<a class="viewcode-back" href="../../api/states.html#ble2wled.states.BeaconState.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beacon_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rssi</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update beacon with signal strength.</span>
+
+<span class="sd">        Updates or creates a beacon entry with the current timestamp and RSSI.</span>
+<span class="sd">        Thread-safe operation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            beacon_id (str): Unique beacon identifier (e.g.,</span>
+<span class="sd">                &#39;iBeacon:2686f39c-bada-4658-854a-a62e7e5e8b8d-1-0&#39;).</span>
+<span class="sd">            rssi (int): Received Signal Strength Indicator in dBm</span>
+<span class="sd">                (typically -30 to -100).</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Update beacon with RSSI value::</span>
+
+<span class="sd">                state.update(&#39;beacon_1&#39;, -50)  # Update beacon_1 with -50 dBm</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_beacons</span><span class="p">[</span><span class="n">beacon_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;rssi&quot;</span><span class="p">:</span> <span class="n">rssi</span><span class="p">,</span>
+                <span class="s2">&quot;last_seen&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;life&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="BeaconState.snapshot">
+<a class="viewcode-back" href="../../api/states.html#ble2wled.states.BeaconState.snapshot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get current active beacons with RSSI and life values.</span>
+
+<span class="sd">        Returns a thread-safe snapshot of all active beacons. Automatically</span>
+<span class="sd">        removes beacons that have completely faded out. Each beacon entry</span>
+<span class="sd">        includes its RSSI and life value (0.0 = invisible, 1.0 = fully visible).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary mapping beacon_id (str) to (rssi, life) tuples.</span>
+<span class="sd">                rssi (int): Signal strength in dBm.</span>
+<span class="sd">                life (float): Beacon visibility (0.0 to 1.0).</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Get current beacon snapshot::</span>
+
+<span class="sd">                beacons = state.snapshot()</span>
+<span class="sd">                if &#39;beacon_1&#39; in beacons:</span>
+<span class="sd">                    rssi, life = beacons[&#39;beacon_1&#39;]</span>
+<span class="sd">                    print(f&quot;Beacon 1: {rssi} dBm, {life*100:.0f}% visible&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="n">to_remove</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">age</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;last_seen&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;life&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">decay</span> <span class="o">=</span> <span class="p">(</span><span class="n">age</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade_out</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;life&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">decay</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;life&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">to_remove</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">active</span><span class="p">[</span><span class="n">beacon_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;rssi&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;life&quot;</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">beacon_id</span> <span class="ow">in</span> <span class="n">to_remove</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beacons</span><span class="p">[</span><span class="n">beacon_id</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">active</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

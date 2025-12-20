@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.states - Beacon State Management &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.colors - Color Calculations" href="colors.html" />
+    <link rel="prev" title="ble2wled.config - Configuration Management" href="config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.states.BeaconState"><code class="docutils literal notranslate"><span class="pre">BeaconState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.states.BeaconState.timeout"><code class="docutils literal notranslate"><span class="pre">BeaconState.timeout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.states.BeaconState.fade_out"><code class="docutils literal notranslate"><span class="pre">BeaconState.fade_out</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.states.BeaconState.__init__"><code class="docutils literal notranslate"><span class="pre">BeaconState.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.states.BeaconState.update"><code class="docutils literal notranslate"><span class="pre">BeaconState.update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.states.BeaconState.snapshot"><code class="docutils literal notranslate"><span class="pre">BeaconState.snapshot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-classes">Key Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#beacon">Beacon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#beaconstate">BeaconState</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-beacon-tracking">Basic Beacon Tracking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#beacon-lifecycle">Beacon Lifecycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mqtt-integration">MQTT Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#animation-integration">Animation Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-timeout-configuration">Custom Timeout Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/states.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.states">
+<span id="ble2wled-states-beacon-state-management"></span><h1><a class="reference internal" href="#module-ble2wled.states" title="ble2wled.states"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code></a> - Beacon State Management<a class="headerlink" href="#module-ble2wled.states" title="Link to this heading"></a></h1>
+<p>Beacon state management with timeout and fade-out.</p>
+<p>This module provides the BeaconState class for tracking BLE beacons with
+automatic timeout and fade-out effects. Beacons update their “life” value
+from 1.0 (fully visible) to 0.0 (faded out) as they age.</p>
+<p class="rubric">Example</p>
+<p>Track beacons and get their current state:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span><span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># Update with RSSI</span>
+<span class="n">beacons</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>     <span class="c1"># Get current beacons</span>
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="p">(</span><span class="n">rssi</span><span class="p">,</span> <span class="n">life</span><span class="p">)</span> <span class="ow">in</span> <span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2">: RSSI=</span><span class="si">{</span><span class="n">rssi</span><span class="si">}</span><span class="s2">, life=</span><span class="si">{</span><span class="n">life</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.states.BeaconState">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.states.</span></span><span class="sig-name descname"><span class="pre">BeaconState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_out_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/states.html#BeaconState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.states.BeaconState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Manages the state of detected beacons with automatic timeout and fade-out.</p>
+<p>This class maintains a thread-safe collection of beacons with their RSSI
+values and life metrics. Beacons automatically timeout when not updated
+and fade out gracefully over a configurable period.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.states.BeaconState.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#ble2wled.states.BeaconState.timeout" title="Link to this definition"></a></dt>
+<dd><p>Seconds before a beacon is considered timed out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.states.BeaconState.fade_out">
+<span class="sig-name descname"><span class="pre">fade_out</span></span><a class="headerlink" href="#ble2wled.states.BeaconState.fade_out" title="Link to this definition"></a></dt>
+<dd><p>Seconds to fade out after timeout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.states.BeaconState.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_out_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/states.html#BeaconState.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.states.BeaconState.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize beacon state tracker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeout_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Duration before a beacon is considered
+timed out (no updates received). Default is 5.0 seconds.</p></li>
+<li><p><strong>fade_out_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Duration to fade out the beacon after
+timeout. Default is 3.0 seconds.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create a beacon state tracker with 6-second timeout and 4-second fade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span><span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.states.BeaconState.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beacon_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/states.html#BeaconState.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.states.BeaconState.update" title="Link to this definition"></a></dt>
+<dd><p>Update beacon with signal strength.</p>
+<p>Updates or creates a beacon entry with the current timestamp and RSSI.
+Thread-safe operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beacon_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Unique beacon identifier (e.g.,
+‘iBeacon:2686f39c-bada-4658-854a-a62e7e5e8b8d-1-0’).</p></li>
+<li><p><strong>rssi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Received Signal Strength Indicator in dBm
+(typically -30 to -100).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Update beacon with RSSI value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># Update beacon_1 with -50 dBm</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.states.BeaconState.snapshot">
+<span class="sig-name descname"><span class="pre">snapshot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ble2wled/states.html#BeaconState.snapshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.states.BeaconState.snapshot" title="Link to this definition"></a></dt>
+<dd><p>Get current active beacons with RSSI and life values.</p>
+<p>Returns a thread-safe snapshot of all active beacons. Automatically
+removes beacons that have completely faded out. Each beacon entry
+includes its RSSI and life value (0.0 = invisible, 1.0 = fully visible).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Dictionary mapping beacon_id (str) to (rssi, life) tuples.</dt><dd><p>rssi (int): Signal strength in dBm.
+life (float): Beacon visibility (0.0 to 1.0).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Get current beacon snapshot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beacons</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="k">if</span> <span class="s1">&#39;beacon_1&#39;</span> <span class="ow">in</span> <span class="n">beacons</span><span class="p">:</span>
+    <span class="n">rssi</span><span class="p">,</span> <span class="n">life</span> <span class="o">=</span> <span class="n">beacons</span><span class="p">[</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon 1: </span><span class="si">{</span><span class="n">rssi</span><span class="si">}</span><span class="s2"> dBm, </span><span class="si">{</span><span class="n">life</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% visible&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">states</span></code> module manages beacon state and lifecycle. It tracks:</p>
+<ul class="simple">
+<li><p>Active beacons and their positions</p></li>
+<li><p>Signal strength (RSSI) over time</p></li>
+<li><p>Beacon timeouts (when beacons disappear)</p></li>
+<li><p>Fade-out animations for departing beacons</p></li>
+</ul>
+</section>
+<section id="key-classes">
+<h2>Key Classes<a class="headerlink" href="#key-classes" title="Link to this heading"></a></h2>
+<p><strong>Beacon</strong></p>
+<p>Represents a single beacon with its current state.</p>
+<p><strong>BeaconState</strong></p>
+<p>Tracks all active and fading beacons.</p>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span><span class="p">,</span> <span class="n">Beacon</span>
+
+<span class="c1"># Create beacon state tracker</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>      <span class="c1"># Beacon times out after 6 seconds</span>
+    <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">4.0</span>      <span class="c1"># Fade out over 4 seconds after timeout</span>
+<span class="p">)</span>
+
+<span class="c1"># Add a beacon (usually from MQTT)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+    <span class="n">beacon_id</span><span class="o">=</span><span class="s1">&#39;device_123&#39;</span><span class="p">,</span>
+    <span class="n">position</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>              <span class="c1"># Position on LED strip (0-60)</span>
+    <span class="n">rssi</span><span class="o">=-</span><span class="mi">45</span>                  <span class="c1"># Signal strength in dBm</span>
+<span class="p">)</span>
+
+<span class="c1"># Get active beacon</span>
+<span class="n">beacon</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">[</span><span class="s1">&#39;device_123&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Position: </span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">, RSSI: </span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">rssi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check if beacon is in timeout</span>
+<span class="k">if</span> <span class="n">beacon</span><span class="o">.</span><span class="n">is_in_timeout</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Beacon has timed out!&quot;</span><span class="p">)</span>
+
+<span class="c1"># Update beacon positions/signals</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;device_123&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">48</span><span class="p">)</span>
+
+<span class="c1"># Cleanup expired beacons</span>
+<span class="n">state</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<section id="beacon">
+<h3>Beacon<a class="headerlink" href="#beacon" title="Link to this heading"></a></h3>
+<p>A single beacon with position and signal information.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_id</span></code> (str) - Unique beacon identifier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> (float) - Position on LED strip (0 to led_count)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rssi</span></code> (int) - Signal strength in dBm (typically -20 to -100)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">last_update_time</span></code> (float) - Timestamp of last update</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_at</span></code> (float) - Timestamp when beacon times out</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_in_timeout</span></code> (bool) - Whether beacon has timed out</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">should_be_removed(current_time:</span> <span class="pre">float)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> - Check if beacon should be removed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_fade_factor(current_time:</span> <span class="pre">float)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> - Get fade factor (0.0-1.0) during fade-out</p></li>
+</ul>
+</section>
+<section id="beaconstate">
+<h3>BeaconState<a class="headerlink" href="#beaconstate" title="Link to this heading"></a></h3>
+<p>Tracks all active and fading beacons.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beacons</span></code> (Dict[str, Beacon]) - Active and fading beacons</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout_seconds</span></code> (float) - Beacon timeout duration</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fade_out_seconds</span></code> (float) - Fade-out animation duration</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update_or_create(beacon_id:</span> <span class="pre">str,</span> <span class="pre">position:</span> <span class="pre">float,</span> <span class="pre">rssi:</span> <span class="pre">int)</span></code> - Update or create beacon</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cleanup()</span></code> - Remove expired beacons</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear()</span></code> - Remove all beacons</p></li>
+</ul>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="basic-beacon-tracking">
+<h3>Basic Beacon Tracking<a class="headerlink" href="#basic-beacon-tracking" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Update beacon position and signal</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;beacon_2&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Check active beacons</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active beacons: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">beacon</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2">: pos=</span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">, rssi=</span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">rssi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="beacon-lifecycle">
+<h3>Beacon Lifecycle<a class="headerlink" href="#beacon-lifecycle" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span><span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Beacon appears</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;device_1&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">45</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon active: </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">[</span><span class="s1">&#39;device_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_in_timeout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># False</span>
+
+<span class="c1"># After 2 seconds without update: beacon times out</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">2.1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon timed out: </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">[</span><span class="s1">&#39;device_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_in_timeout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># True</span>
+
+<span class="c1"># Get fade factor for animation</span>
+<span class="n">fade</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">[</span><span class="s1">&#39;device_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_fade_factor</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fade factor: </span><span class="si">{</span><span class="n">fade</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 0.5 (halfway through fade-out)</span>
+
+<span class="c1"># After 3 seconds: beacon is removed</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon count: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 0</span>
+</pre></div>
+</div>
+</section>
+<section id="mqtt-integration">
+<h3>MQTT Integration<a class="headerlink" href="#mqtt-integration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># MQTT listener updates beacon state automatically</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s1">&#39;living_room&#39;</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Beacon state is automatically updated from MQTT</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">beacon</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">rssi</span><span class="si">}</span><span class="s2"> dBm&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="animation-integration">
+<h3>Animation Integration<a class="headerlink" href="#animation-integration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">position_to_color_hue</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Get beacon for animation</span>
+<span class="n">beacon</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">[</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">]</span>
+
+<span class="c1"># Calculate color based on distance/signal</span>
+<span class="n">hue</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Color hue: </span><span class="si">{</span><span class="n">hue</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Use fade factor if beacon is timing out</span>
+<span class="n">brightness</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">beacon</span><span class="o">.</span><span class="n">get_fade_factor</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brightness: </span><span class="si">{</span><span class="n">brightness</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-timeout-configuration">
+<h3>Custom Timeout Configuration<a class="headerlink" href="#custom-timeout-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="c1"># Fast timeout: 2 seconds active, 1 second fade-out</span>
+<span class="n">state_fast</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span><span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Slow timeout: 10 seconds active, 5 seconds fade-out</span>
+<span class="n">state_slow</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span><span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+
+<span class="c1"># Very persistent: 30 seconds before timeout</span>
+<span class="n">state_persistent</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span><span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../guides/configuration.html"><span class="doc">Configuration</span></a> - Configure timeout values</p></li>
+<li><p><a class="reference internal" href="colors.html"><span class="doc">ble2wled.colors - Color Calculations</span></a> - Color mapping for beacons</p></li>
+<li><p><a class="reference internal" href="animation.html"><span class="doc">ble2wled.animation - Animation Loop</span></a> - Animation loop using beacon state</p></li>
+<li><p><a class="reference internal" href="mqtt.html"><span class="doc">ble2wled.mqtt - MQTT Beacon Listener</span></a> - MQTT listener that updates beacon state</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="config.html" class="btn btn-neutral float-left" title="ble2wled.config - Configuration Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="colors.html" class="btn btn-neutral float-right" title="ble2wled.colors - Color Calculations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

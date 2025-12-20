@@ -1,0 +1,800 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.simulator - LED Simulator and Mock Beacons &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="License" href="../license.html" />
+    <link rel="prev" title="ble2wled.mqtt - MQTT Beacon Listener" href="mqtt.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator"><code class="docutils literal notranslate"><span class="pre">LEDSimulator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.led_count"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.led_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.rows"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.rows</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.cols"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.cols</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.current_leds"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.current_leds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.lock"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.__init__"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.update"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.LEDSimulator.get_snapshot"><code class="docutils literal notranslate"><span class="pre">LEDSimulator.get_snapshot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.simulator.MockBeaconGenerator"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.MockBeaconGenerator.beacon_ids"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator.beacon_ids</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.MockBeaconGenerator.positions"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator.positions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.MockBeaconGenerator.rssi_base"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator.rssi_base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.MockBeaconGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.simulator.MockBeaconGenerator.update"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ledsimulator">LEDSimulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#led-count-and-grid-layout">LED Count and Grid Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mockbeacongenerator">MockBeaconGenerator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#visual-led-display">Visual LED Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mock-beacon-animation">Mock Beacon Animation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-grid-layouts">Custom Grid Layouts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#programmatic-led-display">Programmatic LED Display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#display-output-format">Display Output Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-usage">CLI Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#terminal-requirements">Terminal Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typical-performance">Typical Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimization-tips">Optimization Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/simulator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.simulator">
+<span id="ble2wled-simulator-led-simulator-and-mock-beacons"></span><h1><a class="reference internal" href="#module-ble2wled.simulator" title="ble2wled.simulator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code></a> - LED Simulator and Mock Beacons<a class="headerlink" href="#module-ble2wled.simulator" title="Link to this heading"></a></h1>
+<p>LED strip simulator with visual CLI output.</p>
+<p>This module provides a simulator for testing beacon visualization without
+requiring a real WLED device. The simulator displays the LED strip state
+as colored dots in the terminal using ANSI escape codes.</p>
+<p>The simulator implements the LEDController interface and can be used as a
+drop-in replacement for WLEDHTTPController or WLEDUDPController.</p>
+<p class="rubric">Example</p>
+<p>Simulate beacon visualization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span><span class="p">,</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Create simulator</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Create beacon state</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Run animation with simulator (no real WLED needed)</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">simulator</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.simulator.</span></span><span class="sig-name descname"><span class="pre">LEDSimulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/simulator.html#LEDSimulator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.LEDSimulator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="wled.html#ble2wled.wled.LEDController" title="ble2wled.wled.LEDController"><code class="xref py py-class docutils literal notranslate"><span class="pre">LEDController</span></code></a></p>
+<p>LED strip simulator with visual terminal output.</p>
+<p>Displays the LED strip as a grid of colored dots in the terminal using
+ANSI 24-bit color codes. Useful for testing beacon visualization without
+a real WLED device.</p>
+<p>The grid is arranged in rows x cols format. For example, with 60 LEDs in
+a 10x6 grid, LED 0 is top-left, LED 5 is top-right, LED 6 is
+second-row-left, etc.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.led_count">
+<span class="sig-name descname"><span class="pre">led_count</span></span><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.led_count" title="Link to this definition"></a></dt>
+<dd><p>Total number of LEDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.rows">
+<span class="sig-name descname"><span class="pre">rows</span></span><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.rows" title="Link to this definition"></a></dt>
+<dd><p>Number of rows in display grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.cols">
+<span class="sig-name descname"><span class="pre">cols</span></span><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.cols" title="Link to this definition"></a></dt>
+<dd><p>Number of columns in display grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.current_leds">
+<span class="sig-name descname"><span class="pre">current_leds</span></span><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.current_leds" title="Link to this definition"></a></dt>
+<dd><p>Current LED RGB values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.lock">
+<span class="sig-name descname"><span class="pre">lock</span></span><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.lock" title="Link to this definition"></a></dt>
+<dd><p>Thread-safe access to LED data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.14)">threading.Lock</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<p>Create a 10x6 grid simulator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>  <span class="c1"># All red</span>
+<span class="n">simulator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/simulator.html#LEDSimulator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the LED simulator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>led_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Total number of LEDs. Default: 60.
+Must equal rows x cols.</p></li>
+<li><p><strong>rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of rows in display grid. Default: 10.</p></li>
+<li><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of columns in display grid. Default: 6.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If rows x cols does not equal led_count.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create 120-LED simulator (12 rows x 10 cols):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/simulator.html#LEDSimulator.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.update" title="Link to this definition"></a></dt>
+<dd><p>Update and display the LED strip.</p>
+<p>Updates the current LED state and renders the grid to terminal.
+Uses ANSI 24-bit true color escape codes for each LED.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>leds</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>]</em>) – LED data as list of [R, G, B] triplets.
+Expected length: led_count.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Display a gradient:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">):</span>
+    <span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>
+    <span class="n">leds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Orange</span>
+    <span class="n">simulator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.simulator.LEDSimulator.get_snapshot">
+<span class="sig-name descname"><span class="pre">get_snapshot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ble2wled/simulator.html#LEDSimulator.get_snapshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.LEDSimulator.get_snapshot" title="Link to this definition"></a></dt>
+<dd><p>Get current LED state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copy of current LED state as list of [R, G, B].</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>]]</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Check current state:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">leds</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">get_snapshot</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LED 0 color: RGB</span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">leds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.simulator.MockBeaconGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.simulator.</span></span><span class="sig-name descname"><span class="pre">MockBeaconGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_beacons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssi_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(-90,</span> <span class="pre">-30)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/simulator.html#MockBeaconGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.MockBeaconGenerator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Generate mock beacon data for simulator testing.</p>
+<p>Creates synthetic BLE beacon data that changes over time to simulate
+real beacon movement and signal strength variation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.MockBeaconGenerator.beacon_ids">
+<span class="sig-name descname"><span class="pre">beacon_ids</span></span><a class="headerlink" href="#ble2wled.simulator.MockBeaconGenerator.beacon_ids" title="Link to this definition"></a></dt>
+<dd><p>List of simulated beacon IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.MockBeaconGenerator.positions">
+<span class="sig-name descname"><span class="pre">positions</span></span><a class="headerlink" href="#ble2wled.simulator.MockBeaconGenerator.positions" title="Link to this definition"></a></dt>
+<dd><p>Current position (0.0-1.0) for each beacon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.simulator.MockBeaconGenerator.rssi_base">
+<span class="sig-name descname"><span class="pre">rssi_base</span></span><a class="headerlink" href="#ble2wled.simulator.MockBeaconGenerator.rssi_base" title="Link to this definition"></a></dt>
+<dd><p>Base RSSI value for each beacon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<p>Generate beacon updates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBeaconGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span><span class="n">num_beacons</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">beacons</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">rssi</span> <span class="ow">in</span> <span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">beacon_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">,</span> <span class="n">rssi</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.simulator.MockBeaconGenerator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_beacons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssi_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(-90,</span> <span class="pre">-30)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/simulator.html#MockBeaconGenerator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.MockBeaconGenerator.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize mock beacon generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_beacons</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of simulated beacons. Default: 3.</p></li>
+<li><p><strong>rssi_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a>) – (min_rssi, max_rssi) signal range. Default: (-90, -30).
+Typical RSSI range for BLE: -90 (far/weak) to -30 (close/strong).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Generate 5 beacons with custom RSSI range:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span>
+    <span class="n">num_beacons</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">rssi_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.simulator.MockBeaconGenerator.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/simulator.html#MockBeaconGenerator.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.simulator.MockBeaconGenerator.update" title="Link to this definition"></a></dt>
+<dd><p>Update beacon positions and signal strengths.</p>
+<p>Beacons move in a circular pattern and signal strength oscillates
+around their base RSSI value, simulating realistic beacon movement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Time step for simulation. Default: 0.1 seconds.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Beacon data as {beacon_id: rssi_value}.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Step through beacon updates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span><span class="n">num_beacons</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">beacons</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="c1"># Update beacon_state with beacons data</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">simulator</span></code> module provides tools for testing beacon visualization without requiring a real WLED device or MQTT broker. It includes:</p>
+<ul class="simple">
+<li><p><strong>LEDSimulator</strong> - Visual LED display in terminal using ANSI colors</p></li>
+<li><p><strong>MockBeaconGenerator</strong> - Generates realistic simulated beacon data</p></li>
+<li><p><strong>CLI interface</strong> - Command-line tool for testing</p></li>
+</ul>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span><span class="p">,</span> <span class="n">MockBeaconGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Create simulator</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Create beacon state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Generate mock beacons</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">num_beacons</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Run animation</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">simulator</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">generator</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<section id="ledsimulator">
+<h3>LEDSimulator<a class="headerlink" href="#ledsimulator" title="Link to this heading"></a></h3>
+<p>Displays LEDs as colored blocks in terminal using ANSI 24-bit colors.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int) - Total number of LEDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rows</span></code> (int, default 10) - Grid rows</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cols</span></code> (int, default 6) - Grid columns</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">width</span></code> (int) - Terminal width needed (cols * 4)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">height</span></code> (int) - Terminal height needed (rows + 5)</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update(leds:</span> <span class="pre">List[List[int]])</span></code> - Display LED data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear()</span></code> - Clear display</p></li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul class="simple">
+<li><p>Terminal must support ANSI 24-bit colors</p></li>
+<li><p>Terminal width must be at least <code class="docutils literal notranslate"><span class="pre">cols</span> <span class="pre">*</span> <span class="pre">4</span></code></p></li>
+<li><p>Terminal height must be at least <code class="docutils literal notranslate"><span class="pre">rows</span> <span class="pre">+</span> <span class="pre">5</span></code></p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+
+<span class="c1"># Create 60-LED display in 10×6 grid</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Display colors</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">30</span> <span class="o">+</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">30</span>
+<span class="n">simulator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+
+<span class="c1"># Clear display</span>
+<span class="n">simulator</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="led-count-and-grid-layout">
+<h3>LED Count and Grid Layout<a class="headerlink" href="#led-count-and-grid-layout" title="Link to this heading"></a></h3>
+<p>The LED count must equal rows × cols:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 60 LEDs (10 rows × 6 columns)</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># 100 LEDs (20 rows × 5 columns)</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># 120 LEDs (12 rows × 10 columns)</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mockbeacongenerator">
+<h3>MockBeaconGenerator<a class="headerlink" href="#mockbeacongenerator" title="Link to this heading"></a></h3>
+<p>Generates simulated beacon data for testing.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_state</span></code> (BeaconState) - State to update with beacons</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_beacons</span></code> (int) - Number of beacons to simulate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int) - Total LEDs (for position bounds)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_interval</span></code> (float, default 0.1) - Update interval in seconds</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">start()</span></code> - Start generating beacons (non-blocking, background thread)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stop()</span></code> - Stop generator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_running</span></code> (property) - Whether generator is running</p></li>
+</ul>
+<p><strong>Behavior:</strong></p>
+<p>Generates random beacon movements:</p>
+<ul class="simple">
+<li><p>Beacons move randomly along LED strip</p></li>
+<li><p>RSSI values change realistically (-20 to -90 dBm)</p></li>
+<li><p>Updates at specified interval</p></li>
+<li><p>Beacons persist until stopped</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBeaconGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Generate 5 mock beacons</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">num_beacons</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Beacons are now updating in background</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Stop generator</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="visual-led-display">
+<h3>Visual LED Display<a class="headerlink" href="#visual-led-display" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">beacon_id_to_hue</span><span class="p">,</span> <span class="n">hsv_to_rgb</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># Create display</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Add some beacons</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;beacon_2&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="s1">&#39;beacon_3&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># Render beacons</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">beacon</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+    <span class="n">hue</span> <span class="o">=</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">leds</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+
+<span class="c1"># Display</span>
+<span class="n">simulator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mock-beacon-animation">
+<h3>Mock Beacon Animation<a class="headerlink" href="#mock-beacon-animation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span><span class="p">,</span> <span class="n">MockBeaconGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Setup</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Generate mock beacons</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">num_beacons</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Run animation</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span>
+        <span class="n">simulator</span><span class="p">,</span>
+        <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+        <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">trail_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span>
+    <span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">generator</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-grid-layouts">
+<h3>Custom Grid Layouts<a class="headerlink" href="#custom-grid-layouts" title="Link to this heading"></a></h3>
+<p>Adjust grid for different terminal sizes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+
+<span class="c1"># Narrow terminal (12 columns wide)</span>
+<span class="n">sim_narrow</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># Wide terminal (4 columns wide)</span>
+<span class="n">sim_wide</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Very wide display</span>
+<span class="n">sim_very_wide</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="programmatic-led-display">
+<h3>Programmatic LED Display<a class="headerlink" href="#programmatic-led-display" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Rainbow gradient</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">):</span>
+    <span class="n">hue</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mi">360</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">hsv_to_rgb</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">leds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+
+<span class="n">simulator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="display-output-format">
+<h3>Display Output Format<a class="headerlink" href="#display-output-format" title="Link to this heading"></a></h3>
+<p>The simulator displays LEDs as colored blocks:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████████████████████████████
+██████████████████████████████
+██████████████████████████████
+███░░░░███░░░░██████████░░████
+██░░░░░░░░░░░░██████████████░░
+██░░░░░░░░░░░░██████████░░░░░░
+██████████░░░░██░░░░██░░░░░░░░
+██████████░░░░██░░░░██░░░░░░░░
+██████████░░░░██░░░░██░░░░░░░░
+██████████████████████████░░░░
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Bright colors = bright LEDs</p></li>
+<li><p>Dim colors = dim LEDs</p></li>
+<li><p>Each block is one LED</p></li>
+</ul>
+</section>
+</section>
+<section id="cli-usage">
+<h2>CLI Usage<a class="headerlink" href="#cli-usage" title="Link to this heading"></a></h2>
+<p>Run simulator from command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator
+</pre></div>
+</div>
+<p>With options:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">120</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--rows<span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cols<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--beacons<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--update-interval<span class="w"> </span><span class="m">0</span>.05<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--trail-length<span class="w"> </span><span class="m">15</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--fade-factor<span class="w"> </span><span class="m">0</span>.75<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--duration<span class="w"> </span><span class="m">60</span>
+</pre></div>
+</div>
+<p>With MQTT:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-username<span class="w"> </span>user<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-password<span class="w"> </span>pass
+</pre></div>
+</div>
+</section>
+<section id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h2>
+<section id="terminal-requirements">
+<h3>Terminal Requirements<a class="headerlink" href="#terminal-requirements" title="Link to this heading"></a></h3>
+<p>For smooth animation:</p>
+<ul class="simple">
+<li><p>Terminal must support ANSI 24-bit colors</p></li>
+<li><p>Terminal width &gt;= cols * 4</p></li>
+<li><p>Terminal height &gt;= rows + 5</p></li>
+<li><p>Adequate CPU for rendering</p></li>
+</ul>
+</section>
+<section id="typical-performance">
+<h3>Typical Performance<a class="headerlink" href="#typical-performance" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>60 LEDs (10×6): ~50fps on modern CPU</p></li>
+<li><p>120 LEDs (12×10): ~25fps</p></li>
+<li><p>300 LEDs (20×15): ~5-10fps</p></li>
+</ul>
+</section>
+<section id="optimization-tips">
+<h3>Optimization Tips<a class="headerlink" href="#optimization-tips" title="Link to this heading"></a></h3>
+<p>For CPU-constrained systems:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use fewer LEDs</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Use slower update interval</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1"># Use shorter trails</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">trail_length</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For high-speed animation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use moderate LED count</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Use fast update interval</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h3>
+<p><strong>Nothing displays or error about terminal:</strong></p>
+<p>Try smaller grid:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Colors look wrong:</strong></p>
+<p>Ensure terminal supports 24-bit colors. Most modern terminals do.</p>
+<p><strong>Animation stutters:</strong></p>
+<p>Reduce LED count or increase update_interval.</p>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../guides/cli_simulator.html"><span class="doc">CLI Simulator Guide</span></a> - CLI simulator guide</p></li>
+<li><p><a class="reference internal" href="animation.html"><span class="doc">ble2wled.animation - Animation Loop</span></a> - Animation loop</p></li>
+<li><p><a class="reference internal" href="states.html"><span class="doc">ble2wled.states - Beacon State Management</span></a> - Beacon state</p></li>
+<li><p><a class="reference internal" href="colors.html"><span class="doc">ble2wled.colors - Color Calculations</span></a> - Color calculations</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mqtt.html" class="btn btn-neutral float-left" title="ble2wled.mqtt - MQTT Beacon Listener" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,552 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MQTT Authentication &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="HTTP Retry Logic" href="http_retry_logic.html" />
+    <link rel="prev" title="CLI Simulator Guide" href="cli_simulator.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MQTT Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-env-file">Using .env File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-environment-variables">Using Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#backward-compatibility">Backward Compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-usage">CLI Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#without-authentication">Without Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-authentication">With Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-env-configuration">Using .env Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api">Python API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-config-class">Using Config Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-constructor-parameters">Direct Constructor Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complete-example">Complete Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#security-best-practices">Security Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#password-management">Password Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-variable-management">Environment Variable Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-mqtt-connection">Test MQTT Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-cli-simulator">Test CLI Simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-python-api">Test Python API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-examples">Configuration Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MQTT Authentication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/mqtt_authentication.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mqtt-authentication">
+<h1>MQTT Authentication<a class="headerlink" href="#mqtt-authentication" title="Link to this heading"></a></h1>
+<p>BLE2WLED supports username and password authentication for MQTT brokers that require credentials.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The MQTT authentication system allows you to:</p>
+<ul class="simple">
+<li><p>Connect to secured MQTT brokers with credentials</p></li>
+<li><p>Optional authentication (works with or without credentials)</p></li>
+<li><p>Secure password management via environment variables</p></li>
+<li><p>Support for both CLI and Python API</p></li>
+</ul>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<section id="using-env-file">
+<h3>Using .env File<a class="headerlink" href="#using-env-file" title="Link to this heading"></a></h3>
+<p>Add the following to your <cite>.env</cite> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># MQTT Broker Settings</span>
+<span class="nv">MQTT_BROKER</span><span class="o">=</span><span class="m">192</span>.168.1.100
+<span class="nv">MQTT_PORT</span><span class="o">=</span><span class="m">1883</span>
+<span class="nv">MQTT_LOCATION</span><span class="o">=</span>living_room
+
+<span class="c1"># MQTT Authentication (Optional)</span>
+<span class="nv">MQTT_USERNAME</span><span class="o">=</span>mqtt_user
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span>mqtt_secure_password
+</pre></div>
+</div>
+</section>
+<section id="using-environment-variables">
+<h3>Using Environment Variables<a class="headerlink" href="#using-environment-variables" title="Link to this heading"></a></h3>
+<p>Set environment variables directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MQTT_BROKER</span><span class="o">=</span><span class="m">192</span>.168.1.100
+<span class="nb">export</span><span class="w"> </span><span class="nv">MQTT_PORT</span><span class="o">=</span><span class="m">1883</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MQTT_LOCATION</span><span class="o">=</span>living_room
+<span class="nb">export</span><span class="w"> </span><span class="nv">MQTT_USERNAME</span><span class="o">=</span>mqtt_user
+<span class="nb">export</span><span class="w"> </span><span class="nv">MQTT_PASSWORD</span><span class="o">=</span>mqtt_secure_password
+</pre></div>
+</div>
+</section>
+<section id="backward-compatibility">
+<h3>Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Link to this heading"></a></h3>
+<p><strong>MQTT authentication is completely optional.</strong> If <code class="docutils literal notranslate"><span class="pre">MQTT_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">MQTT_PASSWORD</span></code> are not set, the system attempts to connect without authentication (as before).</p>
+<p>This ensures existing configurations continue to work without modification.</p>
+</section>
+</section>
+<section id="cli-usage">
+<h2>CLI Usage<a class="headerlink" href="#cli-usage" title="Link to this heading"></a></h2>
+<section id="without-authentication">
+<h3>Without Authentication<a class="headerlink" href="#without-authentication" title="Link to this heading"></a></h3>
+<p>For MQTT brokers that don’t require credentials:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">60</span>
+</pre></div>
+</div>
+</section>
+<section id="with-authentication">
+<h3>With Authentication<a class="headerlink" href="#with-authentication" title="Link to this heading"></a></h3>
+<p>For secured MQTT brokers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-port<span class="w"> </span><span class="m">1883</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-username<span class="w"> </span>mqtt_user<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-password<span class="w"> </span>mqtt_secure_pass<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">60</span>
+</pre></div>
+</div>
+</section>
+<section id="using-env-configuration">
+<h3>Using .env Configuration<a class="headerlink" href="#using-env-configuration" title="Link to this heading"></a></h3>
+<p>Load credentials from <cite>.env</cite> file automatically:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">60</span>
+</pre></div>
+</div>
+<p>The CLI automatically uses <code class="docutils literal notranslate"><span class="pre">MQTT_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">MQTT_PASSWORD</span></code> from <cite>.env</cite> if present.</p>
+</section>
+</section>
+<section id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Link to this heading"></a></h2>
+<section id="using-config-class">
+<h3>Using Config Class<a class="headerlink" href="#using-config-class" title="Link to this heading"></a></h3>
+<p>Load credentials from configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="c1"># Load configuration from .env</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Initialize beacon state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Create listener with credentials from config</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">,</span>      <span class="c1"># Optional</span>
+    <span class="n">password</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span>       <span class="c1"># Optional</span>
+<span class="p">)</span>
+
+<span class="c1"># Start listening for beacon data</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-constructor-parameters">
+<h3>Direct Constructor Parameters<a class="headerlink" href="#direct-constructor-parameters" title="Link to this heading"></a></h3>
+<p>Pass credentials directly to the listener:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># With authentication</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s2">&quot;192.168.1.100&quot;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s2">&quot;living_room&quot;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;mqtt_user&quot;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;secure_password&quot;</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Without authentication (credentials optional)</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s2">&quot;192.168.1.100&quot;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">1883</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s2">&quot;living_room&quot;</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-example">
+<h3>Complete Example<a class="headerlink" href="#complete-example" title="Link to this heading"></a></h3>
+<p>Production setup with authentication:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Load configuration from .env</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+
+<span class="c1"># Create beacon state</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>
+    <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">4.0</span>
+<span class="p">)</span>
+
+<span class="c1"># Create MQTT listener with authentication</span>
+<span class="n">mqtt_listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">,</span>      <span class="c1"># From MQTT_USERNAME env var</span>
+    <span class="n">password</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span>       <span class="c1"># From MQTT_PASSWORD env var</span>
+<span class="p">)</span>
+<span class="n">mqtt_listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Create WLED controller</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span>
+<span class="p">)</span>
+
+<span class="c1"># Run animation loop</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span>
+        <span class="n">controller</span><span class="p">,</span>
+        <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+        <span class="n">beacon_state</span><span class="o">=</span><span class="n">beacon_state</span><span class="p">,</span>
+        <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">trail_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span>
+    <span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">mqtt_listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="security-best-practices">
+<h2>Security Best Practices<a class="headerlink" href="#security-best-practices" title="Link to this heading"></a></h2>
+<section id="password-management">
+<h3>Password Management<a class="headerlink" href="#password-management" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Use .env files</strong> - Never hardcode passwords in source code</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good: credentials in .env</span>
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span>secure_password
+
+<span class="c1"># Bad: hardcoded in code</span>
+<span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;secure_password&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Protect .env files</strong> - Add to <cite>.gitignore</cite></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .gitignore</span>
+.env
+.env.local
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use strong passwords</strong> - Follow broker security recommendations</p>
+<p>Good password:
+- At least 12 characters
+- Mix of upper/lowercase, numbers, symbols
+- No dictionary words or patterns</p>
+</li>
+<li><p><strong>Rotate credentials regularly</strong> - Change MQTT credentials periodically</p></li>
+<li><p><strong>Limit broker access</strong> - Configure firewall rules on MQTT broker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Only allow connections from trusted IP ranges</span>
+ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.168.1.0/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">1883</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="environment-variable-management">
+<h3>Environment Variable Management<a class="headerlink" href="#environment-variable-management" title="Link to this heading"></a></h3>
+<p>For CI/CD or Docker deployments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set via environment</span>
+docker<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span><span class="nv">MQTT_USERNAME</span><span class="o">=</span>user<span class="w"> </span>-e<span class="w"> </span><span class="nv">MQTT_PASSWORD</span><span class="o">=</span>pass<span class="w"> </span>image
+
+<span class="c1"># Or use secrets file</span>
+docker<span class="w"> </span>secret<span class="w"> </span>create<span class="w"> </span>mqtt_password<span class="w"> </span>/path/to/password
+docker<span class="w"> </span>service<span class="w"> </span>create<span class="w"> </span>--secret<span class="w"> </span>mqtt_password<span class="w"> </span>image
+</pre></div>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<section id="test-mqtt-connection">
+<h3>Test MQTT Connection<a class="headerlink" href="#test-mqtt-connection" title="Link to this heading"></a></h3>
+<p>Verify your MQTT credentials work:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test with mosquitto client</span>
+mosquitto_sub<span class="w"> </span>-h<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span>-u<span class="w"> </span>mqtt_user<span class="w"> </span>-P<span class="w"> </span>mqtt_password<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span><span class="s2">&quot;espresense/devices/living_room/+&quot;</span>
+
+<span class="c1"># Should receive beacon messages</span>
+espresense/devices/living_room/device_id<span class="w"> </span><span class="o">{</span><span class="s2">&quot;rssi&quot;</span>:<span class="w"> </span>-45,<span class="w"> </span>...<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="test-cli-simulator">
+<h3>Test CLI Simulator<a class="headerlink" href="#test-cli-simulator" title="Link to this heading"></a></h3>
+<p>Test the simulator with authentication:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-username<span class="w"> </span>mqtt_user<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-password<span class="w"> </span>mqtt_password<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room
+</pre></div>
+</div>
+<p>You should see animated beacons and MQTT statistics.</p>
+</section>
+<section id="test-python-api">
+<h3>Test Python API<a class="headerlink" href="#test-python-api" title="Link to this heading"></a></h3>
+<p>Test the listener directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="s2">&quot;192.168.1.100&quot;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;mqtt_user&quot;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;mqtt_password&quot;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s2">&quot;test&quot;</span>
+<span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connected successfully!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active beacons: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">beacons</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h3>
+<p><strong>Connection refused with credentials</strong></p>
+<ol class="arabic">
+<li><p>Verify username/password are correct:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mosquitto_sub<span class="w"> </span>-h<span class="w"> </span>broker<span class="w"> </span>-u<span class="w"> </span>username<span class="w"> </span>-P<span class="w"> </span>password<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;test&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check MQTT broker logs for authentication errors</p></li>
+<li><p>Ensure broker has user configured:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mosquitto: check password file</span>
+sudo<span class="w"> </span>cat<span class="w"> </span>/etc/mosquitto/passwd
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Authentication failed error</strong></p>
+<ol class="arabic">
+<li><p>Verify credentials are properly set:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Username: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Password: </span><span class="si">{</span><span class="s1">&#39;*&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check .env file format (no extra spaces):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Good</span>
+<span class="nv">MQTT_USERNAME</span><span class="o">=</span>user
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span>password
+
+<span class="c1"># Bad</span>
+<span class="nv">MQTT_USERNAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>user
+<span class="nv">MQTT_PASSWORD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>password
+</pre></div>
+</div>
+</li>
+<li><p>Check for special characters that need escaping:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># If password contains special chars, quote it</span>
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span><span class="s2">&quot;p@ss:word!&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Connection works without credentials but fails with them</strong></p>
+<ol class="arabic simple">
+<li><p>Broker might not have authentication enabled</p></li>
+<li><p>Check broker configuration</p></li>
+<li><p>Verify user account exists in broker</p></li>
+</ol>
+</section>
+<section id="configuration-examples">
+<h3>Configuration Examples<a class="headerlink" href="#configuration-examples" title="Link to this heading"></a></h3>
+<p><strong>Mosquitto with authentication:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create password file</span>
+sudo<span class="w"> </span>mosquitto_passwd<span class="w"> </span>-c<span class="w"> </span>/etc/mosquitto/passwd<span class="w"> </span>mqtt_user
+
+<span class="c1"># Configure mosquitto.conf</span>
+allow_anonymous<span class="w"> </span><span class="nb">false</span>
+password_file<span class="w"> </span>/etc/mosquitto/passwd
+listener<span class="w"> </span><span class="m">1883</span>
+</pre></div>
+</div>
+<p><strong>Home Assistant MQTT:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MQTT_BROKER</span><span class="o">=</span><span class="m">192</span>.168.1.50
+<span class="nv">MQTT_USERNAME</span><span class="o">=</span>homeassistant
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span>&lt;your-ha-password&gt;
+<span class="nv">MQTT_LOCATION</span><span class="o">=</span>living_room
+</pre></div>
+</div>
+<p><strong>HiveMQ Cloud:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MQTT_BROKER</span><span class="o">=</span>&lt;your-cluster&gt;.s2.eu.hivemq.cloud
+<span class="nv">MQTT_PORT</span><span class="o">=</span><span class="m">8883</span>
+<span class="nv">MQTT_USERNAME</span><span class="o">=</span>&lt;hivemq-username&gt;
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span>&lt;hivemq-password&gt;
+<span class="nv">MQTT_LOCATION</span><span class="o">=</span><span class="nb">test</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> - Full configuration reference</p></li>
+<li><p><a class="reference internal" href="cli_simulator.html"><span class="doc">CLI Simulator Guide</span></a> - CLI simulator usage</p></li>
+<li><p><a class="reference internal" href="../api/mqtt.html"><span class="doc">ble2wled.mqtt - MQTT Beacon Listener</span></a> - MQTT module API reference</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli_simulator.html" class="btn btn-neutral float-left" title="CLI Simulator Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="http_retry_logic.html" class="btn btn-neutral float-right" title="HTTP Retry Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

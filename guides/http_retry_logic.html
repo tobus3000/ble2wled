@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTTP Retry Logic &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api/modules.html" />
+    <link rel="prev" title="MQTT Authentication" href="mqtt_authentication.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HTTP Retry Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why-retry-logic">Why Retry Logic?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-it-works">How It Works</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#retry-mechanism">Retry Mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handled-errors">Handled Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retry-behavior">Retry Behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#default-configuration-3-retries">Default Configuration (3 retries)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-retry-count">Custom Retry Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-timeout">Custom Timeout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-output">Logging Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#retry-attempt-warning-level">Retry Attempt (WARNING Level)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#final-failure-error-level">Final Failure (ERROR Level)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-errors-error-level">Other Errors (ERROR Level)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collecting-logs">Collecting Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-impact">Performance Impact</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overhead-analysis">Overhead Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overall-impact">Overall Impact</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#typical-scenarios">Typical Scenarios</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scenario-1-momentary-network-congestion">Scenario 1: Momentary Network Congestion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scenario-2-device-temporarily-busy">Scenario 2: Device Temporarily Busy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scenario-3-device-unreachable">Scenario 3: Device Unreachable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scenario-4-poor-wifi-signal">Scenario 4: Poor WiFi Signal</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#optimization-tips">Optimization Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#for-fast-networks">For Fast Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-slow-unstable-networks">For Slow/Unstable Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-critical-applications">For Critical Applications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#udp-alternative">UDP Alternative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">HTTP Retry Logic</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/http_retry_logic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="http-retry-logic">
+<h1>HTTP Retry Logic<a class="headerlink" href="#http-retry-logic" title="Link to this heading"></a></h1>
+<p>BLE2WLED automatically handles temporary connection failures to WLED devices via HTTP using intelligent retry logic with exponential backoff.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The HTTP retry mechanism ensures reliable communication with WLED devices by:</p>
+<ul class="simple">
+<li><p>Automatically retrying failed HTTP requests</p></li>
+<li><p>Handling transient timeouts and connection errors</p></li>
+<li><p>Gracefully degrading when device is unreachable</p></li>
+<li><p>Continuing animation even during temporary failures</p></li>
+<li><p>Configurable retry behavior</p></li>
+</ul>
+<section id="why-retry-logic">
+<h3>Why Retry Logic?<a class="headerlink" href="#why-retry-logic" title="Link to this heading"></a></h3>
+<p>WLED devices over HTTP can experience temporary delays due to:</p>
+<ul class="simple">
+<li><p>Network congestion or WiFi interference</p></li>
+<li><p>WLED device busy processing other requests</p></li>
+<li><p>Device momentarily unreachable</p></li>
+<li><p>Slow network response times</p></li>
+</ul>
+<p>The retry logic recovers from these transient failures without disrupting the animation.</p>
+</section>
+</section>
+<section id="how-it-works">
+<h2>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
+<section id="retry-mechanism">
+<h3>Retry Mechanism<a class="headerlink" href="#retry-mechanism" title="Link to this heading"></a></h3>
+<p>When an HTTP request to a WLED device times out:</p>
+<ol class="arabic simple">
+<li><p>Controller automatically retries up to 3 times (configurable)</p></li>
+<li><p>Brief 50ms delay between retries allows device to recover</p></li>
+<li><p>On success: LED update is sent and animation continues</p></li>
+<li><p>On failure after all retries: Error is logged, animation continues without update</p></li>
+</ol>
+</section>
+<section id="handled-errors">
+<h3>Handled Errors<a class="headerlink" href="#handled-errors" title="Link to this heading"></a></h3>
+<p>The following errors trigger automatic retries:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">requests.exceptions.ReadTimeout</span></code> - Server didn’t send response in time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">requests.exceptions.Timeout</span></code> - Generic timeout error</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">requests.exceptions.ConnectionError</span></code> - Connection to device failed</p></li>
+</ul>
+<p>Other errors don’t trigger retries:
+- DNS resolution errors
+- SSL/TLS errors
+- Invalid JSON responses
+- 4xx/5xx HTTP errors</p>
+<p>These are logged as errors but don’t retry (retry wouldn’t help).</p>
+</section>
+<section id="retry-behavior">
+<h3>Retry Behavior<a class="headerlink" href="#retry-behavior" title="Link to this heading"></a></h3>
+<p><strong>Success on first attempt:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>LED update → Success → Continue animation
+</pre></div>
+</div>
+<p><strong>Timeout on first attempt, success on retry:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>LED update (attempt 1) → Timeout → Sleep 50ms
+LED update (attempt 2) → Success → Continue animation
+</pre></div>
+</div>
+<p><strong>Multiple timeouts with recovery:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>LED update (attempt 1) → Timeout → Sleep 50ms
+LED update (attempt 2) → Timeout → Sleep 50ms
+LED update (attempt 3) → Success → Continue animation
+</pre></div>
+</div>
+<p><strong>All retries exhausted:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>LED update (attempt 1) → Timeout → Sleep 50ms
+LED update (attempt 2) → Timeout → Sleep 50ms
+LED update (attempt 3) → Timeout → Log error → Continue animation
+</pre></div>
+</div>
+<p>Animation continues with last known LED state.</p>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<section id="default-configuration-3-retries">
+<h3>Default Configuration (3 retries)<a class="headerlink" href="#default-configuration-3-retries" title="Link to this heading"></a></h3>
+<p>With default settings, HTTP controller retries 3 times on timeout:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
+<span class="c1"># Automatically retries 3 times on timeout</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-retry-count">
+<h3>Custom Retry Count<a class="headerlink" href="#custom-retry-count" title="Link to this heading"></a></h3>
+<p>Configure the number of retry attempts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retry up to 5 times (for unreliable networks)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+
+<span class="c1"># Single attempt, no retries (fast fail)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-timeout">
+<h3>Custom Timeout<a class="headerlink" href="#custom-timeout" title="Link to this heading"></a></h3>
+<p>Configure HTTP request timeout:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2 second timeout per request</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="c1"># Short timeout for responsive devices</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h3>
+<p>Configure via .env file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">WLED_HOST</span><span class="o">=</span><span class="m">192</span>.168.1.100
+<span class="nv">LED_COUNT</span><span class="o">=</span><span class="m">60</span>
+<span class="nv">WLED_HTTP_TIMEOUT</span><span class="o">=</span><span class="m">1</span>.0
+<span class="nv">WLED_HTTP_RETRIES</span><span class="o">=</span><span class="m">3</span>
+</pre></div>
+</div>
+<p>Then use in code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">wled_http_timeout</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">wled_http_retries</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="logging-output">
+<h2>Logging Output<a class="headerlink" href="#logging-output" title="Link to this heading"></a></h2>
+<section id="retry-attempt-warning-level">
+<h3>Retry Attempt (WARNING Level)<a class="headerlink" href="#retry-attempt-warning-level" title="Link to this heading"></a></h3>
+<p>When a timeout occurs and retry is attempted:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...
+HTTP timeout on attempt 2/3 for 192.168.1.100, retrying...
+</pre></div>
+</div>
+</section>
+<section id="final-failure-error-level">
+<h3>Final Failure (ERROR Level)<a class="headerlink" href="#final-failure-error-level" title="Link to this heading"></a></h3>
+<p>When all retries are exhausted:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP request failed after 3 attempts for 192.168.1.100: Read timed out. (read timeout=1)
+</pre></div>
+</div>
+</section>
+<section id="other-errors-error-level">
+<h3>Other Errors (ERROR Level)<a class="headerlink" href="#other-errors-error-level" title="Link to this heading"></a></h3>
+<p>For errors that don’t retry:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP request error for 192.168.1.100: [Errno -2] Name or service not known
+</pre></div>
+</div>
+</section>
+<section id="collecting-logs">
+<h3>Collecting Logs<a class="headerlink" href="#collecting-logs" title="Link to this heading"></a></h3>
+<p>Enable logging to see retry messages:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="c1"># Configure logging to show INFO and above</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Now you&#39;ll see retry messages</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-impact">
+<h2>Performance Impact<a class="headerlink" href="#performance-impact" title="Link to this heading"></a></h2>
+<section id="overhead-analysis">
+<h3>Overhead Analysis<a class="headerlink" href="#overhead-analysis" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>50ms retry delay</strong> - Sleep between attempts</p></li>
+<li><p><strong>Typical timeout</strong> - 1-2 seconds before retry</p></li>
+<li><p><strong>Total overhead per failed update</strong> - ~150ms (3 retries × 50ms)</p></li>
+</ul>
+<p>This overhead is acceptable because:
+- Animation updates run every 50-100ms anyway
+- Missing one update is imperceptible to human eye
+- Fast recovery is more important than speed of single update</p>
+</section>
+<section id="overall-impact">
+<h3>Overall Impact<a class="headerlink" href="#overall-impact" title="Link to this heading"></a></h3>
+<p>In typical scenarios:</p>
+<ul class="simple">
+<li><p>No impact on normal operation (no retries)</p></li>
+<li><p>&lt;150ms delay for one failed update (recovered on retry)</p></li>
+<li><p>Complete failure still allows animation to continue</p></li>
+</ul>
+<p>Example: With 60 LED updates per second (16.7ms each):
+- Timeout and recovery takes ~200ms (12 frames)
+- User sees smooth animation, brief pause during timeout recovery
+- Much better than animation crash</p>
+</section>
+</section>
+<section id="typical-scenarios">
+<h2>Typical Scenarios<a class="headerlink" href="#typical-scenarios" title="Link to this heading"></a></h2>
+<section id="scenario-1-momentary-network-congestion">
+<h3>Scenario 1: Momentary Network Congestion<a class="headerlink" href="#scenario-1-momentary-network-congestion" title="Link to this heading"></a></h3>
+<p><strong>What happens:</strong></p>
+<ul class="simple">
+<li><p>WiFi temporarily congested, single packet loss</p></li>
+<li><p>Attempt 1: Timeout (device busy)</p></li>
+<li><p>Attempt 2: Success (device responds)</p></li>
+<li><p>Result: Slight animation pause, then continues smoothly</p></li>
+</ul>
+<p><strong>Logs:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...
+[LED update succeeds on retry 2]
+</pre></div>
+</div>
+<p><strong>User experience:</strong> Smooth animation, imperceptible brief pause</p>
+</section>
+<section id="scenario-2-device-temporarily-busy">
+<h3>Scenario 2: Device Temporarily Busy<a class="headerlink" href="#scenario-2-device-temporarily-busy" title="Link to this heading"></a></h3>
+<p><strong>What happens:</strong></p>
+<ul class="simple">
+<li><p>WLED device processing multiple requests</p></li>
+<li><p>Attempt 1: Timeout (queue full)</p></li>
+<li><p>Attempt 2: Timeout (still busy)</p></li>
+<li><p>Attempt 3: Success (queue cleared)</p></li>
+<li><p>Result: Animation continues after brief delay</p></li>
+</ul>
+<p><strong>Logs:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...
+HTTP timeout on attempt 2/3 for 192.168.1.100, retrying...
+[LED update succeeds on retry 3]
+</pre></div>
+</div>
+<p><strong>User experience:</strong> Smooth animation with minor frame drops</p>
+</section>
+<section id="scenario-3-device-unreachable">
+<h3>Scenario 3: Device Unreachable<a class="headerlink" href="#scenario-3-device-unreachable" title="Link to this heading"></a></h3>
+<p><strong>What happens:</strong></p>
+<ul class="simple">
+<li><p>WLED device powered off or network disconnected</p></li>
+<li><p>All 3 attempts timeout</p></li>
+<li><p>Animation continues with last known LED state</p></li>
+<li><p>User sees frozen LED pattern</p></li>
+<li><p>When device comes back online, animation resumes</p></li>
+</ul>
+<p><strong>Logs:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...
+HTTP timeout on attempt 2/3 for 192.168.1.100, retrying...
+HTTP request failed after 3 attempts for 192.168.1.100: Read timed out.
+</pre></div>
+</div>
+<p><strong>User experience:</strong> LEDs freeze, then resume when device comes back</p>
+</section>
+<section id="scenario-4-poor-wifi-signal">
+<h3>Scenario 4: Poor WiFi Signal<a class="headerlink" href="#scenario-4-poor-wifi-signal" title="Link to this heading"></a></h3>
+<p><strong>What happens:</strong></p>
+<ul class="simple">
+<li><p>WiFi signal weak (edge of range)</p></li>
+<li><p>Some updates succeed, others timeout and retry</p></li>
+<li><p>Animation continues but with more frame drops</p></li>
+<li><p>Works, but not smooth</p></li>
+</ul>
+<p><strong>Logs:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...
+[Succeeds on retry]
+[Normal update]
+HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...
+[Succeeds on retry]
+...
+</pre></div>
+</div>
+<p><strong>User experience:</strong> Animation continues but somewhat choppy
+<strong>Solution:</strong> Move WiFi router closer or increase max_retries</p>
+</section>
+</section>
+<section id="optimization-tips">
+<h2>Optimization Tips<a class="headerlink" href="#optimization-tips" title="Link to this heading"></a></h2>
+<section id="for-fast-networks">
+<h3>For Fast Networks<a class="headerlink" href="#for-fast-networks" title="Link to this heading"></a></h3>
+<p>If your WLED device is on a fast local network:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>      <span class="c1"># Shorter timeout</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">2</span>     <span class="c1"># Fewer retries</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="for-slow-unstable-networks">
+<h3>For Slow/Unstable Networks<a class="headerlink" href="#for-slow-unstable-networks" title="Link to this heading"></a></h3>
+<p>If your network is slow or unstable:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>       <span class="c1"># Longer timeout</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span>      <span class="c1"># More retries</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="for-critical-applications">
+<h3>For Critical Applications<a class="headerlink" href="#for-critical-applications" title="Link to this heading"></a></h3>
+<p>If animation must not freeze:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>       <span class="c1"># Fast timeout</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">1</span>      <span class="c1"># Single attempt</span>
+<span class="p">)</span>
+<span class="c1"># Animation continues even if device unreachable</span>
+<span class="c1"># Might miss some updates but never stalls</span>
+</pre></div>
+</div>
+</section>
+<section id="udp-alternative">
+<h3>UDP Alternative<a class="headerlink" href="#udp-alternative" title="Link to this heading"></a></h3>
+<p>For most reliable real-time updates, consider UDP:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="c1"># UDP is faster and doesn&#39;t require connection</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>UDP doesn’t have timeouts - packets are sent and forgotten.</p>
+</section>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h3>
+<p><strong>Frequent timeout warnings in logs</strong></p>
+<ol class="arabic simple">
+<li><p>Check network connectivity: <code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">192.168.1.100</span></code></p></li>
+<li><p>Verify WLED is responding: <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">http://192.168.1.100/json/state</span></code></p></li>
+<li><p>Try increasing timeout: <code class="docutils literal notranslate"><span class="pre">timeout=2.0</span></code></p></li>
+<li><p>Try more retries: <code class="docutils literal notranslate"><span class="pre">max_retries=5</span></code></p></li>
+</ol>
+<p><strong>Device always timing out</strong></p>
+<ol class="arabic simple">
+<li><p>Ensure device is powered on and connected</p></li>
+<li><p>Check IP address is correct</p></li>
+<li><p>Try accessing WLED web interface: <code class="docutils literal notranslate"><span class="pre">http://192.168.1.100</span></code></p></li>
+<li><p>Check WLED logs for errors</p></li>
+<li><p>Try UDP mode instead</p></li>
+</ol>
+<p><strong>Animation stutters despite retries</strong></p>
+<ol class="arabic simple">
+<li><p>Network might be overloaded</p></li>
+<li><p>Try increasing update_interval: <code class="docutils literal notranslate"><span class="pre">update_interval=0.1</span></code> (slower)</p></li>
+<li><p>Try reducing trail_length or fade effects</p></li>
+<li><p>Consider moving WiFi router closer</p></li>
+<li><p>Check for interference on WiFi channel</p></li>
+</ol>
+<p><strong>High CPU usage during retries</strong></p>
+<p>This shouldn’t happen (retries include 50ms sleep).
+If you see high CPU:</p>
+<ol class="arabic simple">
+<li><p>Check if animation thread is spinning</p></li>
+<li><p>Reduce update_interval</p></li>
+<li><p>Verify timeout isn’t set too low</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> - Configure HTTP parameters</p></li>
+<li><p><a class="reference internal" href="cli_simulator.html"><span class="doc">CLI Simulator Guide</span></a> - Test with simulator</p></li>
+<li><p><a class="reference internal" href="../api/wled.html"><span class="doc">ble2wled.wled - WLED Device Communication</span></a> - WLEDHTTPController API reference</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mqtt_authentication.html" class="btn btn-neutral float-left" title="MQTT Authentication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/modules.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

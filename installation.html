@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#from-source">From Source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-steps">Installation Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verify-installation">Verify Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-environment-recommended">Virtual Environment (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-from-pypi-future">Installing from PyPI (Future)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting-installation">Troubleshooting Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p>BLE2WLED can be installed from source. PyPI publication is planned for future releases.</p>
+<section id="from-source">
+<h2>From Source<a class="headerlink" href="#from-source" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python 3.8 or higher</p></li>
+<li><p>pip</p></li>
+<li><p>git (to clone the repository)</p></li>
+</ul>
+</section>
+<section id="installation-steps">
+<h3>Installation Steps<a class="headerlink" href="#installation-steps" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Clone the repository:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tobus3000/ble2wled.git
+<span class="nb">cd</span><span class="w"> </span>ble2wled
+</pre></div>
+</div>
+</li>
+<li><p><strong>Install in development mode (recommended for development):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</pre></div>
+</div>
+<p>This installs BLE2WLED with all development dependencies (testing, linting, documentation).</p>
+</li>
+<li><p><strong>Or install in standard mode (for users):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>This installs only the runtime dependencies.</p>
+</li>
+</ol>
+</section>
+<section id="verify-installation">
+<h3>Verify Installation<a class="headerlink" href="#verify-installation" title="Link to this heading"></a></h3>
+<p>Verify the installation was successful:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from ble2wled import BeaconState; print(&#39;BLE2WLED installed successfully&#39;)&quot;</span>
+</pre></div>
+</div>
+<p>Run the simulator to verify everything works:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--duration<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<p>You should see an animated LED strip visualization for 5 seconds.</p>
+</section>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h3>
+<p><strong>Core Dependencies:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">paho-mqtt</span></code> - MQTT client library for beacon data reception</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">requests</span></code> - HTTP library for WLED device communication</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python-dotenv</span></code> - .env file support for configuration</p></li>
+</ul>
+<p><strong>Development Dependencies:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pytest</span></code> - Testing framework</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pytest-cov</span></code> - Code coverage reporting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx</span></code> - Documentation generation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sphinx-rtd-theme</span></code> - ReadTheDocs theme for Sphinx</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">myst-parser</span></code> - Markdown support in Sphinx</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ruff</span></code> - Code linting and formatting</p></li>
+</ul>
+</section>
+<section id="virtual-environment-recommended">
+<h3>Virtual Environment (Recommended)<a class="headerlink" href="#virtual-environment-recommended" title="Link to this heading"></a></h3>
+<p>It’s recommended to use a virtual environment to avoid conflicts with system packages:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create virtual environment</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+
+<span class="c1"># Activate virtual environment</span>
+<span class="c1"># On Linux/macOS:</span>
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate
+<span class="c1"># On Windows:</span>
+venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+
+<span class="c1"># Install BLE2WLED</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="installing-from-pypi-future">
+<h3>Installing from PyPI (Future)<a class="headerlink" href="#installing-from-pypi-future" title="Link to this heading"></a></h3>
+<p>Once BLE2WLED is published to PyPI, installation will be as simple as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ble2wled
+</pre></div>
+</div>
+</section>
+<section id="troubleshooting-installation">
+<h3>Troubleshooting Installation<a class="headerlink" href="#troubleshooting-installation" title="Link to this heading"></a></h3>
+<p><strong>ImportError: No module named ‘ble2wled’</strong></p>
+<p>Make sure you’ve installed the package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>MQTT Connection Error</strong></p>
+<p>Ensure:
+- MQTT broker is running and accessible
+- Correct broker host and port in configuration
+- Network connectivity between your machine and broker</p>
+<p><strong>WLED Connection Error</strong></p>
+<p>Ensure:
+- WLED device is powered on and connected to the network
+- Correct WLED host/IP address in configuration
+- UDP or HTTP port is accessible (21324 for UDP, 80 for HTTP)</p>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="quickstart.html"><span class="doc">Quickstart</span></a> - Get started in 5 minutes</p></li>
+<li><p><a class="reference internal" href="guides/configuration.html"><span class="doc">Configuration</span></a> - Learn about configuration options</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

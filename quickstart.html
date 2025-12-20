@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quickstart &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration" href="guides/configuration.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-setup">2. Basic Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-with-simulator">3. Test with Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#real-time-statistics">4. Real-Time Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api-production">5. Python API (Production)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-alternative">6. HTTP Alternative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-with-authentication">7. Configuration with Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quickstart</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h1>
+<p>Get BLE2WLED up and running in 5 minutes.</p>
+<section id="installation">
+<h2>1. Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-setup">
+<h2>2. Basic Setup<a class="headerlink" href="#basic-setup" title="Link to this heading"></a></h2>
+<p>Create a <cite>.env</cite> file in your project directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># WLED LED Strip</span>
+<span class="nv">WLED_HOST</span><span class="o">=</span>wled.local
+<span class="nv">LED_COUNT</span><span class="o">=</span><span class="m">60</span>
+
+<span class="c1"># MQTT Broker</span>
+<span class="nv">MQTT_BROKER</span><span class="o">=</span>localhost
+<span class="nv">MQTT_LOCATION</span><span class="o">=</span>living_room
+<span class="nv">MQTT_PORT</span><span class="o">=</span><span class="m">1883</span>
+</pre></div>
+</div>
+</section>
+<section id="test-with-simulator">
+<h2>3. Test with Simulator<a class="headerlink" href="#test-with-simulator" title="Link to this heading"></a></h2>
+<p>Run the CLI simulator to see beacon visualization in your terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--led-count<span class="w"> </span><span class="m">60</span><span class="w"> </span>--beacons<span class="w"> </span><span class="m">3</span>
+</pre></div>
+</div>
+<p>You should see an animated LED grid with colorful moving beacons.</p>
+</section>
+<section id="real-time-statistics">
+<h2>4. Real-Time Statistics<a class="headerlink" href="#real-time-statistics" title="Link to this heading"></a></h2>
+<p>The simulator can display real-time MQTT statistics:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span>localhost<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">60</span>
+</pre></div>
+</div>
+<p>This connects to a live MQTT broker and displays:
+- Number of messages received
+- Messages per second
+- Number of active beacons
+- Current frame rate
+- Total elapsed time</p>
+</section>
+<section id="python-api-production">
+<h2>5. Python API (Production)<a class="headerlink" href="#python-api-production" title="Link to this heading"></a></h2>
+<p>For production use with a real WLED device:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Load configuration from .env</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Validate configuration</span>
+<span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+
+<span class="c1"># Create beacon state tracker</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>
+    <span class="n">fade_out_seconds</span><span class="o">=</span><span class="mf">4.0</span>
+<span class="p">)</span>
+
+<span class="c1"># Create MQTT listener</span>
+<span class="n">mqtt_listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span>
+<span class="p">)</span>
+<span class="n">mqtt_listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Create WLED controller (UDP is faster)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span>
+<span class="p">)</span>
+
+<span class="c1"># Run animation loop</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>      <span class="c1"># 50ms updates</span>
+    <span class="n">trail_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="http-alternative">
+<h2>6. HTTP Alternative<a class="headerlink" href="#http-alternative" title="Link to this heading"></a></h2>
+<p>If your WLED device doesn’t support UDP, use HTTP instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+
+<span class="c1"># Create HTTP controller with automatic retry on timeout</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>        <span class="c1"># 1 second timeout</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span>       <span class="c1"># Retry 3 times on timeout</span>
+<span class="p">)</span>
+
+<span class="c1"># Use same animation loop</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-with-authentication">
+<h2>7. Configuration with Authentication<a class="headerlink" href="#configuration-with-authentication" title="Link to this heading"></a></h2>
+<p>If your MQTT broker requires authentication:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add to .env</span>
+<span class="nv">MQTT_USERNAME</span><span class="o">=</span>my_username
+<span class="nv">MQTT_PASSWORD</span><span class="o">=</span>my_password
+</pre></div>
+</div>
+<p>Or via CLI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-username<span class="w"> </span>my_user<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-password<span class="w"> </span>my_pass<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">60</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="guides/configuration.html"><span class="doc">Configuration</span></a> - Full configuration reference</p></li>
+<li><p><a class="reference internal" href="guides/cli_simulator.html"><span class="doc">CLI Simulator Guide</span></a> - Advanced simulator usage</p></li>
+<li><p><a class="reference internal" href="guides/mqtt_authentication.html"><span class="doc">MQTT Authentication</span></a> - MQTT authentication setup</p></li>
+<li><p><a class="reference internal" href="guides/http_retry_logic.html"><span class="doc">HTTP Retry Logic</span></a> - Understanding HTTP retry behavior</p></li>
+<li><p><a class="reference internal" href="api/modules.html"><span class="doc">API Reference</span></a> - Full API documentation</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guides/configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

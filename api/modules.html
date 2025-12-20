@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.config - Configuration Management" href="config.html" />
+    <link rel="prev" title="HTTP Retry Logic" href="../guides/http_retry_logic.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-dependencies">Module Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage-example">Usage Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<p>Complete API reference for BLE2WLED modules.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html#ble2wled.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#properties">Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#methods">Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="states.html#ble2wled.states.BeaconState"><code class="docutils literal notranslate"><span class="pre">BeaconState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html#key-classes">Key Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="states.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#ble2wled.colors.estimate_distance_from_rssi"><code class="docutils literal notranslate"><span class="pre">estimate_distance_from_rssi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#ble2wled.colors.lerp"><code class="docutils literal notranslate"><span class="pre">lerp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#ble2wled.colors.gradient_color"><code class="docutils literal notranslate"><span class="pre">gradient_color()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#ble2wled.colors.ble_beacon_to_rgb"><code class="docutils literal notranslate"><span class="pre">ble_beacon_to_rgb()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#ble2wled.animation.BeaconRunner"><code class="docutils literal notranslate"><span class="pre">BeaconRunner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#ble2wled.animation.add_trail"><code class="docutils literal notranslate"><span class="pre">add_trail()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#animation-parameters">Animation Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="animation.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#ble2wled.wled.LEDController"><code class="docutils literal notranslate"><span class="pre">LEDController</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#ble2wled.wled.WLEDHTTPController"><code class="docutils literal notranslate"><span class="pre">WLEDHTTPController</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#ble2wled.wled.WLEDUDPController"><code class="docutils literal notranslate"><span class="pre">WLEDUDPController</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#led-data-format">LED Data Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#choosing-between-udp-and-http">Choosing Between UDP and HTTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wled.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#ble2wled.mqtt.EspresenseBeaconListener"><code class="docutils literal notranslate"><span class="pre">EspresenseBeaconListener</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#ble2wled.mqtt.BeaconMQTTListener"><code class="docutils literal notranslate"><span class="pre">BeaconMQTTListener</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#performance">Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mqtt.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#ble2wled.simulator.LEDSimulator"><code class="docutils literal notranslate"><span class="pre">LEDSimulator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#ble2wled.simulator.MockBeaconGenerator"><code class="docutils literal notranslate"><span class="pre">MockBeaconGenerator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#cli-usage">CLI Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#performance">Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulator.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>BLE2WLED consists of several modular components:</p>
+<dl class="simple">
+<dt><strong>Configuration Management</strong></dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="config.html"><span class="doc">ble2wled.config - Configuration Management</span></a> - Load and manage configuration from environment variables</p></li>
+</ul>
+</dd>
+<dt><strong>Beacon State Tracking</strong></dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="states.html"><span class="doc">ble2wled.states - Beacon State Management</span></a> - Track beacon positions, signals, and lifecycles</p></li>
+</ul>
+</dd>
+<dt><strong>Visualization</strong></dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="colors.html"><span class="doc">ble2wled.colors - Color Calculations</span></a> - Color mapping and HSV calculations</p></li>
+<li><p><a class="reference internal" href="animation.html"><span class="doc">ble2wled.animation - Animation Loop</span></a> - Animation loop and LED rendering</p></li>
+<li><p><a class="reference internal" href="wled.html"><span class="doc">ble2wled.wled - WLED Device Communication</span></a> - WLED device communication (HTTP/UDP)</p></li>
+</ul>
+</dd>
+<dt><strong>Input</strong></dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="mqtt.html"><span class="doc">ble2wled.mqtt - MQTT Beacon Listener</span></a> - MQTT listener for beacon data</p></li>
+</ul>
+</dd>
+<dt><strong>Testing</strong></dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="simulator.html"><span class="doc">ble2wled.simulator - LED Simulator and Mock Beacons</span></a> - LED simulator and mock beacon generation</p></li>
+</ul>
+</dd>
+</dl>
+<section id="module-dependencies">
+<h3>Module Dependencies<a class="headerlink" href="#module-dependencies" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>config.py
+    └─&gt; Loads environment variables and .env files
+
+states.py
+    └─&gt; Tracks beacon state over time
+
+mqtt.py
+    ├─&gt; Depends on states.py
+    └─&gt; Provides beacon data to states
+
+colors.py
+    └─&gt; Converts distance/signal to LED colors
+
+animation.py
+    ├─&gt; Depends on states.py, colors.py, wled.py
+    └─&gt; Main animation loop
+
+wled.py
+    └─&gt; Communicates with physical WLED devices
+
+simulator.py
+    ├─&gt; Depends on states.py
+    └─&gt; Mock WLED controller for testing
+</pre></div>
+</div>
+</section>
+<section id="usage-example">
+<h3>Usage Example<a class="headerlink" href="#usage-example" title="Link to this heading"></a></h3>
+<p>Typical application flow:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Load configuration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># 2. Create beacon state tracker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># 3. Start MQTT listener (provides beacon data)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span>
+<span class="p">)</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># 4. Create WLED controller</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">)</span>
+
+<span class="c1"># 5. Run animation loop</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../guides/http_retry_logic.html" class="btn btn-neutral float-left" title="HTTP Retry Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="config.html" class="btn btn-neutral float-right" title="ble2wled.config - Configuration Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

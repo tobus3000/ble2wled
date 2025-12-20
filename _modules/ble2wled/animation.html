@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.animation &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ble2wled.animation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ble2wled.animation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Beacon animation and trail rendering.</span>
+
+<span class="sd">This module handles animation of beacons moving across LED strips and</span>
+<span class="sd">rendering motion trails for visual effects.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Animate beacons with motion trails::</span>
+
+<span class="sd">        from ble2wled.animation import BeaconRunner, add_trail</span>
+<span class="sd">        from ble2wled.colors import ble_beacon_to_rgb</span>
+
+<span class="sd">        runner = BeaconRunner(led_count=60)</span>
+<span class="sd">        leds = [[0, 0, 0] for _ in range(60)]</span>
+
+<span class="sd">        # Get next position for beacon and add trail</span>
+<span class="sd">        pos = runner.next_position(&#39;beacon_1&#39;)</span>
+<span class="sd">        color = ble_beacon_to_rgb(&#39;beacon_1&#39;, rssi=-50, life=0.8)</span>
+<span class="sd">        add_trail(leds, pos, color, trail_length=10, fade_factor=0.75)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="BeaconRunner">
+<a class="viewcode-back" href="../../api/animation.html#ble2wled.animation.BeaconRunner">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BeaconRunner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages animation positions for beacons moving along LED strip.</span>
+
+<span class="sd">    Each beacon gets its own position on the LED strip. Calling next_position()</span>
+<span class="sd">    increments the position, creating a moving effect across the strip.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        led_count (int): Total number of LEDs in the strip.</span>
+<span class="sd">        positions (dict): Current position of each beacon.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BeaconRunner.__init__">
+<a class="viewcode-back" href="../../api/animation.html#ble2wled.animation.BeaconRunner.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">led_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize beacon runner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            led_count (int): Total number of LEDs in the strip.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Create a beacon runner for a 60-LED strip::</span>
+
+<span class="sd">                runner = BeaconRunner(led_count=60)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_count</span> <span class="o">=</span> <span class="n">led_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="BeaconRunner.next_position">
+<a class="viewcode-back" href="../../api/animation.html#ble2wled.animation.BeaconRunner.next_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">next_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beacon_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get next position for a beacon.</span>
+
+<span class="sd">        Increments position and wraps around at LED count. Maintains consistent</span>
+<span class="sd">        position increment per beacon across calls.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            beacon_id (str): Unique beacon identifier.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Next position index (0 to led_count-1).</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Get beacon positions for animation::</span>
+
+<span class="sd">                runner = BeaconRunner(led_count=60)</span>
+<span class="sd">                pos1 = runner.next_position(&#39;beacon_1&#39;)  # Returns 0</span>
+<span class="sd">                pos1 = runner.next_position(&#39;beacon_1&#39;)  # Returns 1</span>
+<span class="sd">                pos2 = runner.next_position(&#39;beacon_2&#39;)  # Returns 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">led_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">beacon_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="k">return</span> <span class="n">pos</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="add_trail">
+<a class="viewcode-back" href="../../api/animation.html#ble2wled.animation.add_trail">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_trail</span><span class="p">(</span>
+    <span class="n">leds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">trail_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">fade_factor</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add motion trail to LED array.</span>
+
+<span class="sd">    Creates a fading trail effect behind the beacon by rendering progressively</span>
+<span class="sd">    dimmer segments behind the main position. Uses additive blending to combine</span>
+<span class="sd">    trail colors with existing LED values.</span>
+
+<span class="sd">    Trail Rendering:</span>
+<span class="sd">        - LED at position gets full color</span>
+<span class="sd">        - Each previous LED gets color * fade_factor^distance</span>
+<span class="sd">        - Colors are additively blended (clamped at 255)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        leds (list): LED color array (list of [R, G, B] with values 0-255).</span>
+<span class="sd">        position (int): Current beacon position index.</span>
+<span class="sd">        color (tuple): RGB color tuple (R, G, B) with values 0-255.</span>
+<span class="sd">        trail_length (int): Number of LEDs in the trail (including main position).</span>
+<span class="sd">        fade_factor (float): Brightness decay per segment (0.0 to 1.0).</span>
+<span class="sd">            0.75 means each trailing segment is 75% brightness of previous.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If trail_length is negative or fade_factor outside 0-1.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Add a red trail to the LED array::</span>
+
+<span class="sd">            leds = [[0, 0, 0] for _ in range(60)]</span>
+<span class="sd">            add_trail(leds, position=10, color=(255, 0, 0),</span>
+<span class="sd">                     trail_length=8, fade_factor=0.75)</span>
+<span class="sd">            # Now leds[10] has max red, leds[9] has 75% red, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">color</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trail_length</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">position</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+        <span class="n">fade</span> <span class="o">=</span> <span class="n">fade_factor</span><span class="o">**</span><span class="n">i</span>
+
+        <span class="n">leds</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">leds</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">fade</span><span class="p">))</span>
+        <span class="n">leds</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">leds</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="n">fade</span><span class="p">))</span>
+        <span class="n">leds</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">leds</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">fade</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

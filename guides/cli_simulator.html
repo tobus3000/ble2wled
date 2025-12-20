@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLI Simulator Guide &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MQTT Authentication" href="mqtt_authentication.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLI Simulator Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command-Line Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-examples">Basic Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#live-mqtt-examples">Live MQTT Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#display-output">Display Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-tips">Performance Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CLI Simulator Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/cli_simulator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cli-simulator-guide">
+<h1>CLI Simulator Guide<a class="headerlink" href="#cli-simulator-guide" title="Link to this heading"></a></h1>
+<p>The BLE2WLED simulator provides a command-line interface for testing beacon visualization without requiring a real WLED device or MQTT broker.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Visual LED Display</strong> - Renders LED strip as a colored grid in the terminal using ANSI 24-bit colors</p></li>
+<li><p><strong>Mock Beacon Generation</strong> - Simulates realistic BLE beacon movement and signal strength</p></li>
+<li><p><strong>Configurable Parameters</strong> - Customize LED count, grid layout, beacon count, and animation settings</p></li>
+<li><p><strong>Live MQTT Connection</strong> - Connect to real MQTT broker to test with actual beacon data</p></li>
+<li><p><strong>Real-time Statistics</strong> - Display message rates, active beacons, and frame rate</p></li>
+<li><p><strong>Headless Testing</strong> - Run simulations in CI/CD pipelines or headless environments</p></li>
+</ul>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h2>
+<p>Run the simulator with default settings (60 LEDs, 3 beacons):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator
+</pre></div>
+</div>
+<p>This displays an animated grid of LEDs with colorful moving beacons in your terminal.</p>
+<p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl+C</span></code> to exit.</p>
+</section>
+<section id="command-line-options">
+<h2>Command-Line Options<a class="headerlink" href="#command-line-options" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">led</span><span class="o">-</span><span class="n">count</span> <span class="n">LED_COUNT</span>
+    <span class="n">Total</span> <span class="n">number</span> <span class="n">of</span> <span class="n">LEDs</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">strip</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">Valid</span> <span class="nb">range</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">1024</span>
+
+<span class="o">--</span><span class="n">rows</span> <span class="n">ROWS</span>
+    <span class="n">Display</span> <span class="n">grid</span> <span class="n">rows</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">Lower</span> <span class="n">values</span> <span class="o">=</span> <span class="n">taller</span> <span class="n">display</span>
+
+<span class="o">--</span><span class="n">cols</span> <span class="n">COLS</span>
+    <span class="n">Display</span> <span class="n">grid</span> <span class="n">columns</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">Higher</span> <span class="n">values</span> <span class="o">=</span> <span class="n">wider</span> <span class="n">display</span>
+
+<span class="o">--</span><span class="n">beacons</span> <span class="n">BEACONS</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">mock</span> <span class="n">beacons</span> <span class="n">to</span> <span class="n">simulate</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">Valid</span> <span class="nb">range</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">50</span>
+
+<span class="o">--</span><span class="n">update</span><span class="o">-</span><span class="n">interval</span> <span class="n">UPDATE_INTERVAL</span>
+    <span class="n">Update</span> <span class="n">interval</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">Lower</span> <span class="o">=</span> <span class="n">smoother</span> <span class="n">animation</span> <span class="n">but</span> <span class="n">higher</span> <span class="n">CPU</span>
+    <span class="n">Valid</span> <span class="nb">range</span><span class="p">:</span> <span class="mf">0.01</span><span class="o">-</span><span class="mf">1.0</span>
+
+<span class="o">--</span><span class="n">trail</span><span class="o">-</span><span class="n">length</span> <span class="n">TRAIL_LENGTH</span>
+    <span class="n">Length</span> <span class="n">of</span> <span class="n">motion</span> <span class="n">trail</span> <span class="ow">in</span> <span class="n">LEDs</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="n">Valid</span> <span class="nb">range</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">100</span>
+
+<span class="o">--</span><span class="n">fade</span><span class="o">-</span><span class="n">factor</span> <span class="n">FADE_FACTOR</span>
+    <span class="n">Trail</span> <span class="n">fade</span> <span class="n">factor</span> <span class="mi">0</span><span class="o">-</span><span class="mi">1</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">)</span>
+    <span class="mf">0.9</span> <span class="o">=</span> <span class="n">slow</span> <span class="n">fade</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">=</span> <span class="n">fast</span> <span class="n">fade</span>
+
+<span class="o">--</span><span class="n">duration</span> <span class="n">DURATION</span>
+    <span class="n">Run</span> <span class="n">duration</span> <span class="ow">in</span> <span class="n">seconds</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">infinite</span><span class="p">)</span>
+    <span class="n">Useful</span> <span class="k">for</span> <span class="n">automated</span> <span class="n">testing</span>
+
+<span class="o">--</span><span class="n">mqtt</span>
+    <span class="n">Connect</span> <span class="n">to</span> <span class="n">real</span> <span class="n">MQTT</span> <span class="n">broker</span> <span class="n">instead</span> <span class="n">of</span> <span class="n">generating</span> <span class="n">mock</span> <span class="n">beacons</span>
+
+<span class="o">--</span><span class="n">mqtt</span><span class="o">-</span><span class="n">broker</span> <span class="n">BROKER</span>
+    <span class="n">MQTT</span> <span class="n">broker</span> <span class="n">hostname</span><span class="o">/</span><span class="n">IP</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">localhost</span><span class="p">)</span>
+
+<span class="o">--</span><span class="n">mqtt</span><span class="o">-</span><span class="n">port</span> <span class="n">PORT</span>
+    <span class="n">MQTT</span> <span class="n">broker</span> <span class="n">port</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">1883</span><span class="p">)</span>
+
+<span class="o">--</span><span class="n">mqtt</span><span class="o">-</span><span class="n">location</span> <span class="n">LOCATION</span>
+    <span class="n">Beacon</span> <span class="n">location</span><span class="o">/</span><span class="n">room</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">test</span><span class="p">)</span>
+    <span class="n">Topic</span><span class="p">:</span> <span class="n">espresense</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="p">{</span><span class="n">LOCATION</span><span class="p">}</span>
+
+<span class="o">--</span><span class="n">mqtt</span><span class="o">-</span><span class="n">username</span> <span class="n">USERNAME</span>
+    <span class="n">MQTT</span> <span class="n">username</span> <span class="k">for</span> <span class="n">authentication</span> <span class="p">(</span><span class="n">optional</span><span class="p">)</span>
+
+<span class="o">--</span><span class="n">mqtt</span><span class="o">-</span><span class="n">password</span> <span class="n">PASSWORD</span>
+    <span class="n">MQTT</span> <span class="n">password</span> <span class="k">for</span> <span class="n">authentication</span> <span class="p">(</span><span class="n">optional</span><span class="p">)</span>
+
+<span class="o">--</span><span class="n">help</span>
+    <span class="n">Show</span> <span class="n">help</span> <span class="n">message</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-examples">
+<h2>Basic Examples<a class="headerlink" href="#basic-examples" title="Link to this heading"></a></h2>
+<p><strong>120-LED strip with 5 beacons:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--led-count<span class="w"> </span><span class="m">120</span><span class="w"> </span>--beacons<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<p><strong>Run for 30 seconds with faster updates:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--duration<span class="w"> </span><span class="m">30</span><span class="w"> </span>--update-interval<span class="w"> </span><span class="m">0</span>.05
+</pre></div>
+</div>
+<p><strong>Custom grid layout with longer trails:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--led-count<span class="w"> </span><span class="m">100</span><span class="w"> </span>--rows<span class="w"> </span><span class="m">20</span><span class="w"> </span>--cols<span class="w"> </span><span class="m">5</span><span class="w"> </span>--trail-length<span class="w"> </span><span class="m">15</span>
+</pre></div>
+</div>
+<p><strong>Small display for narrow terminals:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--led-count<span class="w"> </span><span class="m">60</span><span class="w"> </span>--rows<span class="w"> </span><span class="m">5</span><span class="w"> </span>--cols<span class="w"> </span><span class="m">12</span>
+</pre></div>
+</div>
+<p><strong>High-speed animation (50fps):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--update-interval<span class="w"> </span><span class="m">0</span>.02
+</pre></div>
+</div>
+<p><strong>Slow animation (5fps):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--update-interval<span class="w"> </span><span class="m">0</span>.2
+</pre></div>
+</div>
+</section>
+<section id="live-mqtt-examples">
+<h2>Live MQTT Examples<a class="headerlink" href="#live-mqtt-examples" title="Link to this heading"></a></h2>
+<p>Connect to a real MQTT broker and visualize actual beacon data:</p>
+<p><strong>Basic MQTT connection:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span>localhost<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>living_room
+</pre></div>
+</div>
+<p><strong>MQTT with custom grid layout:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>bedroom<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--rows<span class="w"> </span><span class="m">12</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cols<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<p><strong>MQTT with authentication:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--mqtt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-broker<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-port<span class="w"> </span><span class="m">1883</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-location<span class="w"> </span>office<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-username<span class="w"> </span>mqtt_user<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--mqtt-password<span class="w"> </span>my_password<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--led-count<span class="w"> </span><span class="m">100</span>
+</pre></div>
+</div>
+<p><strong>MQTT with real-time statistics display:</strong></p>
+<p>The simulator automatically displays real-time statistics when using MQTT:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MQTT</span><span class="p">:</span> <span class="mi">342</span> <span class="n">msgs</span> <span class="o">|</span> <span class="mf">12.3</span> <span class="n">msg</span><span class="o">/</span><span class="n">s</span> <span class="o">|</span> <span class="n">Beacons</span><span class="p">:</span> <span class="mi">8</span> <span class="o">|</span> <span class="n">FPS</span><span class="p">:</span> <span class="mf">9.8</span> <span class="o">|</span> <span class="n">Time</span><span class="p">:</span> <span class="mi">00</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">34</span>
+</pre></div>
+</div>
+<p>This shows:
+- <strong>342 msgs</strong> - Total messages received
+- <strong>12.3 msg/s</strong> - Message rate per second
+- <strong>Beacons: 8</strong> - Number of active beacons
+- <strong>FPS: 9.8</strong> - Animation frame rate
+- <strong>Time: 00:02:34</strong> - Elapsed time</p>
+</section>
+<section id="python-api">
+<h2>Python API<a class="headerlink" href="#python-api" title="Link to this heading"></a></h2>
+<p>Use the simulator programmatically in your code:</p>
+<p><strong>Using LEDSimulator with mock beacons:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEDSimulator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Create simulator (60 LEDs in 10×6 grid)</span>
+<span class="n">simulator</span> <span class="o">=</span> <span class="n">LEDSimulator</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Create beacon state</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Generate some beacons for testing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBeaconGenerator</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">num_beacons</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Run animation loop with simulator</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">simulator</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">trail_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.7</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Using MockBeaconGenerator for testing:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBeaconGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="c1"># Create beacon state</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+
+<span class="c1"># Create mock beacon generator</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">num_beacons</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">)</span>
+
+<span class="c1"># Start generating mock beacons</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Use beacon_state in your animation loop</span>
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">beacon</span> <span class="ow">in</span> <span class="n">beacon_state</span><span class="o">.</span><span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon </span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2">: pos=</span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">, rssi=</span><span class="si">{</span><span class="n">beacon</span><span class="o">.</span><span class="n">rssi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Stop generator</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="display-output">
+<h2>Display Output<a class="headerlink" href="#display-output" title="Link to this heading"></a></h2>
+<p>The simulator displays LEDs as colored blocks in a grid:</p>
+<p><strong>Example output with 60 LEDs (10×6 grid) and 3 beacons:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████████████████████████████
+██████████████████████████████
+██████████████████████████████
+███░░░░███░░░░██████████░░████
+██░░░░░░░░░░░░██████████████░░
+██░░░░░░░░░░░░██████████░░░░░░
+██████████░░░░██░░░░██░░░░░░░░
+██████████░░░░██░░░░██░░░░░░░░
+██████████░░░░██░░░░██░░░░░░░░
+██████████████████████████░░░░
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Colors</strong> represent different beacons (hash-based hue)</p></li>
+<li><p><strong>Brightness</strong> represents signal strength (RSSI)</p></li>
+<li><p><strong>Trails</strong> show recent beacon positions (fading backward)</p></li>
+</ul>
+<section id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h3>
+<p><strong>Nothing displays or “broken pipe” error:</strong></p>
+<p>Try using a smaller grid:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--rows<span class="w"> </span><span class="m">5</span><span class="w"> </span>--cols<span class="w"> </span><span class="m">12</span>
+</pre></div>
+</div>
+<p><strong>MQTT connection refuses:</strong></p>
+<p>Check:
+1. MQTT broker is running: <code class="docutils literal notranslate"><span class="pre">telnet</span> <span class="pre">localhost</span> <span class="pre">1883</span></code>
+2. Correct broker address: <code class="docutils literal notranslate"><span class="pre">--mqtt-broker</span> <span class="pre">&lt;your-broker&gt;</span></code>
+3. Correct location: <code class="docutils literal notranslate"><span class="pre">--mqtt-location</span> <span class="pre">&lt;location&gt;</span></code>
+4. Network connectivity: <code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">&lt;broker-ip&gt;</span></code></p>
+<p><strong>Animation is choppy or slow:</strong></p>
+<p>Reduce complexity:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ble2wled.cli_simulator<span class="w"> </span>--rows<span class="w"> </span><span class="m">5</span><span class="w"> </span>--cols<span class="w"> </span><span class="m">10</span><span class="w"> </span>--update-interval<span class="w"> </span><span class="m">0</span>.2
+</pre></div>
+</div>
+<p><strong>No beacons appear on MQTT:</strong></p>
+<p>Ensure:
+1. MQTT broker is receiving messages: <code class="docutils literal notranslate"><span class="pre">mosquitto_sub</span> <span class="pre">-t</span> <span class="pre">&quot;espresense/devices/+/+&quot;</span></code>
+2. Correct location in command matches espresense devices
+3. Espresense devices are actively scanning</p>
+</section>
+<section id="performance-tips">
+<h3>Performance Tips<a class="headerlink" href="#performance-tips" title="Link to this heading"></a></h3>
+<p><strong>For smooth animation:</strong></p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">--update-interval</span> <span class="pre">0.05</span></code> for 20fps (good balance)</p></li>
+<li><p>Keep grid under 120 LEDs for smooth display</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">--trail-length</span> <span class="pre">8</span></code> or lower for lower-end systems</p></li>
+</ul>
+<p><strong>For CPU-constrained systems:</strong></p>
+<ul class="simple">
+<li><p>Increase <code class="docutils literal notranslate"><span class="pre">--update-interval</span></code> to 0.2 (5fps)</p></li>
+<li><p>Reduce <code class="docutils literal notranslate"><span class="pre">--rows</span></code> and <code class="docutils literal notranslate"><span class="pre">--cols</span></code> for smaller grid</p></li>
+<li><p>Reduce <code class="docutils literal notranslate"><span class="pre">--trail-length</span></code> to 4 or less</p></li>
+</ul>
+<p><strong>For high-speed animation:</strong></p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">--update-interval</span> <span class="pre">0.02</span></code> for 50fps (requires fast terminal)</p></li>
+<li><p>Keep grid reasonably sized (50-100 LEDs)</p></li>
+</ul>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> - Learn about configuration options</p></li>
+<li><p><a class="reference internal" href="mqtt_authentication.html"><span class="doc">MQTT Authentication</span></a> - Set up authenticated MQTT</p></li>
+<li><p><a class="reference internal" href="http_retry_logic.html"><span class="doc">HTTP Retry Logic</span></a> - Understand HTTP retry behavior</p></li>
+<li><p><a class="reference internal" href="../api/simulator.html"><span class="doc">ble2wled.simulator - LED Simulator and Mock Beacons</span></a> - Simulator API reference</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mqtt_authentication.html" class="btn btn-neutral float-right" title="MQTT Authentication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

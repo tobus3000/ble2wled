@@ -1,0 +1,869 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.config - Configuration Management &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.states - Beacon State Management" href="states.html" />
+    <link rel="prev" title="API Reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.wled_host"><code class="docutils literal notranslate"><span class="pre">Config.wled_host</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.led_count"><code class="docutils literal notranslate"><span class="pre">Config.led_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.output_mode"><code class="docutils literal notranslate"><span class="pre">Config.output_mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.mqtt_broker"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_broker</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.mqtt_location"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.mqtt_port"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_port</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.__init__"><code class="docutils literal notranslate"><span class="pre">Config.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Config.wled_host</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Config.led_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">Config.output_mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.http_timeout"><code class="docutils literal notranslate"><span class="pre">Config.http_timeout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.udp_port"><code class="docutils literal notranslate"><span class="pre">Config.udp_port</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_broker</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_port</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.mqtt_username"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_username</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.mqtt_password"><code class="docutils literal notranslate"><span class="pre">Config.mqtt_password</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.beacon_timeout_seconds"><code class="docutils literal notranslate"><span class="pre">Config.beacon_timeout_seconds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.beacon_fade_out_seconds"><code class="docutils literal notranslate"><span class="pre">Config.beacon_fade_out_seconds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.update_interval"><code class="docutils literal notranslate"><span class="pre">Config.update_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.trail_length"><code class="docutils literal notranslate"><span class="pre">Config.trail_length</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.fade_factor"><code class="docutils literal notranslate"><span class="pre">Config.fade_factor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.log_level"><code class="docutils literal notranslate"><span class="pre">Config.log_level</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.validate"><code class="docutils literal notranslate"><span class="pre">Config.validate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.config.Config.to_dict"><code class="docutils literal notranslate"><span class="pre">Config.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#methods">Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load-from-env-file">Load from .env File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-from-environment-variables">Load from Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validate-configuration">Validate Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-with-mqtt-authentication">Use with MQTT Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#export-for-logging">Export for Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.config">
+<span id="ble2wled-config-configuration-management"></span><h1><a class="reference internal" href="#module-ble2wled.config" title="ble2wled.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code></a> - Configuration Management<a class="headerlink" href="#module-ble2wled.config" title="Link to this heading"></a></h1>
+<p>Configuration management using environment variables and .env files.</p>
+<p>This module provides centralized configuration management for BLE2WLED using
+environment variables and .env files. Configuration is loaded from .env on
+initialization and provides property-based access with type conversion,
+validation, and sensible defaults.</p>
+<dl class="simple">
+<dt>Configuration Hierarchy:</dt><dd><ol class="arabic simple">
+<li><p>.env file (if it exists)</p></li>
+<li><p>Environment variables</p></li>
+<li><p>Default values</p></li>
+</ol>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Load and use configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>  <span class="c1"># Check all values are valid</span>
+
+<span class="c1"># Access configuration properties</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WLED host: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LED count: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MQTT broker: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Log all configuration</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.config.Config">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.config.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/config.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.config.Config" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Centralized configuration management for BLE2WLED.</p>
+<p>Loads configuration from .env file and environment variables. Provides
+property-based access to configuration with automatic type conversion,
+validation, and sensible defaults.</p>
+<p>All configuration values are read through environment variables, which
+can be set via .env file or directly in the process environment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.config.Config.wled_host">
+<span class="sig-name descname"><span class="pre">wled_host</span></span><a class="headerlink" href="#ble2wled.config.Config.wled_host" title="Link to this definition"></a></dt>
+<dd><p>WLED device hostname or IP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.config.Config.led_count">
+<span class="sig-name descname"><span class="pre">led_count</span></span><a class="headerlink" href="#ble2wled.config.Config.led_count" title="Link to this definition"></a></dt>
+<dd><p>Number of LEDs in the strip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.config.Config.output_mode">
+<span class="sig-name descname"><span class="pre">output_mode</span></span><a class="headerlink" href="#ble2wled.config.Config.output_mode" title="Link to this definition"></a></dt>
+<dd><p>LED output protocol (‘udp’ or ‘http’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.config.Config.mqtt_broker">
+<span class="sig-name descname"><span class="pre">mqtt_broker</span></span><a class="headerlink" href="#ble2wled.config.Config.mqtt_broker" title="Link to this definition"></a></dt>
+<dd><p>MQTT broker hostname or IP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.config.Config.mqtt_location">
+<span class="sig-name descname"><span class="pre">mqtt_location</span></span><a class="headerlink" href="#ble2wled.config.Config.mqtt_location" title="Link to this definition"></a></dt>
+<dd><p>Location filter for beacons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.config.Config.mqtt_port">
+<span class="sig-name descname"><span class="pre">mqtt_port</span></span><a class="headerlink" href="#ble2wled.config.Config.mqtt_port" title="Link to this definition"></a></dt>
+<dd><p>MQTT broker port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.config.Config.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/config.html#Config.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.config.Config.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize configuration.</p>
+<p>Loads environment variables from .env file if it exists. Configuration
+properties can then be accessed via the property methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>env_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to .env file. If None, defaults to “.env”
+in the current directory.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Load configuration from default .env file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>  <span class="c1"># Loads from .env</span>
+</pre></div>
+</div>
+<p>Or from a specific file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;/path/to/.env.production&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wled_host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>WLED device hostname or IP address.</p>
+<p>Default: ‘wled.local’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Hostname or IP address of WLED device.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Access WLED host:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">)</span>  <span class="c1"># &#39;wled.local&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">led_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Number of LEDs in the strip.</p>
+<p>Default: 60</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>LED count (must be positive).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If LED_COUNT is not positive.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Access LED count:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>‘udp’ or ‘http’.</p>
+<ul class="simple">
+<li><p>‘udp’: Fast real-time protocol (DRGB)</p></li>
+<li><p>‘http’: Slower but more reliable JSON API</p></li>
+</ul>
+<p>Default: ‘udp’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Output mode (‘udp’ or ‘http’).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If OUTPUT_MODE is not ‘udp’ or ‘http’.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Check output mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">output_mode</span> <span class="o">==</span> <span class="s1">&#39;udp&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using fast UDP updates&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>LED output mode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.http_timeout">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">http_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#ble2wled.config.Config.http_timeout" title="Link to this definition"></a></dt>
+<dd><p>HTTP request timeout in seconds.</p>
+<p>Default: 1.0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Timeout in seconds.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Set HTTP request timeout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">http_timeout</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.udp_port">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">udp_port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#ble2wled.config.Config.udp_port" title="Link to this definition"></a></dt>
+<dd><p>UDP DRGB protocol port.</p>
+<p>Default: 21324</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>UDP port number.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Use configured UDP port:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">udp_port</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mqtt_broker</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>MQTT broker hostname or IP address.</p>
+<p>Default: ‘localhost’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MQTT broker hostname or IP.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Connect to MQTT broker:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mqtt_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Location name for espresense filtering.</p>
+<p>Used to filter beacon messages from a specific location.
+Example values: ‘balkon’, ‘bedroom’, ‘living_room’</p>
+<p>Default: ‘balkon’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Location name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Filter beacons by location:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mqtt_port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>MQTT broker port.</p>
+<p>Default: 1883</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MQTT port number.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.mqtt_username">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mqtt_username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#ble2wled.config.Config.mqtt_username" title="Link to this definition"></a></dt>
+<dd><p>MQTT broker username for authentication.</p>
+<p>If set, used to authenticate with the MQTT broker.</p>
+<p>Default: None (no authentication)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MQTT username or None if not set.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Authenticate with MQTT broker:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">username_pw_set</span><span class="p">(</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">,</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.mqtt_password">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mqtt_password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#ble2wled.config.Config.mqtt_password" title="Link to this definition"></a></dt>
+<dd><p>MQTT broker password for authentication.</p>
+<p>If set along with mqtt_username, used to authenticate with the MQTT broker.</p>
+<p>Default: None (no authentication)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MQTT password or None if not set.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.beacon_timeout_seconds">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">beacon_timeout_seconds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#ble2wled.config.Config.beacon_timeout_seconds" title="Link to this definition"></a></dt>
+<dd><p>Beacon timeout duration in seconds.</p>
+<p>Time before a beacon is considered timed out (no updates received).</p>
+<p>Default: 6.0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Timeout duration in seconds.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create beacon state with configured timeout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">beacon_timeout_seconds</span><span class="p">,</span>
+    <span class="n">fade_out_seconds</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">beacon_fade_out_seconds</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.beacon_fade_out_seconds">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">beacon_fade_out_seconds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#ble2wled.config.Config.beacon_fade_out_seconds" title="Link to this definition"></a></dt>
+<dd><p>Beacon fade-out duration in seconds.</p>
+<p>Time to fade out a beacon after timeout.</p>
+<p>Default: 4.0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Fade-out duration in seconds.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.update_interval">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#ble2wled.config.Config.update_interval" title="Link to this definition"></a></dt>
+<dd><p>LED update interval in seconds.</p>
+<p>Time between LED updates. Smaller values = smoother but higher CPU.</p>
+<p>Default: 0.2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Update interval in seconds.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Run animation loop with configured interval:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">update_interval</span><span class="p">,</span>
+    <span class="n">trail_length</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">trail_length</span><span class="p">,</span>
+    <span class="n">fade_factor</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">fade_factor</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.trail_length">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trail_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#ble2wled.config.Config.trail_length" title="Link to this definition"></a></dt>
+<dd><p>Motion trail length in LEDs.</p>
+<p>Number of LEDs in the motion trail behind each beacon.</p>
+<p>Default: 10</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trail length in LEDs.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Use trail length for rendering:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add_trail</span><span class="p">(</span><span class="n">leds</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">trail_length</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">trail_length</span><span class="p">,</span>
+         <span class="n">fade_factor</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">fade_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.fade_factor">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fade_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#ble2wled.config.Config.fade_factor" title="Link to this definition"></a></dt>
+<dd><p>Trail brightness fade factor per segment.</p>
+<p>Brightness decay per trail segment (0.0 &lt; x &lt;= 1.0).
+0.75 = each segment is 75% brightness of previous.</p>
+<p>Default: 0.75</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Fade factor (0.0 to 1.0).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If fade factor is not in valid range.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Configure trail rendering:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add_trail</span><span class="p">(</span><span class="n">leds</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span>
+         <span class="n">trail_length</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">trail_length</span><span class="p">,</span>
+         <span class="n">fade_factor</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">fade_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ble2wled.config.Config.log_level">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#ble2wled.config.Config.log_level" title="Link to this definition"></a></dt>
+<dd><p>Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).</p>
+<p>Controls verbosity of application logging.</p>
+<p>Default: ‘INFO’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Log level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If log level is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Configure logging:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">log_level</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.config.Config.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/config.html#Config.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.config.Config.validate" title="Link to this definition"></a></dt>
+<dd><p>Validate all configuration values.</p>
+<p>Runs all property getters to check for invalid values. Useful for
+catching configuration errors at startup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If any configuration value is invalid.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Validate configuration on startup:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Configuration is valid&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.config.Config.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/config.html#Config.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.config.Config.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Export configuration as dictionary.</p>
+<p>Returns all configuration values as a dictionary. Useful for logging
+or debugging configuration state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary with all configuration values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Log configuration on startup:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">config</span></code> module provides centralized configuration management for BLE2WLED using environment variables and .env files.</p>
+<p>Configuration is loaded from:
+1. .env file (if present)
+2. Environment variables
+3. Default values</p>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+
+<span class="c1"># Load configuration from .env</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Validate all required values are present</span>
+<span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+
+<span class="c1"># Access configuration properties</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WLED: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MQTT: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Export as dictionary for logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading"></a></h2>
+<p><strong>WLED Device</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">wled_host</span></code> (str, required) - WLED device hostname/IP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int, default 60) - Number of LEDs in strip</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wled_http_timeout</span></code> (float, default 1.0) - HTTP request timeout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wled_http_retries</span></code> (int, default 3) - HTTP retry attempts</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wled_udp_port</span></code> (int, default 21324) - UDP DRGB port</p></li>
+</ul>
+<p><strong>MQTT Broker</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mqtt_broker</span></code> (str, required if using MQTT) - MQTT broker hostname/IP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mqtt_port</span></code> (int, default 1883) - MQTT port</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mqtt_location</span></code> (str, required if using MQTT) - Location/room identifier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mqtt_username</span></code> (str, optional) - MQTT authentication username</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mqtt_password</span></code> (str, optional) - MQTT authentication password</p></li>
+</ul>
+<p><strong>Animation</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">animation_update_interval</span></code> (float, default 0.05) - Animation update interval</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">animation_trail_length</span></code> (int, default 8) - Motion trail length</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">animation_fade_factor</span></code> (float, default 0.7) - Trail fade factor</p></li>
+</ul>
+<p><strong>Beacon Detection</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_timeout_seconds</span></code> (float, default 6.0) - Beacon timeout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_fade_out_seconds</span></code> (float, default 4.0) - Fade out duration</p></li>
+</ul>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">__init__(env_file:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None)</span></code></dt><dd><p>Initialize configuration, optionally loading from .env file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">validate()</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></dt><dd><p>Validate that all required configuration values are present.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">to_dict()</span> <span class="pre">-&gt;</span> <span class="pre">Dict[str,</span> <span class="pre">Any]</span></code></dt><dd><p>Export configuration as dictionary (useful for logging/debugging).</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="load-from-env-file">
+<h3>Load from .env File<a class="headerlink" href="#load-from-env-file" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LED count: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="load-from-environment-variables">
+<h3>Load from Environment Variables<a class="headerlink" href="#load-from-environment-variables" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">WLED_HOST</span><span class="o">=</span><span class="m">192</span>.168.1.100
+<span class="nb">export</span><span class="w"> </span><span class="nv">LED_COUNT</span><span class="o">=</span><span class="m">120</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MQTT_BROKER</span><span class="o">=</span>localhost
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>  <span class="c1"># Reads from environment</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LED count: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 120</span>
+</pre></div>
+</div>
+</section>
+<section id="validate-configuration">
+<h3>Validate Configuration<a class="headerlink" href="#validate-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Configuration valid!&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid config: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="use-with-mqtt-authentication">
+<h3>Use with MQTT Authentication<a class="headerlink" href="#use-with-mqtt-authentication" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_port</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_username</span><span class="p">,</span>      <span class="c1"># Optional</span>
+    <span class="n">password</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_password</span>       <span class="c1"># Optional</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="export-for-logging">
+<h3>Export for Logging<a class="headerlink" href="#export-for-logging" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Print formatted configuration</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c1"># Output:</span>
+<span class="c1"># {</span>
+<span class="c1">#   &quot;wled_host&quot;: &quot;192.168.1.100&quot;,</span>
+<span class="c1">#   &quot;led_count&quot;: 60,</span>
+<span class="c1">#   &quot;mqtt_broker&quot;: &quot;192.168.1.50&quot;,</span>
+<span class="c1">#   ...</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../guides/configuration.html"><span class="doc">Configuration</span></a> - Full configuration guide</p></li>
+<li><p><a class="reference internal" href="../quickstart.html"><span class="doc">Quickstart</span></a> - Quick start with configuration</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="states.html" class="btn btn-neutral float-right" title="ble2wled.states - Beacon State Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,621 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.animation - Animation Loop &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.wled - WLED Device Communication" href="wled.html" />
+    <link rel="prev" title="ble2wled.colors - Color Calculations" href="colors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.animation.BeaconRunner"><code class="docutils literal notranslate"><span class="pre">BeaconRunner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.animation.BeaconRunner.led_count"><code class="docutils literal notranslate"><span class="pre">BeaconRunner.led_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.animation.BeaconRunner.positions"><code class="docutils literal notranslate"><span class="pre">BeaconRunner.positions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.animation.BeaconRunner.__init__"><code class="docutils literal notranslate"><span class="pre">BeaconRunner.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.animation.BeaconRunner.next_position"><code class="docutils literal notranslate"><span class="pre">BeaconRunner.next_position()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.animation.add_trail"><code class="docutils literal notranslate"><span class="pre">add_trail()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#key-function">Key Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-wled-beacons">run_wled_beacons()</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#animation-parameters">Animation Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#update-interval">Update Interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trail-length">Trail Length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fade-factor">Fade Factor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-animation-loop">Basic Animation Loop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-mqtt">With MQTT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-custom-parameters">With Custom Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-considerations">Performance Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging-animation">Debugging Animation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/animation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.animation">
+<span id="ble2wled-animation-animation-loop"></span><h1><a class="reference internal" href="#module-ble2wled.animation" title="ble2wled.animation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code></a> - Animation Loop<a class="headerlink" href="#module-ble2wled.animation" title="Link to this heading"></a></h1>
+<p>Beacon animation and trail rendering.</p>
+<p>This module handles animation of beacons moving across LED strips and
+rendering motion trails for visual effects.</p>
+<p class="rubric">Example</p>
+<p>Animate beacons with motion trails:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconRunner</span><span class="p">,</span> <span class="n">add_trail</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ble_beacon_to_rgb</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">BeaconRunner</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>
+
+<span class="c1"># Get next position for beacon and add trail</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">next_position</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">)</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">ble_beacon_to_rgb</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">life</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">add_trail</span><span class="p">(</span><span class="n">leds</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">trail_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.animation.BeaconRunner">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.animation.</span></span><span class="sig-name descname"><span class="pre">BeaconRunner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/animation.html#BeaconRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.animation.BeaconRunner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Manages animation positions for beacons moving along LED strip.</p>
+<p>Each beacon gets its own position on the LED strip. Calling next_position()
+increments the position, creating a moving effect across the strip.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.animation.BeaconRunner.led_count">
+<span class="sig-name descname"><span class="pre">led_count</span></span><a class="headerlink" href="#ble2wled.animation.BeaconRunner.led_count" title="Link to this definition"></a></dt>
+<dd><p>Total number of LEDs in the strip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.animation.BeaconRunner.positions">
+<span class="sig-name descname"><span class="pre">positions</span></span><a class="headerlink" href="#ble2wled.animation.BeaconRunner.positions" title="Link to this definition"></a></dt>
+<dd><p>Current position of each beacon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.animation.BeaconRunner.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/animation.html#BeaconRunner.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.animation.BeaconRunner.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize beacon runner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>led_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Total number of LEDs in the strip.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create a beacon runner for a 60-LED strip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">runner</span> <span class="o">=</span> <span class="n">BeaconRunner</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.animation.BeaconRunner.next_position">
+<span class="sig-name descname"><span class="pre">next_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beacon_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/animation.html#BeaconRunner.next_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.animation.BeaconRunner.next_position" title="Link to this definition"></a></dt>
+<dd><p>Get next position for a beacon.</p>
+<p>Increments position and wraps around at LED count. Maintains consistent
+position increment per beacon across calls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>beacon_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Unique beacon identifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Next position index (0 to led_count-1).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Get beacon positions for animation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">runner</span> <span class="o">=</span> <span class="n">BeaconRunner</span><span class="p">(</span><span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">pos1</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">next_position</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">)</span>  <span class="c1"># Returns 0</span>
+<span class="n">pos1</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">next_position</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">)</span>  <span class="c1"># Returns 1</span>
+<span class="n">pos2</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">next_position</span><span class="p">(</span><span class="s1">&#39;beacon_2&#39;</span><span class="p">)</span>  <span class="c1"># Returns 0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ble2wled.animation.add_trail">
+<span class="sig-prename descclassname"><span class="pre">ble2wled.animation.</span></span><span class="sig-name descname"><span class="pre">add_trail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trail_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/animation.html#add_trail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.animation.add_trail" title="Link to this definition"></a></dt>
+<dd><p>Add motion trail to LED array.</p>
+<p>Creates a fading trail effect behind the beacon by rendering progressively
+dimmer segments behind the main position. Uses additive blending to combine
+trail colors with existing LED values.</p>
+<dl class="simple">
+<dt>Trail Rendering:</dt><dd><ul class="simple">
+<li><p>LED at position gets full color</p></li>
+<li><p>Each previous LED gets color * fade_factor^distance</p></li>
+<li><p>Colors are additively blended (clamped at 255)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>leds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>) – LED color array (list of [R, G, B] with values 0-255).</p></li>
+<li><p><strong>position</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Current beacon position index.</p></li>
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a>) – RGB color tuple (R, G, B) with values 0-255.</p></li>
+<li><p><strong>trail_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of LEDs in the trail (including main position).</p></li>
+<li><p><strong>fade_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Brightness decay per segment (0.0 to 1.0).
+0.75 means each trailing segment is 75% brightness of previous.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If trail_length is negative or fade_factor outside 0-1.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Add a red trail to the LED array:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>
+<span class="n">add_trail</span><span class="p">(</span><span class="n">leds</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+         <span class="n">trail_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="c1"># Now leds[10] has max red, leds[9] has 75% red, etc.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">animation</span></code> module provides the main animation loop and LED rendering logic. It:</p>
+<ul class="simple">
+<li><p>Processes beacon state into LED colors</p></li>
+<li><p>Renders motion trails</p></li>
+<li><p>Handles fade-out animations</p></li>
+<li><p>Updates WLED device at regular intervals</p></li>
+</ul>
+<section id="key-function">
+<h3>Key Function<a class="headerlink" href="#key-function" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">run_wled_beacons()</span></code> is the main entry point for running beacon visualization.</p>
+</section>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+
+<span class="c1"># Load configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create beacon state and MQTT listener</span>
+<span class="n">beacon_state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">mqtt_listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span>
+    <span class="n">beacon_state</span><span class="p">,</span>
+    <span class="n">broker</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_broker</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">mqtt_location</span>
+<span class="p">)</span>
+<span class="n">mqtt_listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Create WLED controller</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">)</span>
+
+<span class="c1"># Run animation loop (blocking)</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">beacon_state</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<section id="run-wled-beacons">
+<h3>run_wled_beacons()<a class="headerlink" href="#run-wled-beacons" title="Link to this heading"></a></h3>
+<p>Main animation loop for beacon visualization.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">controller</span></code> - WLED device controller (WLEDHTTPController or WLEDUDPController)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int) - Total number of LEDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_state</span></code> (BeaconState) - Beacon state tracker</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_interval</span></code> (float, default 0.05) - Update interval in seconds (50ms = 20fps)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trail_length</span></code> (int, default 8) - Length of motion trail in LEDs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fade_factor</span></code> (float, default 0.75) - Trail fade factor (0.1-1.0)</p></li>
+</ul>
+<p><strong>Behavior:</strong></p>
+<p>The function runs a continuous animation loop:</p>
+<ol class="arabic simple">
+<li><p><strong>Read beacon state</strong> - Get active and fading beacons</p></li>
+<li><p><strong>Initialize LED array</strong> - Create array of [R, G, B] for each LED</p></li>
+<li><p><strong>Render trails</strong> - For each beacon, render motion trail on LEDs</p></li>
+<li><p><strong>Apply fade-out</strong> - Reduce brightness for beacons in timeout</p></li>
+<li><p><strong>Update device</strong> - Send LED array to WLED controller</p></li>
+<li><p><strong>Cleanup</strong> - Remove expired beacons</p></li>
+<li><p><strong>Sleep</strong> - Wait update_interval before next iteration</p></li>
+</ol>
+<p><strong>Raises:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> - When user presses Ctrl+C</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span>
+        <span class="n">controller</span><span class="p">,</span>
+        <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+        <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>      <span class="c1"># 20fps</span>
+        <span class="n">trail_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>           <span class="c1"># 10-LED trail</span>
+        <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span>           <span class="c1"># Dim trail</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Animation stopped&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="animation-parameters">
+<h2>Animation Parameters<a class="headerlink" href="#animation-parameters" title="Link to this heading"></a></h2>
+<section id="update-interval">
+<h3>Update Interval<a class="headerlink" href="#update-interval" title="Link to this heading"></a></h3>
+<p>Controls animation smoothness and CPU usage.</p>
+<p><strong>Values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0.02</span></code> - 50fps (very smooth, high CPU)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0.05</span></code> - 20fps (good balance, recommended)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code> - 10fps (lower CPU, less smooth)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0.2</span></code> - 5fps (low CPU, clearly animated)</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fast animation</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+
+<span class="c1"># Smooth default</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="c1"># CPU efficient</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="trail-length">
+<h3>Trail Length<a class="headerlink" href="#trail-length" title="Link to this heading"></a></h3>
+<p>Number of LEDs the motion trail extends backward from beacon position.</p>
+<p><strong>Values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code> - Short trails (just position)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">8</span></code> - Medium trails (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">15</span></code> - Long trails (motion effect)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">30</span></code> - Very long trails (significant motion history)</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Short trail</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">trail_length</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Medium trail (default)</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">trail_length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># Long trail (motion effect)</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">trail_length</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="fade-factor">
+<h3>Fade Factor<a class="headerlink" href="#fade-factor" title="Link to this heading"></a></h3>
+<p>How much each trail segment fades compared to the previous.</p>
+<p><strong>Values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code> - Fast fade (dim trails)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code> - Medium fade</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0.75</span></code> - Default fade</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0.9</span></code> - Slow fade (bright trails)</p></li>
+</ul>
+<p><strong>Behavior:</strong></p>
+<p>For a trail with <code class="docutils literal notranslate"><span class="pre">trail_length=8</span></code> and <code class="docutils literal notranslate"><span class="pre">fade_factor=0.75</span></code>:</p>
+<ul class="simple">
+<li><p>Position 0 (current): brightness 1.0</p></li>
+<li><p>Position 1: brightness 0.75</p></li>
+<li><p>Position 2: brightness 0.56 (0.75²)</p></li>
+<li><p>Position 3: brightness 0.42 (0.75³)</p></li>
+<li><p>… and so on</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dim trails</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Medium trails (default)</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+
+<span class="c1"># Bright trails</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="basic-animation-loop">
+<h3>Basic Animation Loop<a class="headerlink" href="#basic-animation-loop" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBeaconGenerator</span>
+
+<span class="c1"># Setup</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Generate mock beacons for testing</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">MockBeaconGenerator</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+<span class="n">generator</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Run animation</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">generator</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="with-mqtt">
+<h3>With MQTT<a class="headerlink" href="#with-mqtt" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.mqtt</span><span class="w"> </span><span class="kn">import</span> <span class="n">EspresenseBeaconListener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="c1"># Setup</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">EspresenseBeaconListener</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;living_room&#39;</span><span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Start listener</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Run animation</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">run_wled_beacons</span><span class="p">(</span>
+        <span class="n">controller</span><span class="p">,</span>
+        <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+        <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">trail_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.75</span>
+    <span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="with-custom-parameters">
+<h3>With Custom Parameters<a class="headerlink" href="#with-custom-parameters" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.states</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeaconState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="c1"># Load configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="s1">&#39;.env&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create components</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">BeaconState</span><span class="p">(</span>
+    <span class="n">timeout_seconds</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">beacon_timeout_seconds</span><span class="p">,</span>
+    <span class="n">fade_out_seconds</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">beacon_fade_out_seconds</span>
+<span class="p">)</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">wled_host</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">)</span>
+
+<span class="c1"># Run with configuration values</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">led_count</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">animation_update_interval</span><span class="p">,</span>
+    <span class="n">trail_length</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">animation_trail_length</span><span class="p">,</span>
+    <span class="n">fade_factor</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">animation_fade_factor</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-considerations">
+<h3>Performance Considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading"></a></h3>
+<p><strong>For smooth 20fps animation on 60 LEDs:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.05</span>        <span class="c1"># 20fps</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>For CPU-constrained systems:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>        <span class="c1"># 10fps</span>
+    <span class="n">trail_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>             <span class="c1"># Shorter trail</span>
+    <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.5</span>             <span class="c1"># Faster fade</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>For high-end systems with more LEDs:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_wled_beacons</span><span class="p">(</span>
+    <span class="n">controller</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>              <span class="c1"># More LEDs</span>
+    <span class="n">beacon_state</span><span class="o">=</span><span class="n">state</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>       <span class="c1"># 50fps</span>
+    <span class="n">trail_length</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>            <span class="c1"># Longer trail</span>
+    <span class="n">fade_factor</span><span class="o">=</span><span class="mf">0.9</span>             <span class="c1"># Slower fade</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="debugging-animation">
+<h3>Debugging Animation<a class="headerlink" href="#debugging-animation" title="Link to this heading"></a></h3>
+<p>To debug animation issues, capture LED data before sending:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_wled_beacons</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DebugController</span><span class="p">(</span><span class="n">WLEDUDPController</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leds</span><span class="p">):</span>
+        <span class="c1"># Print first 10 LEDs</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LEDs: </span><span class="si">{</span><span class="n">leds</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">DebugController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+<span class="n">run_wled_beacons</span><span class="p">(</span><span class="n">controller</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="states.html"><span class="doc">ble2wled.states - Beacon State Management</span></a> - Beacon state tracking</p></li>
+<li><p><a class="reference internal" href="colors.html"><span class="doc">ble2wled.colors - Color Calculations</span></a> - Color calculations</p></li>
+<li><p><a class="reference internal" href="wled.html"><span class="doc">ble2wled.wled - WLED Device Communication</span></a> - WLED device communication</p></li>
+<li><p><a class="reference internal" href="../guides/configuration.html"><span class="doc">Configuration</span></a> - Configure animation parameters</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="colors.html" class="btn btn-neutral float-left" title="ble2wled.colors - Color Calculations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="wled.html" class="btn btn-neutral float-right" title="ble2wled.wled - WLED Device Communication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

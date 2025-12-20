@@ -1,0 +1,589 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.colors - Color Calculations &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.animation - Animation Loop" href="animation.html" />
+    <link rel="prev" title="ble2wled.states - Beacon State Management" href="states.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.colors.estimate_distance_from_rssi"><code class="docutils literal notranslate"><span class="pre">estimate_distance_from_rssi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.colors.lerp"><code class="docutils literal notranslate"><span class="pre">lerp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.colors.gradient_color"><code class="docutils literal notranslate"><span class="pre">gradient_color()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.colors.ble_beacon_to_rgb"><code class="docutils literal notranslate"><span class="pre">ble_beacon_to_rgb()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#color-strategy">Color Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#position-to-color-hue">position_to_color_hue()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rssi-to-brightness">rssi_to_brightness()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#beacon-id-to-hue">beacon_id_to_hue()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hsv-to-rgb">hsv_to_rgb()</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#complete-color-calculation">Complete Color Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-beacons">Multiple Beacons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gradient-visualization">Gradient Visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#signal-strength-visualization">Signal Strength Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/colors.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.colors">
+<span id="ble2wled-colors-color-calculations"></span><h1><a class="reference internal" href="#module-ble2wled.colors" title="ble2wled.colors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code></a> - Color Calculations<a class="headerlink" href="#module-ble2wled.colors" title="Link to this heading"></a></h1>
+<p>Color conversion and distance estimation from RSSI.</p>
+<p>This module provides functions for converting BLE beacon signal strength (RSSI)
+to distance estimates, mapping distance to colors on a gradient, and generating
+beacon-specific colors with life-based brightness modulation.</p>
+<p>The distance estimation uses the Friis path loss model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">distance</span> <span class="o">=</span> <span class="mi">10</span><span class="o">^</span><span class="p">((</span><span class="n">TX_POWER</span> <span class="o">-</span> <span class="n">RSSI</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">N</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Color Mapping:</dt><dd><ul class="simple">
+<li><p>Beacons near (&lt; 0.5m): Yellow (255, 255, 0)</p></li>
+<li><p>Beacons far (&gt; 10m): Red (255, 0, 0)</p></li>
+<li><p>Linear gradient between near and far distances</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Convert beacon data to RGB color:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rssi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="n">estimate_distance_from_rssi</span><span class="p">(</span><span class="n">rssi</span><span class="p">)</span>
+<span class="n">color</span> <span class="o">=</span> <span class="n">ble_beacon_to_rgb</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="n">rssi</span><span class="p">,</span> <span class="n">life</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon at </span><span class="si">{</span><span class="n">distance</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">m: RGB</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="ble2wled.colors.estimate_distance_from_rssi">
+<span class="sig-prename descclassname"><span class="pre">ble2wled.colors.</span></span><span class="sig-name descname"><span class="pre">estimate_distance_from_rssi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rssi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-59</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/colors.html#estimate_distance_from_rssi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.colors.estimate_distance_from_rssi" title="Link to this definition"></a></dt>
+<dd><p>Estimate distance from signal strength using path loss model.</p>
+<p>Uses the Friis free space path loss model to estimate distance from
+RSSI. The accuracy depends on the environment and the TX power of
+the beacon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rssi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Received Signal Strength Indicator in dBm
+(typically -30 to -100).</p></li>
+<li><p><strong>tx_power</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Transmit power in dBm. Typical beacon values are
+-59 dBm at 1 meter. Default: -59.</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Path loss exponent. 2.0 for free space, up to 4.0 in
+indoor environments. Default: 2.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Estimated distance in meters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Estimate distance from RSSI values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">distance</span> <span class="o">=</span> <span class="n">estimate_distance_from_rssi</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># ~1 meter</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="n">estimate_distance_from_rssi</span><span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">)</span>  <span class="c1"># ~10 meters</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ble2wled.colors.lerp">
+<span class="sig-prename descclassname"><span class="pre">ble2wled.colors.</span></span><span class="sig-name descname"><span class="pre">lerp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/colors.html#lerp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.colors.lerp" title="Link to this definition"></a></dt>
+<dd><p>Linear interpolation between two values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Start value.</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – End value.</p></li>
+<li><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Interpolation factor (0.0 to 1.0).
+0.0 returns a, 1.0 returns b.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Interpolated value between a and b.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Interpolate between colors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mid_value</span> <span class="o">=</span> <span class="n">lerp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Returns 127.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ble2wled.colors.gradient_color">
+<span class="sig-prename descclassname"><span class="pre">ble2wled.colors.</span></span><span class="sig-name descname"><span class="pre">gradient_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">near</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">far</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ble2wled/colors.html#gradient_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.colors.gradient_color" title="Link to this definition"></a></dt>
+<dd><p>Map distance to RGB color gradient (yellow to red).</p>
+<p>Maps distance to a color gradient from yellow (near) to red (far).
+Uses linear interpolation in the middle range. Returns values in 0-1 range.</p>
+<dl class="simple">
+<dt>Color Mapping:</dt><dd><ul class="simple">
+<li><p>distance &lt; near: Yellow (1.0, 1.0, 0.0)</p></li>
+<li><p>distance between near and far: Gradient yellow → red</p></li>
+<li><p>distance &gt; far: Red (1.0, 0.0, 0.0)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Distance in meters.</p></li>
+<li><p><strong>near</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Distance threshold for “near” color in meters.
+Default: 0.5 meters (yellow).</p></li>
+<li><p><strong>far</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Distance threshold for “far” color in meters.
+Default: 10.0 meters (red).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>RGB tuple with values in range 0.0-1.0.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Get color for different distances:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">close_color</span> <span class="o">=</span> <span class="n">gradient_color</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>   <span class="c1"># Yellow-ish</span>
+<span class="n">mid_color</span> <span class="o">=</span> <span class="n">gradient_color</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>    <span class="c1"># Yellow-Red transition</span>
+<span class="n">far_color</span> <span class="o">=</span> <span class="n">gradient_color</span><span class="p">(</span><span class="mf">15.0</span><span class="p">)</span>   <span class="c1"># Red</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ble2wled.colors.ble_beacon_to_rgb">
+<span class="sig-prename descclassname"><span class="pre">ble2wled.colors.</span></span><span class="sig-name descname"><span class="pre">ble_beacon_to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beacon_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">life</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ble2wled/colors.html#ble_beacon_to_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.colors.ble_beacon_to_rgb" title="Link to this definition"></a></dt>
+<dd><p>Convert beacon data to RGB color.</p>
+<p>Applies distance-based gradient coloring with unique hue offset per beacon,
+and modulates brightness based on life value. Each beacon gets a consistent
+hue offset based on its ID hash, ensuring the same beacon is always the
+same base color.</p>
+<dl class="simple">
+<dt>Algorithm:</dt><dd><ol class="arabic simple">
+<li><p>Estimate distance from RSSI</p></li>
+<li><p>Map distance to base color (yellow to red gradient)</p></li>
+<li><p>Apply unique hue offset per beacon (0-8% range)</p></li>
+<li><p>Scale brightness by life value (0-1)</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>beacon_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Unique beacon identifier.</p></li>
+<li><p><strong>rssi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Signal strength in dBm (typically -30 to -100).</p></li>
+<li><p><strong>life</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Beacon life value (0.0 to 1.0), modulates brightness.
+1.0 = full brightness, 0.0 = invisible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>RGB tuple with values 0-255.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Convert beacon to RGB color:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">ble_beacon_to_rgb</span><span class="p">(</span><span class="s1">&#39;beacon_1&#39;</span><span class="p">,</span> <span class="n">rssi</span><span class="o">=-</span><span class="mi">50</span><span class="p">,</span> <span class="n">life</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">color</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Color: RGB(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">colors</span></code> module provides color calculations for LED visualization, including:</p>
+<ul class="simple">
+<li><p>Distance-to-color mapping (position on LED strip → hue)</p></li>
+<li><p>Signal strength mapping (RSSI → brightness)</p></li>
+<li><p>HSV to RGB conversion</p></li>
+<li><p>Color utilities for beacon visualization</p></li>
+</ul>
+<section id="color-strategy">
+<h3>Color Strategy<a class="headerlink" href="#color-strategy" title="Link to this heading"></a></h3>
+<p>BLE2WLED uses a sophisticated color mapping strategy:</p>
+<ol class="arabic simple">
+<li><p><strong>Hue Assignment</strong> - Each beacon gets a unique hue based on its ID (hash-based)</p></li>
+<li><p><strong>Distance Mapping</strong> - Distance from transmitter maps to saturation/value</p></li>
+<li><p><strong>Signal Strength</strong> - RSSI maps to brightness</p></li>
+<li><p><strong>Motion Trails</strong> - Recent positions brightest, fade out over time</p></li>
+</ol>
+</section>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">position_to_color_hue</span><span class="p">,</span>
+    <span class="n">rssi_to_brightness</span><span class="p">,</span>
+    <span class="n">beacon_id_to_hue</span><span class="p">,</span>
+    <span class="n">hsv_to_rgb</span>
+<span class="p">)</span>
+
+<span class="c1"># Get hue for a position on the LED strip</span>
+<span class="n">position</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># Middle of 60-LED strip</span>
+<span class="n">hue</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Position </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> → Hue </span><span class="si">{</span><span class="n">hue</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get brightness from signal strength</span>
+<span class="n">rssi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span>
+<span class="n">brightness</span> <span class="o">=</span> <span class="n">rssi_to_brightness</span><span class="p">(</span><span class="n">rssi</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RSSI </span><span class="si">{</span><span class="n">rssi</span><span class="si">}</span><span class="s2"> → Brightness </span><span class="si">{</span><span class="n">brightness</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get unique color for each beacon</span>
+<span class="n">beacon_id</span> <span class="o">=</span> <span class="s2">&quot;device_123&quot;</span>
+<span class="n">beacon_hue</span> <span class="o">=</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon </span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2"> → Hue </span><span class="si">{</span><span class="n">beacon_hue</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Convert HSV to RGB</span>
+<span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">beacon_hue</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HSV(</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">) → RGB(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<section id="position-to-color-hue">
+<h3>position_to_color_hue()<a class="headerlink" href="#position-to-color-hue" title="Link to this heading"></a></h3>
+<p>Map a position on the LED strip to a color hue.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">position</span></code> (float) - Position on LED strip (0 to led_count)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int) - Total number of LEDs</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">float</span></code> - Hue value (0-360 degrees)</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">position_to_color_hue</span>
+
+<span class="c1"># 60-LED strip</span>
+<span class="n">hue_start</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>      <span class="c1"># Red (0°)</span>
+<span class="n">hue_middle</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>    <span class="c1"># Cyan (180°)</span>
+<span class="n">hue_end</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="mi">59</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>       <span class="c1"># Purple (359°)</span>
+</pre></div>
+</div>
+</section>
+<section id="rssi-to-brightness">
+<h3>rssi_to_brightness()<a class="headerlink" href="#rssi-to-brightness" title="Link to this heading"></a></h3>
+<p>Map signal strength (RSSI) to brightness.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rssi</span></code> (int) - Signal strength in dBm (typically -20 to -100)</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">float</span></code> - Brightness (0.0-1.0)</p></li>
+</ul>
+<p><strong>Behavior:</strong></p>
+<ul class="simple">
+<li><p>Very strong signal (-20 to -30): brightness 1.0 (full)</p></li>
+<li><p>Strong signal (-30 to -50): brightness 0.8-1.0</p></li>
+<li><p>Medium signal (-50 to -70): brightness 0.3-0.8</p></li>
+<li><p>Weak signal (-70 to -100): brightness 0.0-0.3</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">rssi_to_brightness</span>
+
+<span class="n">rssi_strong</span> <span class="o">=</span> <span class="o">-</span><span class="mi">40</span>
+<span class="n">rssi_weak</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span>
+
+<span class="n">brightness_strong</span> <span class="o">=</span> <span class="n">rssi_to_brightness</span><span class="p">(</span><span class="n">rssi_strong</span><span class="p">)</span>  <span class="c1"># ~0.9</span>
+<span class="n">brightness_weak</span> <span class="o">=</span> <span class="n">rssi_to_brightness</span><span class="p">(</span><span class="n">rssi_weak</span><span class="p">)</span>      <span class="c1"># ~0.2</span>
+</pre></div>
+</div>
+</section>
+<section id="beacon-id-to-hue">
+<h3>beacon_id_to_hue()<a class="headerlink" href="#beacon-id-to-hue" title="Link to this heading"></a></h3>
+<p>Get a unique, consistent hue for each beacon based on its ID.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">beacon_id</span></code> (str) - Unique beacon identifier</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">float</span></code> - Hue value (0-360 degrees)</p></li>
+</ul>
+<p><strong>Behavior:</strong></p>
+<ul class="simple">
+<li><p>Same beacon ID always gets same hue</p></li>
+<li><p>Different beacon IDs get different hues</p></li>
+<li><p>Uses hash function for distribution</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">beacon_id_to_hue</span>
+
+<span class="n">beacon1_hue</span> <span class="o">=</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="s2">&quot;device_123&quot;</span><span class="p">)</span>
+<span class="n">beacon2_hue</span> <span class="o">=</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="s2">&quot;device_456&quot;</span><span class="p">)</span>
+
+<span class="c1"># Same beacon, same hue (consistent)</span>
+<span class="k">assert</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="s2">&quot;device_123&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">beacon1_hue</span>
+
+<span class="c1"># Different beacon, different hue</span>
+<span class="k">assert</span> <span class="n">beacon1_hue</span> <span class="o">!=</span> <span class="n">beacon2_hue</span>
+</pre></div>
+</div>
+</section>
+<section id="hsv-to-rgb">
+<h3>hsv_to_rgb()<a class="headerlink" href="#hsv-to-rgb" title="Link to this heading"></a></h3>
+<p>Convert HSV color to RGB.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">h</span></code> (float) - Hue (0-360 degrees)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> (float) - Saturation (0.0-1.0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">v</span></code> (float) - Value/Brightness (0.0-1.0)</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tuple</span></code> - RGB values (r, g, b) each 0-255</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">hsv_to_rgb</span>
+
+<span class="c1"># Red</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Green</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Blue</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="c1"># Gray (low saturation)</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="complete-color-calculation">
+<h3>Complete Color Calculation<a class="headerlink" href="#complete-color-calculation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">position_to_color_hue</span><span class="p">,</span>
+    <span class="n">rssi_to_brightness</span><span class="p">,</span>
+    <span class="n">beacon_id_to_hue</span><span class="p">,</span>
+    <span class="n">hsv_to_rgb</span>
+<span class="p">)</span>
+
+<span class="c1"># For a beacon at position 30 with RSSI -50</span>
+<span class="n">beacon_id</span> <span class="o">=</span> <span class="s2">&quot;device_123&quot;</span>
+<span class="n">position</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">rssi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span>
+<span class="n">led_count</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="c1"># Get base hue from beacon ID (unique per beacon)</span>
+<span class="n">hue</span> <span class="o">=</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">)</span>
+
+<span class="c1"># Get saturation from position (distance-based)</span>
+<span class="c1"># Closer beacons are more saturated</span>
+<span class="n">position_hue</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">led_count</span><span class="p">)</span>
+<span class="n">saturation</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hue</span> <span class="o">-</span> <span class="n">position_hue</span><span class="p">)</span> <span class="o">/</span> <span class="mf">180.0</span>
+
+<span class="c1"># Get brightness from signal strength</span>
+<span class="n">brightness</span> <span class="o">=</span> <span class="n">rssi_to_brightness</span><span class="p">(</span><span class="n">rssi</span><span class="p">)</span>
+
+<span class="c1"># Convert HSV to RGB for LED</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="n">saturation</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beacon </span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2"> at LED </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HSV: (</span><span class="si">{</span><span class="n">hue</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°, </span><span class="si">{</span><span class="n">saturation</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">brightness</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  RGB: (</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multiple-beacons">
+<h3>Multiple Beacons<a class="headerlink" href="#multiple-beacons" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">beacon_id_to_hue</span><span class="p">,</span> <span class="n">hsv_to_rgb</span>
+
+<span class="n">beacons</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;device_1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;rssi&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">45</span><span class="p">},</span>
+    <span class="s2">&quot;device_2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;rssi&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">60</span><span class="p">},</span>
+    <span class="s2">&quot;device_3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;rssi&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">75</span><span class="p">},</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">beacon_id</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">beacons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">hue</span> <span class="o">=</span> <span class="n">beacon_id_to_hue</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">)</span>
+    <span class="c1"># ... calculate saturation, brightness ...</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">beacon_id</span><span class="si">}</span><span class="s2">: RGB(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="gradient-visualization">
+<h3>Gradient Visualization<a class="headerlink" href="#gradient-visualization" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">position_to_color_hue</span><span class="p">,</span> <span class="n">hsv_to_rgb</span>
+
+<span class="c1"># Show color gradient across LED strip</span>
+<span class="n">led_count</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">led_count</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">hue</span> <span class="o">=</span> <span class="n">position_to_color_hue</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">led_count</span><span class="p">)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LED </span><span class="si">{</span><span class="n">position</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: RGB(</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="signal-strength-visualization">
+<h3>Signal Strength Visualization<a class="headerlink" href="#signal-strength-visualization" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">rssi_to_brightness</span><span class="p">,</span> <span class="n">hsv_to_rgb</span>
+
+<span class="c1"># Show brightness at different signal strengths</span>
+<span class="n">rssi_values</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">]</span>
+<span class="n">hue</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c1"># Green</span>
+
+<span class="k">for</span> <span class="n">rssi</span> <span class="ow">in</span> <span class="n">rssi_values</span><span class="p">:</span>
+    <span class="n">brightness</span> <span class="o">=</span> <span class="n">rssi_to_brightness</span><span class="p">(</span><span class="n">rssi</span><span class="p">)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RSSI </span><span class="si">{</span><span class="n">rssi</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2"> dBm: Brightness </span><span class="si">{</span><span class="n">brightness</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> → RGB(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="states.html"><span class="doc">ble2wled.states - Beacon State Management</span></a> - Beacon state with position and RSSI</p></li>
+<li><p><a class="reference internal" href="animation.html"><span class="doc">ble2wled.animation - Animation Loop</span></a> - Animation loop using colors</p></li>
+<li><p><a class="reference internal" href="../guides/configuration.html"><span class="doc">Configuration</span></a> - Configure trail and fade</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="states.html" class="btn btn-neutral float-left" title="ble2wled.states - Beacon State Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="animation.html" class="btn btn-neutral float-right" title="ble2wled.animation - Animation Loop" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

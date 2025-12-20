@@ -1,0 +1,709 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.wled - WLED Device Communication &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ble2wled.mqtt - MQTT Beacon Listener" href="mqtt.html" />
+    <link rel="prev" title="ble2wled.animation - Animation Loop" href="animation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.wled.LEDController"><code class="docutils literal notranslate"><span class="pre">LEDController</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.LEDController.host"><code class="docutils literal notranslate"><span class="pre">LEDController.host</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.LEDController.led_count"><code class="docutils literal notranslate"><span class="pre">LEDController.led_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.LEDController.__init__"><code class="docutils literal notranslate"><span class="pre">LEDController.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.LEDController.update"><code class="docutils literal notranslate"><span class="pre">LEDController.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.wled.WLEDHTTPController"><code class="docutils literal notranslate"><span class="pre">WLEDHTTPController</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.WLEDHTTPController.__init__"><code class="docutils literal notranslate"><span class="pre">WLEDHTTPController.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.WLEDHTTPController.update"><code class="docutils literal notranslate"><span class="pre">WLEDHTTPController.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ble2wled.wled.WLEDUDPController"><code class="docutils literal notranslate"><span class="pre">WLEDUDPController</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.WLEDUDPController.__init__"><code class="docutils literal notranslate"><span class="pre">WLEDUDPController.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ble2wled.wled.WLEDUDPController.update"><code class="docutils literal notranslate"><span class="pre">WLEDUDPController.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-example">Quick Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#wledudpcontroller">WLEDUDPController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wledhttpcontroller">WLEDHTTPController</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#led-data-format">LED Data Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-led-updates">Basic LED Updates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-animation-loop">With Animation Loop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-with-retry-handling">HTTP with Retry Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-between-udp-and-http">Choosing Between UDP and HTTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#http-errors">HTTP Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#udp-errors">UDP Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-device-connectivity">Check Device Connectivity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-wled-logs">See WLED Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-tips">Performance Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/wled.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ble2wled.wled">
+<span id="ble2wled-wled-wled-device-communication"></span><h1><a class="reference internal" href="#module-ble2wled.wled" title="ble2wled.wled"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code></a> - WLED Device Communication<a class="headerlink" href="#module-ble2wled.wled" title="Link to this heading"></a></h1>
+<p>WLED LED controller implementations.</p>
+<p>This module provides abstract and concrete LED controller classes for
+communicating with WLED devices via HTTP and UDP protocols.</p>
+<dl class="simple">
+<dt>Protocols:</dt><dd><ul class="simple">
+<li><p>HTTP: JSON-based API, slower but more reliable</p></li>
+<li><p>UDP: DRGB protocol, real-time updates with low latency</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create and use an LED controller:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;wled.local&#39;</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">21324</span><span class="p">)</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>  <span class="c1"># All red</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.wled.LEDController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.wled.</span></span><span class="sig-name descname"><span class="pre">LEDController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/wled.html#LEDController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.LEDController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
+<p>Abstract base class for LED controllers.</p>
+<p>Defines the interface that all LED controller implementations must follow.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.wled.LEDController.host">
+<span class="sig-name descname"><span class="pre">host</span></span><a class="headerlink" href="#ble2wled.wled.LEDController.host" title="Link to this definition"></a></dt>
+<dd><p>WLED device hostname or IP address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ble2wled.wled.LEDController.led_count">
+<span class="sig-name descname"><span class="pre">led_count</span></span><a class="headerlink" href="#ble2wled.wled.LEDController.led_count" title="Link to this definition"></a></dt>
+<dd><p>Total number of LEDs in the strip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.wled.LEDController.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/wled.html#LEDController.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.LEDController.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize LED controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – WLED device hostname or IP address.</p></li>
+<li><p><strong>led_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Total number of LEDs in the strip.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Subclass initialization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyController</span><span class="p">(</span><span class="n">LEDController</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">led_count</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">led_count</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.wled.LEDController.update">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/wled.html#LEDController.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.LEDController.update" title="Link to this definition"></a></dt>
+<dd><p>Send LED color update to device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>leds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>) – List of RGB color values [R, G, B] 0-255.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.wled.WLEDHTTPController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.wled.</span></span><span class="sig-name descname"><span class="pre">WLEDHTTPController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/wled.html#WLEDHTTPController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.WLEDHTTPController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ble2wled.wled.LEDController" title="ble2wled.wled.LEDController"><code class="xref py py-class docutils literal notranslate"><span class="pre">LEDController</span></code></a></p>
+<p>WLED controller using HTTP API.</p>
+<p>Sends LED updates via WLED’s JSON HTTP API. Slower than UDP but more
+reliable and easier to debug.</p>
+<p>Implements automatic retry logic for handling temporary connection failures
+and timeouts.</p>
+<p class="rubric">Example</p>
+<p>Use HTTP controller:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.wled.WLEDHTTPController.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/wled.html#WLEDHTTPController.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.WLEDHTTPController.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize HTTP controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – WLED device hostname or IP address.</p></li>
+<li><p><strong>led_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Total number of LEDs in the strip.</p></li>
+<li><p><strong>max_retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Maximum number of retry attempts on timeout.
+Default: 3.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.wled.WLEDHTTPController.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/wled.html#WLEDHTTPController.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.WLEDHTTPController.update" title="Link to this definition"></a></dt>
+<dd><p>Send LED update via HTTP POST with retry logic.</p>
+<p>Sends LED data to WLED device using the /json/state endpoint.
+Automatically retries on timeout errors to handle temporary
+connection issues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>leds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>) – List of RGB color values [R, G, B] 0-255.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Update LEDs via HTTP:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>  <span class="c1"># All red</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ble2wled.wled.WLEDUDPController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ble2wled.wled.</span></span><span class="sig-name descname"><span class="pre">WLEDUDPController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">21324</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/wled.html#WLEDUDPController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.WLEDUDPController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ble2wled.wled.LEDController" title="ble2wled.wled.LEDController"><code class="xref py py-class docutils literal notranslate"><span class="pre">LEDController</span></code></a></p>
+<p>WLED controller using UDP DRGB protocol.</p>
+<p>Sends LED updates via UDP using the DRGB protocol for real-time updates
+with minimal latency. Requires WLED to have UDP realtime protocol enabled.</p>
+<dl class="simple">
+<dt>The DRGB protocol is simple:</dt><dd><ul class="simple">
+<li><p>Header: ‘DRGB’ (4 bytes)</p></li>
+<li><p>Data: RGB triplets (3 bytes per LED)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Use UDP controller for real-time updates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;wled.local&#39;</span><span class="p">,</span> <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">21324</span><span class="p">)</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>  <span class="c1"># All green</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.wled.WLEDUDPController.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">led_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">21324</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ble2wled/wled.html#WLEDUDPController.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.WLEDUDPController.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize UDP controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – WLED device hostname or IP address.</p></li>
+<li><p><strong>led_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Total number of LEDs in the strip.</p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – DRGB protocol port. Default: 21324.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Create UDP controller with custom port:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;wled.local&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">21325</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ble2wled.wled.WLEDUDPController.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/ble2wled/wled.html#WLEDUDPController.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ble2wled.wled.WLEDUDPController.update" title="Link to this definition"></a></dt>
+<dd><p>Send LED update via UDP DRGB protocol.</p>
+<p>Constructs DRGB packet with header and RGB data, sends via UDP.
+No response is expected or required.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>leds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a>) – List of RGB color values [R, G, B] 0-255.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Update LEDs via UDP:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>  <span class="c1"># All magenta</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">wled</span></code> module provides controllers for communicating with WLED devices via HTTP and UDP protocols. It handles:</p>
+<ul class="simple">
+<li><p>HTTP requests with automatic retry logic</p></li>
+<li><p>UDP DRGB protocol for fast updates</p></li>
+<li><p>Graceful error handling and recovery</p></li>
+</ul>
+<section id="quick-example">
+<h3>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span><span class="p">,</span> <span class="n">WLEDHTTPController</span>
+
+<span class="c1"># UDP is faster and doesn&#39;t require connection setup</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
+
+<span class="c1"># HTTP is slower but more reliable for some networks</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="c1"># Send LED data</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># All red</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<section id="wledudpcontroller">
+<h3>WLEDUDPController<a class="headerlink" href="#wledudpcontroller" title="Link to this heading"></a></h3>
+<p>Fast UDP-based communication using DRGB protocol.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">host</span></code> (str) - WLED device hostname or IP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int) - Number of LEDs in strip</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code> (int, default 21324) - UDP port</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update(leds:</span> <span class="pre">List[List[int]])</span></code> - Send LED data to device</p></li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>Faster (no connection overhead)</p></li>
+<li><p>Fire-and-forget (no waiting for response)</p></li>
+<li><p>Works with most WLED devices</p></li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul class="simple">
+<li><p>No error handling (packets can be lost)</p></li>
+<li><p>No acknowledgment</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Send all red</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+
+<span class="c1"># Send gradient</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)]</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="wledhttpcontroller">
+<h3>WLEDHTTPController<a class="headerlink" href="#wledhttpcontroller" title="Link to this heading"></a></h3>
+<p>Reliable HTTP-based communication with automatic retry logic.</p>
+<p><strong>Attributes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">host</span></code> (str) - WLED device hostname or IP</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">led_count</span></code> (int) - Number of LEDs in strip</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code> (float, default 1.0) - HTTP request timeout in seconds</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_retries</span></code> (int, default 3) - Number of retry attempts on timeout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code> (int, default 80) - HTTP port</p></li>
+</ul>
+<p><strong>Methods:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update(leds:</span> <span class="pre">List[List[int]])</span></code> - Send LED data to device</p></li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul class="simple">
+<li><p>HTTP retries on timeout (automatic recovery)</p></li>
+<li><p>Error handling and logging</p></li>
+<li><p>Works with unreliable networks</p></li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul class="simple">
+<li><p>Slower (HTTP overhead)</p></li>
+<li><p>Connection setup time</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+
+<span class="c1"># Standard configuration</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="c1"># For unreliable networks</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>        <span class="c1"># Longer timeout</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span>       <span class="c1"># More retries</span>
+<span class="p">)</span>
+
+<span class="c1"># For fast networks</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>        <span class="c1"># Shorter timeout</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">1</span>       <span class="c1"># Fewer retries</span>
+<span class="p">)</span>
+
+<span class="c1"># Send update</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="led-data-format">
+<h2>LED Data Format<a class="headerlink" href="#led-data-format" title="Link to this heading"></a></h2>
+<p>Both controllers accept LED data as a list of RGB tuples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List of [R, G, B] values for each LED</span>
+<span class="c1"># Each value is 0-255</span>
+
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>      <span class="c1"># LED 0: Red</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>      <span class="c1"># LED 1: Green</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>      <span class="c1"># LED 2: Blue</span>
+    <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>  <span class="c1"># LED 3: White</span>
+    <span class="c1"># ... 56 more LEDs for 60-LED strip</span>
+<span class="p">]</span>
+
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Requirements:</strong></p>
+<ul class="simple">
+<li><p>List length must equal <code class="docutils literal notranslate"><span class="pre">led_count</span></code></p></li>
+<li><p>Each element must be a list/tuple of [R, G, B]</p></li>
+<li><p>Each value must be 0-255</p></li>
+</ul>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<section id="basic-led-updates">
+<h3>Basic LED Updates<a class="headerlink" href="#basic-led-updates" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># All red</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+
+<span class="c1"># Rainbow gradient</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)),</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+
+<span class="c1"># Off</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="with-animation-loop">
+<h3>With Animation Loop<a class="headerlink" href="#with-animation-loop" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Simple animation: moving red dot</span>
+<span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">60</span>
+    <span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+    <span class="n">leds</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># 20fps</span>
+</pre></div>
+</div>
+</section>
+<section id="http-with-retry-handling">
+<h3>HTTP with Retry Handling<a class="headerlink" href="#http-with-retry-handling" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="c1"># Enable logging to see retries</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span>
+    <span class="n">led_count</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="c1"># Try to update</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+
+<span class="c1"># If device times out, will automatically retry</span>
+<span class="c1"># Logs will show retry attempts</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="choosing-between-udp-and-http">
+<h2>Choosing Between UDP and HTTP<a class="headerlink" href="#choosing-between-udp-and-http" title="Link to this heading"></a></h2>
+<p><strong>Use UDP when:</strong></p>
+<ul class="simple">
+<li><p>WLED device is on stable local network</p></li>
+<li><p>Speed is critical</p></li>
+<li><p>You want fire-and-forget behavior</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;wled.local&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Use HTTP when:</strong></p>
+<ul class="simple">
+<li><p>Network is unreliable or WiFi</p></li>
+<li><p>You need automatic recovery from timeouts</p></li>
+<li><p>Device is temporarily unreachable</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span><span class="s1">&#39;wled.local&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Use HTTP with more retries on bad networks:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span>
+    <span class="s1">&#39;wled.local&#39;</span><span class="p">,</span>
+    <span class="mi">60</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<section id="http-errors">
+<h3>HTTP Errors<a class="headerlink" href="#http-errors" title="Link to this heading"></a></h3>
+<p>Handled automatically with retry logic:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDHTTPController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDHTTPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># These errors are retried automatically:</span>
+<span class="c1"># - ReadTimeout</span>
+<span class="c1"># - Timeout</span>
+<span class="c1"># - ConnectionError</span>
+
+<span class="c1"># Logs will show retry attempts:</span>
+<span class="c1"># &quot;HTTP timeout on attempt 1/3 for 192.168.1.100, retrying...&quot;</span>
+<span class="c1"># If all retries fail: &quot;HTTP request failed after 3 attempts for 192.168.1.100...&quot;</span>
+
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>  <span class="c1"># May log timeout messages but continues</span>
+</pre></div>
+</div>
+</section>
+<section id="udp-errors">
+<h3>UDP Errors<a class="headerlink" href="#udp-errors" title="Link to this heading"></a></h3>
+<p>UDP doesn’t wait for responses, so no timeouts. Packets may be lost:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ble2wled.wled</span><span class="w"> </span><span class="kn">import</span> <span class="n">WLEDUDPController</span>
+
+<span class="n">controller</span> <span class="o">=</span> <span class="n">WLEDUDPController</span><span class="p">(</span><span class="s1">&#39;192.168.1.100&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># UDP doesn&#39;t throw exceptions for lost packets</span>
+<span class="c1"># If device unreachable, packets are silently dropped</span>
+<span class="n">leds</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">controller</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">leds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
+<section id="check-device-connectivity">
+<h3>Check Device Connectivity<a class="headerlink" href="#check-device-connectivity" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test HTTP connection</span>
+curl<span class="w"> </span>http://192.168.1.100/json/state
+
+<span class="c1"># Test UDP with netcat (Linux/Mac)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;test&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-u<span class="w"> </span><span class="m">192</span>.168.1.100<span class="w"> </span><span class="m">21324</span>
+</pre></div>
+</div>
+</section>
+<section id="see-wled-logs">
+<h3>See WLED Logs<a class="headerlink" href="#see-wled-logs" title="Link to this heading"></a></h3>
+<p>Access WLED web interface at <code class="docutils literal notranslate"><span class="pre">http://192.168.1.100</span></code> and check logs.</p>
+</section>
+<section id="performance-tips">
+<h3>Performance Tips<a class="headerlink" href="#performance-tips" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>UDP is ~10x faster than HTTP</p></li>
+<li><p>HTTP adds network overhead but handles errors</p></li>
+<li><p>Update interval of 0.05s (20fps) is good balance</p></li>
+<li><p>Longer trails require more color calculations</p></li>
+</ul>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="animation.html"><span class="doc">ble2wled.animation - Animation Loop</span></a> - Animation loop using controllers</p></li>
+<li><p><a class="reference internal" href="../guides/http_retry_logic.html"><span class="doc">HTTP Retry Logic</span></a> - HTTP retry documentation</p></li>
+<li><p><a class="reference internal" href="../guides/configuration.html"><span class="doc">Configuration</span></a> - Configure WLED parameters</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="animation.html" class="btn btn-neutral float-left" title="ble2wled.animation - Animation Loop" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mqtt.html" class="btn btn-neutral float-right" title="ble2wled.mqtt - MQTT Beacon Listener" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

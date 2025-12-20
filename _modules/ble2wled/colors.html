@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.colors &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ble2wled.colors</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ble2wled.colors</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Color conversion and distance estimation from RSSI.</span>
+
+<span class="sd">This module provides functions for converting BLE beacon signal strength (RSSI)</span>
+<span class="sd">to distance estimates, mapping distance to colors on a gradient, and generating</span>
+<span class="sd">beacon-specific colors with life-based brightness modulation.</span>
+
+<span class="sd">The distance estimation uses the Friis path loss model::</span>
+
+<span class="sd">    distance = 10^((TX_POWER - RSSI) / (10 * N))</span>
+
+<span class="sd">Color Mapping:</span>
+<span class="sd">    - Beacons near (&lt; 0.5m): Yellow (255, 255, 0)</span>
+<span class="sd">    - Beacons far (&gt; 10m): Red (255, 0, 0)</span>
+<span class="sd">    - Linear gradient between near and far distances</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Convert beacon data to RGB color::</span>
+
+<span class="sd">        rssi = -50</span>
+<span class="sd">        distance = estimate_distance_from_rssi(rssi)</span>
+<span class="sd">        color = ble_beacon_to_rgb(&#39;beacon_1&#39;, rssi, life=0.8)</span>
+<span class="sd">        print(f\&quot;Beacon at {distance:.2f}m: RGB{color}\&quot;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="estimate_distance_from_rssi">
+<a class="viewcode-back" href="../../api/colors.html#ble2wled.colors.estimate_distance_from_rssi">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_distance_from_rssi</span><span class="p">(</span>
+    <span class="n">rssi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tx_power</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">59</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate distance from signal strength using path loss model.</span>
+
+<span class="sd">    Uses the Friis free space path loss model to estimate distance from</span>
+<span class="sd">    RSSI. The accuracy depends on the environment and the TX power of</span>
+<span class="sd">    the beacon.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rssi (int): Received Signal Strength Indicator in dBm</span>
+<span class="sd">            (typically -30 to -100).</span>
+<span class="sd">        tx_power (int): Transmit power in dBm. Typical beacon values are</span>
+<span class="sd">            -59 dBm at 1 meter. Default: -59.</span>
+<span class="sd">        n (float): Path loss exponent. 2.0 for free space, up to 4.0 in</span>
+<span class="sd">            indoor environments. Default: 2.0.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Estimated distance in meters.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Estimate distance from RSSI values::</span>
+
+<span class="sd">            distance = estimate_distance_from_rssi(-50)  # ~1 meter</span>
+<span class="sd">            distance = estimate_distance_from_rssi(-70)  # ~10 meters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">((</span><span class="n">tx_power</span> <span class="o">-</span> <span class="n">rssi</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="lerp">
+<a class="viewcode-back" href="../../api/colors.html#ble2wled.colors.lerp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">lerp</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear interpolation between two values.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a (float): Start value.</span>
+<span class="sd">        b (float): End value.</span>
+<span class="sd">        t (float): Interpolation factor (0.0 to 1.0).</span>
+<span class="sd">            0.0 returns a, 1.0 returns b.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Interpolated value between a and b.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Interpolate between colors::</span>
+
+<span class="sd">            mid_value = lerp(0, 255, 0.5)  # Returns 127.5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span></div>
+
+
+
+<div class="viewcode-block" id="gradient_color">
+<a class="viewcode-back" href="../../api/colors.html#ble2wled.colors.gradient_color">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">gradient_color</span><span class="p">(</span>
+    <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">near</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">far</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map distance to RGB color gradient (yellow to red).</span>
+
+<span class="sd">    Maps distance to a color gradient from yellow (near) to red (far).</span>
+<span class="sd">    Uses linear interpolation in the middle range. Returns values in 0-1 range.</span>
+
+<span class="sd">    Color Mapping:</span>
+<span class="sd">        - distance &lt; near: Yellow (1.0, 1.0, 0.0)</span>
+<span class="sd">        - distance between near and far: Gradient yellow → red</span>
+<span class="sd">        - distance &gt; far: Red (1.0, 0.0, 0.0)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        distance (float): Distance in meters.</span>
+<span class="sd">        near (float): Distance threshold for \&quot;near\&quot; color in meters.</span>
+<span class="sd">            Default: 0.5 meters (yellow).</span>
+<span class="sd">        far (float): Distance threshold for \&quot;far\&quot; color in meters.</span>
+<span class="sd">            Default: 10.0 meters (red).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: RGB tuple with values in range 0.0-1.0.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Get color for different distances::</span>
+
+<span class="sd">            close_color = gradient_color(0.3)   # Yellow-ish</span>
+<span class="sd">            mid_color = gradient_color(5.0)    # Yellow-Red transition</span>
+<span class="sd">            far_color = gradient_color(15.0)   # Red</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">near</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">far</span><span class="p">,</span> <span class="n">distance</span><span class="p">))</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">near</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">far</span> <span class="o">-</span> <span class="n">near</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">lerp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span> <span class="o">/</span> <span class="mf">0.5</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lerp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="mf">0.5</span><span class="p">),</span> <span class="mf">0.0</span></div>
+
+
+
+<div class="viewcode-block" id="ble_beacon_to_rgb">
+<a class="viewcode-back" href="../../api/colors.html#ble2wled.colors.ble_beacon_to_rgb">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ble_beacon_to_rgb</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rssi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">life</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert beacon data to RGB color.</span>
+
+<span class="sd">    Applies distance-based gradient coloring with unique hue offset per beacon,</span>
+<span class="sd">    and modulates brightness based on life value. Each beacon gets a consistent</span>
+<span class="sd">    hue offset based on its ID hash, ensuring the same beacon is always the</span>
+<span class="sd">    same base color.</span>
+
+<span class="sd">    Algorithm:</span>
+<span class="sd">        1. Estimate distance from RSSI</span>
+<span class="sd">        2. Map distance to base color (yellow to red gradient)</span>
+<span class="sd">        3. Apply unique hue offset per beacon (0-8% range)</span>
+<span class="sd">        4. Scale brightness by life value (0-1)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        beacon_id (str): Unique beacon identifier.</span>
+<span class="sd">        rssi (int): Signal strength in dBm (typically -30 to -100).</span>
+<span class="sd">        life (float): Beacon life value (0.0 to 1.0), modulates brightness.</span>
+<span class="sd">            1.0 = full brightness, 0.0 = invisible.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: RGB tuple with values 0-255.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Convert beacon to RGB color::</span>
+
+<span class="sd">            color = ble_beacon_to_rgb(&#39;beacon_1&#39;, rssi=-50, life=0.8)</span>
+<span class="sd">            r, g, b = color</span>
+<span class="sd">            print(f\&quot;Color: RGB({r}, {g}, {b})\&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">colorsys</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">estimate_distance_from_rssi</span><span class="p">(</span><span class="n">rssi</span><span class="p">)</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">gradient_color</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+
+    <span class="c1"># Create unique hue offset for each beacon based on its hash</span>
+    <span class="n">beacon_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">beacon_id</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">hue_offset</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">beacon_hash</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">/</span> <span class="mh">0xFFFFFF</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.08</span>
+
+    <span class="c1"># Apply hue shift and life-based brightness</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">colorsys</span><span class="o">.</span><span class="n">rgb_to_hsv</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">hue_offset</span><span class="p">)</span> <span class="o">%</span> <span class="mf">1.0</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">colorsys</span><span class="o">.</span><span class="n">hsv_to_rgb</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">*</span> <span class="n">life</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">255</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="mi">255</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

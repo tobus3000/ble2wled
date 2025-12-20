@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ble2wled.wled &mdash; BLE2WLED 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BLE2WLED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/config.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.config</span></code> - Configuration Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/states.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.states</span></code> - Beacon State Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/colors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.colors</span></code> - Color Calculations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/animation.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.animation</span></code> - Animation Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/wled.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.wled</span></code> - WLED Device Communication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/mqtt.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.mqtt</span></code> - MQTT Beacon Listener</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/simulator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ble2wled.simulator</span></code> - LED Simulator and Mock Beacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/tobus3000/ble2wled">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BLE2WLED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ble2wled.wled</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ble2wled.wled</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;WLED LED controller implementations.</span>
+
+<span class="sd">This module provides abstract and concrete LED controller classes for</span>
+<span class="sd">communicating with WLED devices via HTTP and UDP protocols.</span>
+
+<span class="sd">Protocols:</span>
+<span class="sd">    - HTTP: JSON-based API, slower but more reliable</span>
+<span class="sd">    - UDP: DRGB protocol, real-time updates with low latency</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Create and use an LED controller::</span>
+
+<span class="sd">        from ble2wled.wled import WLEDUDPController</span>
+
+<span class="sd">        controller = WLEDUDPController(&#39;wled.local&#39;, led_count=60, port=21324)</span>
+<span class="sd">        leds = [[255, 0, 0] for _ in range(60)]  # All red</span>
+<span class="sd">        controller.update(leds)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LEDController">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.LEDController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LEDController</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract base class for LED controllers.</span>
+
+<span class="sd">    Defines the interface that all LED controller implementations must follow.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        host (str): WLED device hostname or IP address.</span>
+<span class="sd">        led_count (int): Total number of LEDs in the strip.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LEDController.__init__">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.LEDController.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">led_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize LED controller.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            host (str): WLED device hostname or IP address.</span>
+<span class="sd">            led_count (int): Total number of LEDs in the strip.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Subclass initialization::</span>
+
+<span class="sd">                class MyController(LEDController):</span>
+<span class="sd">                    def __init__(self, host, led_count):</span>
+<span class="sd">                        super().__init__(host, led_count)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_count</span> <span class="o">=</span> <span class="n">led_count</span></div>
+
+
+<div class="viewcode-block" id="LEDController.update">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.LEDController.update">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send LED color update to device.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            leds (list): List of RGB color values [R, G, B] 0-255.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="WLEDHTTPController">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.WLEDHTTPController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WLEDHTTPController</span><span class="p">(</span><span class="n">LEDController</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;WLED controller using HTTP API.</span>
+
+<span class="sd">    Sends LED updates via WLED&#39;s JSON HTTP API. Slower than UDP but more</span>
+<span class="sd">    reliable and easier to debug.</span>
+
+<span class="sd">    Implements automatic retry logic for handling temporary connection failures</span>
+<span class="sd">    and timeouts.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Use HTTP controller::</span>
+
+<span class="sd">            controller = WLEDHTTPController(&#39;192.168.1.100&#39;, led_count=60)</span>
+<span class="sd">            leds = [[255, 100, 50] for _ in range(60)]</span>
+<span class="sd">            controller.update(leds)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WLEDHTTPController.__init__">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.WLEDHTTPController.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">led_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize HTTP controller.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            host (str): WLED device hostname or IP address.</span>
+<span class="sd">            led_count (int): Total number of LEDs in the strip.</span>
+<span class="sd">            max_retries (int): Maximum number of retry attempts on timeout.</span>
+<span class="sd">                Default: 3.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">led_count</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">/json/state&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">max_retries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="WLEDHTTPController.update">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.WLEDHTTPController.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send LED update via HTTP POST with retry logic.</span>
+
+<span class="sd">        Sends LED data to WLED device using the /json/state endpoint.</span>
+<span class="sd">        Automatically retries on timeout errors to handle temporary</span>
+<span class="sd">        connection issues.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            leds (list): List of RGB color values [R, G, B] 0-255.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Update LEDs via HTTP::</span>
+
+<span class="sd">                leds = [[255, 0, 0] for _ in range(60)]  # All red</span>
+<span class="sd">                controller.update(leds)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;on&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;seg&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="n">leds</span><span class="p">}]}</span>
+        
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="k">return</span>  <span class="c1"># Success</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ReadTimeout</span><span class="p">,</span>
+                    <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="s2">&quot;HTTP timeout on attempt </span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2"> for </span><span class="si">%s</span><span class="s2">, retrying...&quot;</span><span class="p">,</span>
+                        <span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Brief sleep before retry to allow device to recover</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                        <span class="s2">&quot;HTTP request failed after </span><span class="si">%d</span><span class="s2"> attempts for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">e</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Don&#39;t raise - allow animation to continue even if device is unreachable</span>
+            <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;HTTP request error for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
+</div>
+
+                <span class="c1"># Don&#39;t raise on other request errors - allow animation to continue</span>
+
+
+<div class="viewcode-block" id="WLEDUDPController">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.WLEDUDPController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WLEDUDPController</span><span class="p">(</span><span class="n">LEDController</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;WLED controller using UDP DRGB protocol.</span>
+
+<span class="sd">    Sends LED updates via UDP using the DRGB protocol for real-time updates</span>
+<span class="sd">    with minimal latency. Requires WLED to have UDP realtime protocol enabled.</span>
+
+<span class="sd">    The DRGB protocol is simple:</span>
+<span class="sd">        - Header: &#39;DRGB&#39; (4 bytes)</span>
+<span class="sd">        - Data: RGB triplets (3 bytes per LED)</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Use UDP controller for real-time updates::</span>
+
+<span class="sd">            controller = WLEDUDPController(&#39;wled.local&#39;, led_count=60, port=21324)</span>
+<span class="sd">            leds = [[0, 255, 0] for _ in range(60)]  # All green</span>
+<span class="sd">            controller.update(leds)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WLEDUDPController.__init__">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.WLEDUDPController.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">led_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">21324</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize UDP controller.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            host (str): WLED device hostname or IP address.</span>
+<span class="sd">            led_count (int): Total number of LEDs in the strip.</span>
+<span class="sd">            port (int): DRGB protocol port. Default: 21324.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Create UDP controller with custom port::</span>
+
+<span class="sd">                controller = WLEDUDPController(&#39;wled.local&#39;, 60, port=21325)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">led_count</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WLEDUDPController.update">
+<a class="viewcode-back" href="../../api/wled.html#ble2wled.wled.WLEDUDPController.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send LED update via UDP DRGB protocol.</span>
+
+<span class="sd">        Constructs DRGB packet with header and RGB data, sends via UDP.</span>
+<span class="sd">        No response is expected or required.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            leds (list): List of RGB color values [R, G, B] 0-255.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Update LEDs via UDP::</span>
+
+<span class="sd">                leds = [[255, 0, 255] for _ in range(60)]  # All magenta</span>
+<span class="sd">                controller.update(leds)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># DRGB header</span>
+        <span class="n">packet</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;DRGB&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">leds</span><span class="p">:</span>
+            <span class="n">packet</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytes</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, BLE2WLED Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
