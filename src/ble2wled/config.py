@@ -28,9 +28,10 @@ Example:
         print(json.dumps(config.to_dict(), indent=2))
 """
 
+import logging
 import os
 from typing import TYPE_CHECKING, Optional
-import logging
+
 from dotenv import load_dotenv
 
 if TYPE_CHECKING:

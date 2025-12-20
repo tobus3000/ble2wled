@@ -1,8 +1,9 @@
 """Tests for CLI simulator MQTT functionality."""
 
-from unittest.mock import patch, MagicMock
-import pytest
 import inspect
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from ble2wled.cli_simulator import main
 from ble2wled.states import BeaconState
@@ -110,6 +111,7 @@ class TestCLISimulatorMQTT:
     def test_cli_validation_mqtt_port_range(self):
         """Test that CLI validates MQTT port range."""
         import sys
+
         from ble2wled.cli_simulator import cli
 
         # Test invalid port (too high)
@@ -137,6 +139,7 @@ class TestCLISimulatorMQTT:
     def test_cli_help_includes_mqtt_options(self):
         """Test that CLI help includes MQTT options."""
         import sys
+
         from ble2wled.cli_simulator import cli
 
         with patch.object(sys, "argv", ["prog", "--help"]):
@@ -147,8 +150,6 @@ class TestCLISimulatorMQTT:
 
     def test_main_docstring_includes_mqtt_example(self):
         """Test that main function docstring includes MQTT example."""
-        from ble2wled.cli_simulator import main
-
         docstring = main.__doc__
         assert docstring is not None
         assert "use_mqtt" in docstring.lower()
