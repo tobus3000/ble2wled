@@ -12,6 +12,7 @@ Overview
 The ``config`` module provides centralized configuration management for BLE2WLED using environment variables and .env files.
 
 Configuration is loaded from:
+
 1. .env file (if present)
 2. Environment variables
 3. Default values
