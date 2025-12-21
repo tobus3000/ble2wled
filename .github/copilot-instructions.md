@@ -14,7 +14,7 @@
 
 * Always use PEP8 compliant code style.
 * Write type hints for all functions and methods.
-* Include docstrings for all functions, methods, and classes.
+* Include Google style docstrings for all functions, methods, and classes.
 * Add examples in docstrings where applicable.
 * Ensure code is modular and reusable.
 * Follow SOLID principles.
