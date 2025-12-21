@@ -41,7 +41,7 @@ dev = [
     "sphinx>=4.5.0",
     "sphinx-rtd-theme>=1.0.0",
     "myst-parser>=0.17.0",
-    "towncrier>=21.3.0",
+    "git-cliff>=0.25.0"
 ]
 
 [project.urls]
@@ -109,3 +109,45 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.git-cliff.changelog]
+header = """
+# Changelog
+
+All notable changes to this project will be documented in this file.
+"""
+body = """
+{% if versions | length > 0 %}
+{% for version in versions %}
+## {{ version.version }} ({{ version.date }})
+{% for group, commits in version.groups %}
+- {{ commit.message }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% if unreleased | length > 0 %}
+## Unreleased
+{% for group, commits in unreleased.groups %}
+- {{ commit.message }}
+{% endfor %}
+{% endif %}
+"""
+trim = true
+
+[tool.git-cliff.git]
+conventional_commits = true
+filter_unconventional = true
+sort_commits = "oldest"
+tag_pattern = "v[0-9].*"
+
+commit_parsers = [
+  { message = "BREAKING CHANGE", group = "💥 Breaking Changes" },
+  { message = "!", group = "💥 Breaking Changes" },
+  { message = "^feat", group = "🚀 Features" },
+  { message = "^fix", group = "🐛 Bug Fixes" },
+  { message = "^docs", group = "📚 Documentation" },
+  { message = "^perf", group = "⚡ Performance" },
+  { message = "^refactor", group = "🔨 Refactoring" },
+  { message = "^chore", skip = true },
+]

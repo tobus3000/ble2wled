@@ -16,7 +16,7 @@ These instructions are **authoritative**. When generating, modifying, or suggest
 
   * **Testing:** `pytest`
   * **Linting & formatting:** `ruff`
-  * **Changelog management:** `towncrier`
+  * Commit message based **Changelog management:** `git-cliff`
   * **Virtual environments:** `venv`
   * **Documentation:** `sphinx` with **Read the Docs** theme
 * All generated files must be compatible with **Python packaging best practices**.

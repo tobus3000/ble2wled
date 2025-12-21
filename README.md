@@ -16,6 +16,17 @@ BLE2WLED bridges the gap between Bluetooth beacon detection and visual LED effec
 6. **Renders motion trails** as beacons move along the LED strip
 7. **Outputs to WLED** via HTTP or UDP (DRGB protocol) for smooth real-time animation
 
+## Prerequisites
+
+### ESPresense & MQTT Broker
+
+You need a working MQTT broker that receives BLE beacon data in JSON format. Each message should contain a unique beacon ID and its RSSI value.  
+Ideally use [ESPresense](https://espresense.com/) firmware on ESP32 devices for BLE scanning and MQTT publishing to a mosquito broker (running on [HomeAssistant](https://www.home-assistant.io/) for example).
+
+### WLED Device
+
+You need a [WLED](https://kno.wled.ge/) controlled LED strip. Use an ESP8266 or ESP32 running the WLED firmware.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for recent changes.
@@ -33,7 +44,7 @@ cd ble2wled
 pip install -e ".[dev]"
 ```
 
-### From PyPI (when published)
+### From PyPI
 
 ```bash
 pip install ble2wled
@@ -435,6 +446,23 @@ mosquitto_pub -t "ble/beacons" -m '{"beacon_id": "test_beacon", "rssi": -50}'
 ## License
 
 MIT License - See LICENSE file for details
+
+## Build Changelog
+
+We use `git-cliff` to generate changelogs from conventional commit messages.  
+Run the following command to generate/update `CHANGELOG.md`:
+
+Generate changelog since last tag:
+
+```bash
+git-cliff --latest -o CHANGELOG.md
+```
+
+For a new release, you can also use:
+
+```bash
+git-cliff --tag v1.0.0 -o CHANGELOG.md
+```
 
 ## Contributing
 
