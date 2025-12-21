@@ -46,17 +46,11 @@ jobs:
       run: |
         pytest tests/ -v --cov=src/ble2wled --cov-report=xml --cov-report=term
     
-    - name: Generate changelog files (on every push to main)
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: |
-        pip install towncrier
-        towncrier create --yes
-
-    - name: Generate changelog on tag push
+    - name: Build changelog (on tag push)
       if: github.event_name == 'push' && github.ref_type == 'tag'
       run: |
         pip install towncrier
-        towncrier create --yes
+        towncrier build --yes
 
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
