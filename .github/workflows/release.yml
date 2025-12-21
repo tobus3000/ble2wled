@@ -15,7 +15,7 @@ jobs:
 
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/ble2wled
+      url: https://test.pypi.org/project/ble2wled
 
     steps:
       # Checkout full history (required for hatch-vcs)
@@ -46,4 +46,4 @@ jobs:
       - name: Publish to TestPyPI
         run: |
             python -m pip install --upgrade twine
-            twine upload --repository testpypi dist/*
+            twine upload --verbose --repository testpypi dist/*
