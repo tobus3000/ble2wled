@@ -60,7 +60,7 @@ format = "{tag}.dev{distance}"  # omit the +g<hash> local segment
 fallback = "0.0.0.dev0"  # <-- fallback if no tag exists
 
 [tool.hatch.version.raw-options]
-local_scheme = """lambda version: ''"""  # callable returning empty string
+local_scheme = "no-local-version"
 version_scheme = "guess-next-dev"
 
 [tool.hatch.build.targets.wheel]
