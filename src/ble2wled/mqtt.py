@@ -110,7 +110,7 @@ class EspresenseBeaconListener:
         # Set authentication credentials if provided
         if username and password:
             self.client.username_pw_set(username, password)
-            logger.info("MQTT authentication configured for user: %s", username)
+            logger.debug("MQTT authentication configured for user: %s", username)
 
         self.client.connect(broker, port, 30)
 
@@ -223,7 +223,7 @@ class EspresenseBeaconListener:
                 # Listener runs in background, updating beacon state
         """
         threading.Thread(target=self.client.loop_forever, daemon=True).start()
-        logger.info("MQTT listener started for location %r", self.location)
+        logger.debug("MQTT listener started for location %r", self.location)
 
 
 # Backward compatibility alias

@@ -164,7 +164,7 @@ def main():
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     logger.info("Starting BLE2WLED beacon visualization")
-    logger.info("Configuration: %s", config.to_dict())
+    logger.debug("Configuration: %s", config.to_dict())
 
     # Validate configuration
     try:
@@ -202,7 +202,7 @@ def main():
             config.wled_host, config.led_count, port=config.udp_port
         )
         logger.info(
-            "Using UDP controller at %s:%d with %d LEDs",
+            "Using WLED UDP controller at %s:%d with %d LEDs",
             config.wled_host,
             config.udp_port,
             config.led_count,
@@ -210,7 +210,7 @@ def main():
     else:
         controller = WLEDHTTPController(config.wled_host, config.led_count)
         logger.info(
-            "Using HTTP controller at %s with %d LEDs",
+            "Using WLED HTTP controller at %s with %d LEDs",
             config.wled_host,
             config.led_count,
         )
