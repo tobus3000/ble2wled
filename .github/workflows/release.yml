@@ -34,9 +34,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install hatch hatchling hatch-vcs build
 
-      # Show version derived from Git (hatch-vcs + no local version segment for pypi!)
+      # Show version derived from Git (hatch-vcs)
       - name: Show resolved version
-        run: hatch version --short
+        run: hatch version
 
       # Build the distribution
       - name: Build package

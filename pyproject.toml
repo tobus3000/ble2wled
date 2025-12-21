@@ -57,10 +57,6 @@ build-backend = "hatchling.build"
 vcs = "git"
 format = "{tag}.dev{distance}"  # omit the +g<hash> local segment
 
-[tool.hatch.version.raw-options]
-version_scheme = "guess-next-dev"
-local_scheme = "node-and-date"
-
 [tool.hatch.build.targets.wheel]
 packages = ["src/ble2wled"]
 
