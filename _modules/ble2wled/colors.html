@@ -119,7 +119,6 @@
 <span class="sd">        print(f\&quot;Beacon at {distance:.2f}m: RGB{color}\&quot;)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 
 
 <div class="viewcode-block" id="estimate_distance_from_rssi">
@@ -181,7 +180,7 @@
 <a class="viewcode-back" href="../../api/colors.html#ble2wled.colors.gradient_color">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gradient_color</span><span class="p">(</span>
     <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">near</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">far</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Map distance to RGB color gradient (yellow to red).</span>
 
 <span class="sd">    Maps distance to a color gradient from yellow (near) to red (far).</span>
@@ -221,7 +220,7 @@
 
 <div class="viewcode-block" id="ble_beacon_to_rgb">
 <a class="viewcode-back" href="../../api/colors.html#ble2wled.colors.ble_beacon_to_rgb">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ble_beacon_to_rgb</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rssi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">life</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ble_beacon_to_rgb</span><span class="p">(</span><span class="n">beacon_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rssi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">life</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert beacon data to RGB color.</span>
 
 <span class="sd">    Applies distance-based gradient coloring with unique hue offset per beacon,</span>
