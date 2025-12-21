@@ -221,9 +221,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">on_connect</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">client</span><span class="p">:</span> <span class="n">mqtt</span><span class="o">.</span><span class="n">Client</span><span class="p">,</span>
-        <span class="n">userdata</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>  <span class="c1"># noqa: ARG002</span>
-        <span class="n">flags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>  <span class="c1"># noqa: ARG002</span>
-        <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>  <span class="c1"># noqa: ARG002</span>
+        <span class="n">userdata</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>  <span class="c1"># noqa: ARG002 # pylint: disable=unused-argument</span>
+        <span class="n">flags</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>  <span class="c1"># noqa: ARG002 # pylint: disable=unused-argument</span>
+        <span class="n">rc</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>  <span class="c1"># noqa: ARG002 # pylint: disable=unused-argument</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle MQTT connection.</span>
 
@@ -249,8 +249,8 @@
 <a class="viewcode-back" href="../../api/mqtt.html#ble2wled.mqtt.EspresenseBeaconListener.on_message">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">on_message</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">client</span><span class="p">:</span> <span class="n">mqtt</span><span class="o">.</span><span class="n">Client</span><span class="p">,</span>  <span class="c1"># noqa: ARG002</span>
-        <span class="n">userdata</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>  <span class="c1"># noqa: ARG002</span>
+        <span class="n">client</span><span class="p">:</span> <span class="n">mqtt</span><span class="o">.</span><span class="n">Client</span><span class="p">,</span>  <span class="c1"># noqa: ARG002 # pylint: disable=unused-argument</span>
+        <span class="n">userdata</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>  <span class="c1"># noqa: ARG002 # pylint: disable=unused-argument</span>
         <span class="n">msg</span><span class="p">:</span> <span class="n">mqtt</span><span class="o">.</span><span class="n">MQTTMessage</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle incoming MQTT message from espresense.</span>
