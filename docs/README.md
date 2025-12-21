@@ -11,22 +11,15 @@ pip install -e ".[dev]"
 ```
 
 This installs:
+
 - sphinx
 - sphinx-rtd-theme
 - myst-parser
 
 ## Building HTML
 
-### On Linux/macOS:
-
 ```bash
 make html
-```
-
-### On Windows:
-
-```bash
-make.bat html
 ```
 
 Output: `_build/html/index.html`
@@ -35,16 +28,8 @@ Output: `_build/html/index.html`
 
 Requires LaTeX/pdflatex:
 
-### On Linux/macOS:
-
 ```bash
 make latexpdf
-```
-
-### On Windows:
-
-```bash
-make.bat latexpdf
 ```
 
 Output: `_build/latex/BLE2WLED.pdf`
@@ -52,11 +37,13 @@ Output: `_build/latex/BLE2WLED.pdf`
 ## Building Other Formats
 
 **Text:**
+
 ```bash
 make text
 ```
 
 **Man pages:**
+
 ```bash
 make man
 ```
@@ -70,11 +57,11 @@ pip install sphinx-autobuild
 sphinx-autobuild source _build/html
 ```
 
-Then open http://localhost:8000 in your browser.
+Then open <http://localhost:8000> in your browser.
 
 ## Structure
 
-```
+```plaintext
 docs/
 ├── source/
 │   ├── conf.py              # Sphinx configuration
