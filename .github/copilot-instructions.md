@@ -1,48 +1,186 @@
-# GitHub Copilot Instructions
+# GitHub Copilot Instructions (Authoritative)
 
-## General Standards
+These instructions are **authoritative**. When generating, modifying, or suggesting code, Copilot **must follow them exactly** unless explicitly told otherwise.
 
-* Always use `pyproject.toml` for project configuration.
-* Use `hatchling` for project management and packaging.
-* Use `pytest` for unit testing.
-* Use `ruff` for linting and formatting checks.
-* Use `towncrier` for managing changelogs and releases.
-* Use `venv` for virtual environments.
-* Use `sphinx` with the Read the Docs theme for documentation.
+---
 
-## Coding Standards
+## 1. Project & Tooling Standards (Always Enforced)
 
-* Always use PEP8 compliant code style.
-* Write type hints for all functions and methods.
-* Include Google style docstrings for all functions, methods, and classes.
-* Add examples in docstrings where applicable.
-* Ensure code is modular and reusable.
-* Follow SOLID principles.
-* Write unit tests for all new features and bug fixes.
-* Follow semantic versioning for releases.
+* **Always use `pyproject.toml`** for all project configuration.
+* **Always use Hatch**:
 
-## Release and Versioning
+  * Build backend: `hatchling`
+  * Versioning: `hatch-vcs`
+* **Never hardcode a version number** anywhere.
+* Use the following tools exclusively:
 
-* Use `semver` for versioning and follow the [Conventional Commits](https://www.conventionalcommits.org/) guidelines.
-* Commits MUST be prefixed with a type, which consists of a noun, feat, fix, etc., followed by the OPTIONAL scope, OPTIONAL !, and REQUIRED terminal colon and space.
-* The type feat MUST be used when a commit adds a new feature to your application or library.
-* The type fix MUST be used when a commit represents a bug fix for your application.
-* A scope MAY be provided after a type. A scope MUST consist of a noun describing a section of the codebase surrounded by parenthesis, e.g., fix(parser):
-* A description MUST immediately follow the colon and space after the type/scope prefix. The description is a short summary of the code changes, e.g., fix: array parsing issue when multiple spaces were contained in string.
-* A longer commit body MAY be provided after the short description, providing additional contextual information about the code changes. The body MUST begin one blank line after the description.
-* A commit body is free-form and MAY consist of any number of newline separated paragraphs.
-* One or more footers MAY be provided one blank line after the body. Each footer MUST consist of a word token, followed by either a :<space> or <space># separator, followed by a string value (this is inspired by the git trailer convention).
-*A footer’s token MUST use - in place of whitespace characters, e.g., Acked-by (this helps differentiate the footer section from a multi-paragraph body). An exception is made for BREAKING CHANGE, which MAY also be used as a token.
-* A footer’s value MAY contain spaces and newlines, and parsing MUST terminate when the next valid footer token/separator pair is observed.
-* Breaking changes MUST be indicated in the type/scope prefix of a commit, or as an entry in the footer.
-* If included as a footer, a breaking change MUST consist of the uppercase text BREAKING CHANGE, followed by a colon, space, and description, e.g., BREAKING CHANGE: environment variables now take precedence over config files.
-* If included in the type/scope prefix, breaking changes MUST be indicated by a ! immediately before the :. If ! is used, BREAKING CHANGE: MAY be omitted from the footer section, and the commit description SHALL be used to describe the breaking change.
-* Types other than feat and fix MAY be used in your commit messages, e.g., docs: update ref docs.
-* The units of information that make up Conventional Commits MUST NOT be treated as case sensitive by implementors, with the exception of BREAKING CHANGE which MUST be uppercase.
-* BREAKING-CHANGE MUST be synonymous with BREAKING CHANGE, when used as a token in a footer.
+  * **Testing:** `pytest`
+  * **Linting & formatting:** `ruff`
+  * **Changelog management:** `towncrier`
+  * **Virtual environments:** `venv`
+  * **Documentation:** `sphinx` with **Read the Docs** theme
+* All generated files must be compatible with **Python packaging best practices**.
 
-## Documentation
+---
 
-* Structure documentation into clear sections: Getting Started, User Guides, API Reference.
-* Ensure all code examples in the documentation are up to date with the latest API.
-* Use consistent terminology throughout the documentation.
+## 2. Coding Standards (Strict)
+
+Copilot **must always**:
+
+* Produce **PEP 8–compliant** code.
+* Add **type hints to every function, method, and public attribute**.
+* Use **Google-style docstrings** for:
+
+  * Modules
+  * Classes
+  * Functions and methods
+* Include **usage examples** in docstrings where meaningful.
+* Write **modular, reusable code**.
+* Follow **SOLID principles**.
+* Prefer **clarity over cleverness**.
+* Avoid premature optimization.
+* Never introduce unused imports, dead code, or commented-out logic.
+
+---
+
+## 3. Testing Requirements
+
+* **Every new feature or bug fix must include tests.**
+* Tests must:
+
+  * Use `pytest`
+  * Be deterministic
+  * Clearly assert behavior, not implementation
+* Favor small, focused test cases.
+* Name tests descriptively.
+
+---
+
+## 4. Versioning & Releases (Hatch-VCS — Authoritative)
+
+This section is **non-negotiable**.
+
+### Version Source
+
+* Versions **must be derived from Git tags only**.
+* `pyproject.toml` **must declare**:
+
+  ```toml
+  [project]
+  dynamic = ["version"]
+
+  [tool.hatch.version]
+  source = "vcs"
+  ```
+* **Never** set a static version.
+
+### Version Semantics
+
+* Git tags **must be annotated** and follow:
+
+  ```
+  vX.Y.Z
+  ```
+* Untagged commits **must** produce:
+
+  ```
+  X.Y.(Z+1).devN
+  ```
+* Use **PEP 440–compliant** versions only.
+* Prefer the **`guess-next-dev`** scheme.
+* Every CI build **must produce a unique version**.
+* Assume:
+
+  * Publishing happens on **every commit or merge to `main`**
+  * TestPyPI receives **all CI builds**
+
+### CI & GitHub Actions
+
+* `actions/checkout` **must use**:
+
+  ```yaml
+  fetch-depth: 0
+  ```
+* Versioning must behave **identically** in:
+
+  * Local builds
+  * CI
+  * GitHub Actions
+* Publishing workflows **must never reuse a version number**.
+* Optimize for **OIDC trusted publishing** (no API tokens).
+
+---
+
+## 5. Commit Message Rules (Conventional Commits — Enforced)
+
+All commits **must** follow **Conventional Commits**.
+
+### Format
+
+```
+<type>(<optional-scope>)<optional !>: <description>
+
+[optional body]
+
+[optional footers]
+```
+
+### Rules
+
+* `feat` → **new user-visible features**
+* `fix` → **bug fixes**
+* Other allowed types: `docs`, `refactor`, `test`, `chore`, `ci`, `build`
+* Scope:
+
+  * Optional
+  * Must be a noun
+  * Example: `fix(parser):`
+* Breaking changes:
+
+  * Use `!` before the colon **OR**
+  * Use a footer:
+
+    ```
+    BREAKING CHANGE: description
+    ```
+* `BREAKING CHANGE` **must be uppercase**.
+* Footers must follow Git trailer conventions.
+* Commit descriptions must be short, imperative, and clear.
+
+---
+
+## 6. Documentation Standards
+
+Copilot must ensure:
+
+* Documentation is structured into:
+
+  * **Getting Started**
+  * **User Guides**
+  * **API Reference**
+* All examples compile and match the current API.
+* Terminology is consistent across:
+
+  * Code
+  * Docs
+  * Docstrings
+* Public APIs are always documented.
+
+---
+
+## 7. Default Behavior for Copilot
+
+Unless explicitly instructed otherwise, Copilot should:
+
+* Assume this is a **library**, not a script.
+* Favor **public, documented APIs** over internal helpers.
+* Generate code that is:
+
+  * Testable
+  * Lint-clean with `ruff`
+  * Ready for CI
+* Never bypass these rules “for convenience”.
+
+---
+
+**If any instruction conflicts with generated output, the instructions take precedence.**

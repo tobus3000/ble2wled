@@ -1,7 +1,7 @@
 [project]
 name = "ble2wled"
-version = "1.0.0"
 description = "Real-time Bluetooth Low Energy beacon visualization on WLED LED strips"
+dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -50,11 +50,15 @@ Repository = "https://github.com/tobus3000/ble2wled"
 Issues = "https://github.com/tobus3000/ble2wled/issues"
 
 [build-system]
-requires = ["hatchling >= 1.26"]
+requires = ["hatchling >= 1.26", "hatch-vcs >= 0.7.2"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-format = "semver"
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ble2wled"]
