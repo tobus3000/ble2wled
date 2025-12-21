@@ -117,20 +117,16 @@ header = """
 All notable changes to this project will be documented in this file.
 """
 body = """
-{% if versions | length > 0 %}
-{% for version in versions %}
-## {{ version.version }} ({{ version.date }})
-{% for group, commits in version.groups %}
-- {{ commit.message }}
-{% endfor %}
-{% endfor %}
-{% endif %}
+{% if version %}
+## Version {{ version }}
 
-{% if unreleased | length > 0 %}
-## Unreleased
-{% for group, commits in unreleased.groups %}
-- {{ commit.message }}
+{% if commits %}
+{% for commit in commits -%}
+- {{ commit.message | default(default=commit.hash) }}
 {% endfor %}
+{% else %}
+- No changes.
+{% endif %}
 {% endif %}
 """
 trim = true
