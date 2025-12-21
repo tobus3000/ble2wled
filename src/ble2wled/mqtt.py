@@ -117,9 +117,9 @@ class EspresenseBeaconListener:
     def on_connect(
         self,
         client: mqtt.Client,
-        userdata: object,  # noqa: ARG002
-        flags: dict,  # noqa: ARG002
-        rc: int,  # noqa: ARG002
+        userdata: object,  # noqa: ARG002 # pylint: disable=unused-argument
+        flags: dict,  # noqa: ARG002 # pylint: disable=unused-argument
+        rc: int,  # noqa: ARG002 # pylint: disable=unused-argument
     ) -> None:
         """Handle MQTT connection.
 
@@ -142,8 +142,8 @@ class EspresenseBeaconListener:
 
     def on_message(
         self,
-        client: mqtt.Client,  # noqa: ARG002
-        userdata: object,  # noqa: ARG002
+        client: mqtt.Client,  # noqa: ARG002 # pylint: disable=unused-argument
+        userdata: object,  # noqa: ARG002 # pylint: disable=unused-argument
         msg: mqtt.MQTTMessage,
     ) -> None:
         """Handle incoming MQTT message from espresense.
