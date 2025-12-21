@@ -1,4 +1,5 @@
 """Tests for Config class."""
+# pylint: disable=redefined-outer-name,unused-argument
 
 import os
 import tempfile

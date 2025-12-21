@@ -29,7 +29,7 @@ class TestEspresenseBeaconListener:
             msg.payload = b'{"id":"iBeacon:2686f39c-bada-4658-854a-a62e7e5e8b8d-1-0","rssi":-50.5}'
 
             # Process message
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was updated
             snapshot = state.snapshot()
@@ -49,7 +49,7 @@ class TestEspresenseBeaconListener:
             msg.topic = "espresense/devices/iBeacon:test-1-0/kitchen"
             msg.payload = b'{"id":"iBeacon:test-1-0","rssi":-50}'
 
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was NOT updated
             snapshot = state.snapshot()
@@ -66,7 +66,7 @@ class TestEspresenseBeaconListener:
             msg.topic = "espresense/devices/iBeacon:test1-1-0/balkon"
             msg.payload = b'{"id":"iBeacon:test2-1-0","rssi":-50}'
 
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was NOT updated
             snapshot = state.snapshot()
@@ -83,7 +83,7 @@ class TestEspresenseBeaconListener:
             msg.topic = "espresense/devices/iBeacon:test-1-0/balkon"
             msg.payload = b'{"id":"iBeacon:test-1-0"}'
 
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was NOT updated
             snapshot = state.snapshot()
@@ -104,7 +104,7 @@ class TestEspresenseBeaconListener:
                 b'"rssiVar":9.56,"distance":2.49,"var":0.16,"int":626}'
             )
 
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was updated
             snapshot = state.snapshot()
@@ -124,7 +124,7 @@ class TestEspresenseBeaconListener:
             msg.topic = "espresense/devices/iBeacon:test-1-0/balkon"
             msg.payload = b"not valid json"
 
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was NOT updated
             snapshot = state.snapshot()
@@ -141,7 +141,7 @@ class TestEspresenseBeaconListener:
             msg.topic = "espresense/devices"
             msg.payload = b'{"id":"test","rssi":-50}'
 
-            listener.on_message(None, None, msg)
+            listener.on_message(None, None, msg) # type: ignore[arg-type]
 
             # Verify beacon was NOT updated
             snapshot = state.snapshot()

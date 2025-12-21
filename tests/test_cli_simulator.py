@@ -32,7 +32,7 @@ class TestMQTTStatistics:
         stats = MQTTStatistics()
 
         assert stats.total_messages == 0
-        assert stats.messages_by_beacon == {}
+        assert not stats.messages_by_beacon
         assert stats.last_message_time is None
         assert hasattr(stats, "lock")
 
@@ -74,7 +74,7 @@ class TestMQTTStatistics:
         result = stats.get_stats()
 
         assert result["total"] == 0
-        assert result["by_beacon"] == {}
+        assert not result["by_beacon"]
         assert result["unique_beacons"] == 0
         assert result["elapsed"] >= 0  # Should have elapsed time
         assert result["rate"] >= 0  # Rate should be calculated
@@ -211,7 +211,7 @@ class TestMainFunction:
     def test_main_with_default_parameters(
         self,
         mock_time,
-        mock_sleep,
+        mock_sleep, # pylint: disable=unused-argument
         mock_beacon_state_cls,
         mock_beacon_runner_cls,
         mock_simulator_cls,
@@ -245,7 +245,7 @@ class TestMainFunction:
     def test_main_with_custom_led_count(
         self,
         mock_time,
-        mock_sleep,
+        mock_sleep, # pylint: disable=unused-argument
         mock_beacon_state_cls,
         mock_beacon_runner_cls,
         mock_simulator_cls,
@@ -274,7 +274,7 @@ class TestMainFunction:
     def test_main_mock_mode(
         self,
         mock_time,
-        mock_sleep,
+        mock_sleep, # pylint: disable=unused-argument
         mock_beacon_state_cls,
         mock_generator_cls,
         mock_beacon_runner_cls,
@@ -282,7 +282,7 @@ class TestMainFunction:
     ):
         """Test main with mock beacon generator."""
         # Use itertools.cycle to provide infinite time values
-        import itertools
+        import itertools # pylint: disable=import-outside-toplevel
 
         mock_time.side_effect = itertools.cycle(
             [0, 0, 0.06, 0.12]
@@ -316,13 +316,13 @@ class TestMainFunction:
     def test_main_mqtt_mode(
         self,
         mock_time,
-        mock_sleep,
+        mock_sleep, # pylint: disable=unused-argument
         mock_mqtt_listener_cls,
         mock_beacon_runner_cls,
         mock_simulator_cls,
     ):
         """Test main with MQTT mode."""
-        import itertools
+        import itertools # pylint: disable=import-outside-toplevel
 
         mock_time.side_effect = itertools.cycle(
             [0, 0, 0.06, 0.12]
@@ -366,13 +366,13 @@ class TestMainFunction:
     def test_main_mqtt_with_auth(
         self,
         mock_time,
-        mock_sleep,
+        mock_sleep, # pylint: disable=unused-argument
         mock_mqtt_listener_cls,
         mock_beacon_runner_cls,
         mock_simulator_cls,
     ):
         """Test main with MQTT authentication."""
-        import itertools
+        import itertools # pylint: disable=import-outside-toplevel
 
         mock_time.side_effect = itertools.cycle(
             [0, 0, 0.06, 0.12]
@@ -416,11 +416,11 @@ class TestMainFunction:
     @patch("ble2wled.cli_simulator.time.time")
     def test_main_invalid_grid_dimensions(
         self,
-        mock_time,
-        mock_sleep,
-        mock_beacon_state_cls,
-        mock_beacon_runner_cls,
-        mock_simulator_cls,
+        mock_time, # pylint: disable=unused-argument
+        mock_sleep, # pylint: disable=unused-argument
+        mock_beacon_state_cls, # pylint: disable=unused-argument
+        mock_beacon_runner_cls, # pylint: disable=unused-argument
+        mock_simulator_cls, # pylint: disable=unused-argument
     ):
         """Test main with mismatched LED count and grid dimensions."""
         with pytest.raises(ValueError) as exc_info:
@@ -442,7 +442,7 @@ class TestMainFunction:
         mock_simulator_cls,
     ):
         """Test that main uses specified update interval."""
-        import itertools
+        import itertools # pylint: disable=import-outside-toplevel
 
         mock_time.side_effect = itertools.cycle(
             [0, 0, 0.06, 0.12]
@@ -474,15 +474,15 @@ class TestMainFunction:
     def test_main_renders_beacons(
         self,
         mock_time,
-        mock_sleep,
-        mock_add_trail,
+        mock_sleep, # pylint: disable=unused-argument
+        mock_add_trail, # pylint: disable=unused-argument
         mock_beacon_to_rgb,
         mock_beacon_state_cls,
         mock_beacon_runner_cls,
         mock_simulator_cls,
     ):
         """Test that main renders beacons to simulator."""
-        import itertools
+        import itertools # pylint: disable=import-outside-toplevel
 
         mock_time.side_effect = itertools.cycle(
             [0, 0, 0.06, 0.12]
@@ -514,7 +514,7 @@ class TestMainFunction:
     def test_main_respects_duration(
         self,
         mock_time,
-        mock_sleep,
+        mock_sleep, # pylint: disable=unused-argument
         mock_beacon_state_cls,
         mock_beacon_runner_cls,
         mock_simulator_cls,
@@ -542,7 +542,7 @@ class TestCLIArgumentParsing:
     def test_cli_defaults(self):
         """Test CLI with default arguments."""
         with patch.object(sys, "argv", ["cli_simulator"]):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
@@ -562,7 +562,7 @@ class TestCLIArgumentParsing:
             "argv",
             ["cli_simulator", "--led-count", "120", "--rows", "12", "--cols", "10"],
         ):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
@@ -575,7 +575,7 @@ class TestCLIArgumentParsing:
     def test_cli_custom_beacons(self):
         """Test CLI with custom beacon count."""
         with patch.object(sys, "argv", ["cli_simulator", "--beacons", "10"]):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
@@ -588,7 +588,7 @@ class TestCLIArgumentParsing:
         with patch.object(
             sys, "argv", ["cli_simulator", "--mqtt", "--mqtt-broker", "192.168.1.100"]
         ):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
@@ -613,7 +613,7 @@ class TestCLIArgumentParsing:
                 "testpass",
             ],
         ):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
@@ -625,7 +625,7 @@ class TestCLIArgumentParsing:
     def test_cli_invalid_led_count(self):
         """Test CLI rejects non-positive LED count."""
         with patch.object(sys, "argv", ["cli_simulator", "--led-count", "0"]):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with pytest.raises(SystemExit):
                 cli_func()
@@ -645,7 +645,7 @@ class TestCLIArgumentParsing:
                 "7",  # 10*7 = 70, not 60
             ],
         ):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with pytest.raises(SystemExit):
                 cli_func()
@@ -653,7 +653,7 @@ class TestCLIArgumentParsing:
     def test_cli_invalid_fade_factor(self):
         """Test CLI rejects invalid fade factor."""
         with patch.object(sys, "argv", ["cli_simulator", "--fade-factor", "1.5"]):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with pytest.raises(SystemExit):
                 cli_func()
@@ -663,7 +663,7 @@ class TestCLIArgumentParsing:
         with patch.object(
             sys, "argv", ["cli_simulator", "--mqtt", "--mqtt-port", "99999"]
         ):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with pytest.raises(SystemExit):
                 cli_func()
@@ -671,7 +671,7 @@ class TestCLIArgumentParsing:
     def test_cli_duration_argument(self):
         """Test CLI with custom duration."""
         with patch.object(sys, "argv", ["cli_simulator", "--duration", "30.5"]):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()
@@ -686,7 +686,7 @@ class TestCLIArgumentParsing:
             "argv",
             ["cli_simulator", "--trail-length", "15", "--fade-factor", "0.5"],
         ):
-            from ble2wled.cli_simulator import cli as cli_func
+            from ble2wled.cli_simulator import cli as cli_func # pylint: disable=import-outside-toplevel
 
             with patch("ble2wled.cli_simulator.main") as mock_main:
                 cli_func()

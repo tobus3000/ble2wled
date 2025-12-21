@@ -1,4 +1,5 @@
 """Tests for CLI simulator MQTT functionality."""
+# pylint: disable=import-outside-toplevel
 
 import inspect
 from unittest.mock import MagicMock, patch

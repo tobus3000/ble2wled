@@ -22,7 +22,7 @@ class TestBeaconRunnerComprehensive:
     def test_init_creates_empty_positions_dict(self):
         """Test that positions dictionary is initialized empty."""
         runner = BeaconRunner(led_count=60)
-        assert runner.positions == {}
+        assert not runner.positions
 
     def test_next_position_returns_integer(self):
         """Test that next_position returns integer values."""
@@ -42,6 +42,7 @@ class TestBeaconRunnerComprehensive:
         """Test wrapping at exact LED count."""
         runner = BeaconRunner(led_count=7)
         # Advance to position 6 (last position)
+        pos = None
         for _ in range(7):
             pos = runner.next_position("b")
         assert pos == 6

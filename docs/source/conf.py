@@ -1,8 +1,10 @@
-# Configuration file for the Sphinx documentation builder.
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/config.html
+"""
+Configuration file for the Sphinx documentation builder.
+For the full list of built-in configuration values, see the documentation:
+<https://www.sphinx-doc.org/en/master/usage/config.html>
+"""
+# pylint: disable=invalid-name
 
-import os
 import sys
 from pathlib import Path
 
@@ -11,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 # -- Project information -------------------------------------------------------
 project = 'BLE2WLED'
-copyright = '2025, BLE2WLED Contributors'
+copyright = '2025, BLE2WLED Contributors' # pylint: disable=redefined-builtin
 author = 'Tobias Hildebrand'
 release = '1.0.0'
 
