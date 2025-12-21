@@ -19,7 +19,6 @@ Example:
 """
 
 
-
 class BeaconRunner:
     """Manages animation positions for beacons moving along LED strip.
 

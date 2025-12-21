@@ -23,7 +23,6 @@ Example:
 """
 
 
-
 def estimate_distance_from_rssi(
     rssi: int, tx_power: int = -59, n: float = 2.0
 ) -> float:
