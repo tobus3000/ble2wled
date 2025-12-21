@@ -55,6 +55,10 @@ jobs:
       - name: Show resolved version
         run: hatch version
 
+      # Clean previous builds
+      - name: Clean dist
+        run: rm -rf dist/*
+
       # Build the distribution
       - name: Build package
         run: hatch build
