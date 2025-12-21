@@ -2,6 +2,8 @@
 
 A Python package that detects Bluetooth Low Energy (BLE) beacons via MQTT and visualizes them in real-time on WLED LED strips using dynamic colors and motion trails.
 
+Read the full documentation on [https://ble2wled.tobotec.ch](https://ble2wled.tobotec.ch).
+
 ## Overview
 
 BLE2WLED bridges the gap between Bluetooth beacon detection and visual LED effects. It:
