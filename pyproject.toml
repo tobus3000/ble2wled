@@ -50,7 +50,7 @@ Repository = "https://github.com/tobus3000/ble2wled"
 Issues = "https://github.com/tobus3000/ble2wled/issues"
 
 [build-system]
-requires = ["hatchling >= 1.26", "hatch-vcs >= 0.7.2"]
+requires = ["hatchling >= 1.26", "hatch-vcs >= 0.5.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
