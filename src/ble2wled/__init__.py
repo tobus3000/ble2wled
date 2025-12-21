@@ -18,7 +18,6 @@ from .simulator import LEDSimulator, MockBeaconGenerator
 from .states import BeaconState
 from .wled import LEDController, WLEDHTTPController, WLEDUDPController
 
-__version__ = "0.1.0"
 __all__ = [
     "BeaconState",
     "BeaconRunner",
