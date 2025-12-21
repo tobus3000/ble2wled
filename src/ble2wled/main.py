@@ -127,7 +127,34 @@ def run_wled_beacons(
         time.sleep(update_interval)
 
 
-if __name__ == "__main__":
+def main():
+    """Run the BLE to WLED beacon visualization system.
+
+    This function initializes the configuration, logging, and system components
+    required to visualize BLE beacons on a WLED LED strip. It starts the MQTT
+    listener to track beacon signals and continuously updates the LED strip
+    with beacon animations.
+
+    Steps performed:
+        1. Load configuration from a `.env` file.
+        2. Configure logging.
+        3. Validate configuration parameters.
+        4. Initialize beacon state tracking.
+        5. Start the Espresense MQTT listener.
+        6. Create a WLED controller (UDP or HTTP) based on configuration.
+        7. Run the main beacon animation loop, updating the LED strip at
+           configured intervals until interrupted.
+
+    Raises:
+        ValueError: If the configuration is invalid.
+        KeyboardInterrupt: When the user interrupts the animation loop.
+
+    Example:
+        Run the main function to start beacon visualization::
+
+            if __name__ == "__main__":
+                main()
+    """
     # Load configuration from .env file
     config = Config(".env")
 
@@ -201,3 +228,7 @@ if __name__ == "__main__":
         )
     except KeyboardInterrupt:
         logger.info("Animation loop interrupted by user, exiting...")
+
+
+if __name__ == "__main__":
+    main()
