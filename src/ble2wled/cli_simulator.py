@@ -26,7 +26,6 @@ import signal
 import sys
 import threading
 import time
-from typing import Optional
 
 from .animation import BeaconRunner, add_trail
 from .colors import ble_beacon_to_rgb
@@ -127,13 +126,13 @@ def main(
     update_interval: float = 0.1,
     trail_length: int = 8,
     fade_factor: float = 0.7,
-    duration: Optional[float] = None,
+    duration: float | None = None,
     use_mqtt: bool = False,
     mqtt_broker: str = "localhost",
     mqtt_port: int = 1883,
     mqtt_location: str = "balkon",
-    mqtt_username: Optional[str] = None,
-    mqtt_password: Optional[str] = None,
+    mqtt_username: str | None = None,
+    mqtt_password: str | None = None,
 ) -> None:
     """Run the CLI simulator.
 
@@ -206,7 +205,7 @@ def main(
     simulator = LEDSimulator(led_count=led_count, rows=rows, cols=cols)
 
     # Initialize statistics tracker for MQTT mode
-    mqtt_stats: Optional[MQTTStatistics] = None
+    mqtt_stats: MQTTStatistics | None = None
     if use_mqtt:
         mqtt_stats = MQTTStatistics()
         beacon_state = StatisticsTrackingBeaconState(
@@ -218,8 +217,8 @@ def main(
     beacon_runner = BeaconRunner(led_count)
 
     # Initialize beacon source
-    beacon_generator: Optional[MockBeaconGenerator] = None
-    mqtt_listener: Optional[EspresenseBeaconListener] = None
+    beacon_generator: MockBeaconGenerator | None = None
+    mqtt_listener: EspresenseBeaconListener | None = None
 
     if use_mqtt:
         logger.info(

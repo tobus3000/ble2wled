@@ -21,7 +21,6 @@ import logging
 import socket
 import time
 from abc import ABC, abstractmethod
-from typing import List
 
 import requests
 
@@ -56,7 +55,7 @@ class LEDController(ABC):
         self.led_count = led_count
 
     @abstractmethod
-    def update(self, leds: List[List[int]]) -> None:
+    def update(self, leds: list[list[int]]) -> None:
         """Send LED color update to device.
 
         Args:
@@ -95,7 +94,7 @@ class WLEDHTTPController(LEDController):
         self.max_retries = max_retries
         self.timeout = 1
 
-    def update(self, leds: List[List[int]]) -> None:
+    def update(self, leds: list[list[int]]) -> None:
         """Send LED update via HTTP POST with retry logic.
 
         Sends LED data to WLED device using the /json/state endpoint.
@@ -179,7 +178,7 @@ class WLEDUDPController(LEDController):
         self.addr = (host, port)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def update(self, leds: List[List[int]]) -> None:
+    def update(self, leds: list[list[int]]) -> None:
         """Send LED update via UDP DRGB protocol.
 
         Constructs DRGB packet with header and RGB data, sends via UDP.

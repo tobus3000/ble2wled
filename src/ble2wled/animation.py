@@ -18,7 +18,6 @@ Example:
         add_trail(leds, pos, color, trail_length=10, fade_factor=0.75)
 """
 
-from typing import Dict, List, Tuple
 
 
 class BeaconRunner:
@@ -44,7 +43,7 @@ class BeaconRunner:
                 runner = BeaconRunner(led_count=60)
         """
         self.led_count = led_count
-        self.positions: Dict[str, int] = {}
+        self.positions: dict[str, int] = {}
 
     def next_position(self, beacon_id: str) -> int:
         """Get next position for a beacon.
@@ -73,9 +72,9 @@ class BeaconRunner:
 
 
 def add_trail(
-    leds: List[List[int]],
+    leds: list[list[int]],
     position: int,
-    color: Tuple[int, int, int],
+    color: tuple[int, int, int],
     trail_length: int,
     fade_factor: float,
 ) -> None:

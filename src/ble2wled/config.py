@@ -30,7 +30,7 @@ Example:
 
 import logging
 import os
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
 
@@ -59,7 +59,7 @@ class Config:
         mqtt_port (int): MQTT broker port.
     """
 
-    def __init__(self, env_file: Optional[str] = None):
+    def __init__(self, env_file: str | None = None):
         """Initialize configuration.
 
         Loads environment variables from .env file if it exists. Configuration
@@ -245,7 +245,7 @@ class Config:
         return int(os.getenv("MQTT_PORT", "1883"))
 
     @property
-    def mqtt_username(self) -> Optional[str]:
+    def mqtt_username(self) -> str | None:
         """MQTT broker username for authentication.
 
         If set, used to authenticate with the MQTT broker.
@@ -267,7 +267,7 @@ class Config:
         return os.getenv("MQTT_USERNAME")
 
     @property
-    def mqtt_password(self) -> Optional[str]:
+    def mqtt_password(self) -> str | None:
         """MQTT broker password for authentication.
 
         If set along with mqtt_username, used to authenticate with the MQTT broker.

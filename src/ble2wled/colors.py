@@ -22,7 +22,6 @@ Example:
         print(f\"Beacon at {distance:.2f}m: RGB{color}\")
 """
 
-from typing import Tuple
 
 
 def estimate_distance_from_rssi(
@@ -76,7 +75,7 @@ def lerp(a: float, b: float, t: float) -> float:
 
 def gradient_color(
     distance: float, near: float = 0.5, far: float = 10.0
-) -> Tuple[float, float, float]:
+) -> tuple[float, float, float]:
     """Map distance to RGB color gradient (yellow to red).
 
     Maps distance to a color gradient from yellow (near) to red (far).
@@ -113,7 +112,7 @@ def gradient_color(
         return 1.0, lerp(1, 0, (t - 0.5) / 0.5), 0.0
 
 
-def ble_beacon_to_rgb(beacon_id: str, rssi: int, life: float) -> Tuple[int, int, int]:
+def ble_beacon_to_rgb(beacon_id: str, rssi: int, life: float) -> tuple[int, int, int]:
     """Convert beacon data to RGB color.
 
     Applies distance-based gradient coloring with unique hue offset per beacon,

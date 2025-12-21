@@ -29,7 +29,6 @@ Example:
 """
 
 import threading
-from typing import List
 
 from .wled import LEDController
 
@@ -87,11 +86,11 @@ class LEDSimulator(LEDController):
         self.led_count = led_count
         self.rows = rows
         self.cols = cols
-        self.current_leds: List[List[int]] = [[0, 0, 0] for _ in range(led_count)]
+        self.current_leds: list[list[int]] = [[0, 0, 0] for _ in range(led_count)]
         self.lock = threading.Lock()
         self._running = False
 
-    def update(self, leds: List[List[int]]) -> None:
+    def update(self, leds: list[list[int]]) -> None:
         """Update and display the LED strip.
 
         Updates the current LED state and renders the grid to terminal.
@@ -162,7 +161,7 @@ class LEDSimulator(LEDController):
             ) / len(self.current_leds)
             print(f"Average brightness: {avg_brightness:.1f}/255")
 
-    def get_snapshot(self) -> List[List[int]]:
+    def get_snapshot(self) -> list[list[int]]:
         """Get current LED state.
 
         Returns:

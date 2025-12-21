@@ -16,7 +16,6 @@ Example:
 
 import threading
 import time
-from typing import Dict, Tuple
 
 
 class BeaconState:
@@ -48,7 +47,7 @@ class BeaconState:
         self._lock = threading.Lock()
         self.timeout = timeout_seconds
         self.fade_out = fade_out_seconds
-        self._beacons: Dict[str, dict] = {}
+        self._beacons: dict[str, dict] = {}
 
     def update(self, beacon_id: str, rssi: int) -> None:
         """Update beacon with signal strength.
@@ -75,7 +74,7 @@ class BeaconState:
                 "life": 1.0,
             }
 
-    def snapshot(self) -> Dict[str, Tuple[int, float]]:
+    def snapshot(self) -> dict[str, tuple[int, float]]:
         """Get current active beacons with RSSI and life values.
 
         Returns a thread-safe snapshot of all active beacons. Automatically
