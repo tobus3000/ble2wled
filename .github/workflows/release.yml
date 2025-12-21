@@ -64,10 +64,10 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" = "push" && "${{ github.actor }}" != "github-actions" ]]; then
             echo "Publishing to TestPyPI..."
-            twine upload --verbose --repository testpypi --identity-token dist/*
+            twine upload --verbose --repository testpypi dist/*
           elif [[ "${{ github.event_name }}" = "release" ]]; then
             echo "Publishing to PyPI..."
-            twine upload --verbose --repository pypi --identity-token dist/*
+            twine upload --verbose --repository pypi dist/*
           else
             echo "Not publishing."
           fi
