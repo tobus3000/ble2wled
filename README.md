@@ -14,6 +14,10 @@ BLE2WLED bridges the gap between Bluetooth beacon detection and visual LED effec
 6. **Renders motion trails** as beacons move along the LED strip
 7. **Outputs to WLED** via HTTP or UDP (DRGB protocol) for smooth real-time animation
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for recent changes.
+
 ## Installation
 
 ### From Source

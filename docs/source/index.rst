@@ -37,5 +37,6 @@ Bluetooth Beacon to WLED Visualizer
    :maxdepth: 1
    :caption: Project
 
+   changelog
    license
    GitHub <https://github.com/tobus3000/ble2wled>
