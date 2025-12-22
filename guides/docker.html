@@ -55,6 +55,9 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Docker</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#building-the-docker-image">Building the Docker Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-with-overridden-environment-variables">Run with overridden environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-and-start-the-container-with-docker-compose">Build and start the container with Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#viewing-logs">Viewing Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stop-the-container">Stop the container</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mqtt_authentication.html">MQTT Authentication</a></li>
@@ -132,6 +135,30 @@
 <li><p>UDP output</p></li>
 <li><p>local MQTT brokers</p></li>
 </ul>
+</section>
+<section id="build-and-start-the-container-with-docker-compose">
+<h2>Build and start the container with Docker Compose<a class="headerlink" href="#build-and-start-the-container-with-docker-compose" title="Link to this heading"></a></h2>
+<p>You can also use Docker Compose to build and start the container.
+Use the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file provided in the repository.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+</pre></div>
+</div>
+<p>This command builds the Docker image from the Dockerfile (<code class="docutils literal notranslate"><span class="pre">--build</span></code>) and starts the container in detached mode (<code class="docutils literal notranslate"><span class="pre">-d</span></code>).</p>
+</section>
+<section id="viewing-logs">
+<h2>Viewing Logs<a class="headerlink" href="#viewing-logs" title="Link to this heading"></a></h2>
+<p>To view the logs of the running container, use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>logs<span class="w"> </span>-f
+</pre></div>
+</div>
+<p>This will stream the logs to your terminal.</p>
+</section>
+<section id="stop-the-container">
+<h2>Stop the container<a class="headerlink" href="#stop-the-container" title="Link to this heading"></a></h2>
+<p>To stop the running container, use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>down
+</pre></div>
+</div>
 </section>
 </section>
 
