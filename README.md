@@ -29,7 +29,7 @@ You need a [WLED](https://kno.wled.ge/) controlled LED strip. Use an ESP8266 or 
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for recent changes.
+See [CHANGELOG.md](https://github.com/tobus3000/ble2wled/blob/main/CHANGELOG.md) for recent changes.
 
 ## Installation
 
