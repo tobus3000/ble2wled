@@ -44,16 +44,16 @@ Prerequisites
 You need a working MQTT broker that receives BLE beacon data in JSON format. 
 Each message should contain a unique beacon ID and its RSSI value.
 
-Ideally, use the ``ESPresense``_ firmware on ESP32 devices for BLE scanning 
-and MQTT publishing to a Mosquitto broker (running on ``HomeAssistant``_ 
+Ideally, use the ESPresense_ firmware on ESP32 devices for BLE scanning 
+and MQTT publishing to a Mosquitto broker (running on HomeAssistant_ 
 for example).
 
-On the output side, you need a ``LED``_ controlled LED strip. 
+On the output side, you need a WLED_ controlled LED strip. 
 Use an ESP8266 or ESP32 running the WLED firmware.
 
 .. _ESPresense: https://espresense.com/
 .. _HomeAssistant: https://www.home-assistant.io/
-.. _LED: https://kno.wled.ge/
+.. _WLED: https://kno.wled.ge/
 
 Architecture
 ------------
