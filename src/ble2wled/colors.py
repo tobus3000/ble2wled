@@ -21,8 +21,10 @@ Example:
         color = ble_beacon_to_rgb('beacon_1', rssi, life=0.8)
         print(f\"Beacon at {distance:.2f}m: RGB{color}\")
 """
+
 import colorsys
 import hashlib
+
 
 def estimate_distance_from_rssi(
     rssi: int, tx_power: int = -59, n: float = 2.0
