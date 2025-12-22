@@ -153,9 +153,13 @@
 </section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
-<p>You need a working MQTT broker that receives BLE beacon data in JSON format. Each message should contain a unique beacon ID and its RSSI value.
-Ideally use <a href="#id1"><span class="problematic" id="id2">`</span></a>ESPresense`&lt;<a class="reference external" href="https://espresense.com/">https://espresense.com/</a>&gt; firmware on ESP32 devices for BLE scanning and MQTT publishing to a mosquito broker (running on <a href="#id3"><span class="problematic" id="id4">`</span></a>HomeAssistant`&lt;<a class="reference external" href="https://www.home-assistant.io/">https://www.home-assistant.io/</a>&gt; for example).</p>
-<p>On the output side, you need a <a href="#id5"><span class="problematic" id="id6">`</span></a>LED`&lt;<a class="reference external" href="https://kno.wled.ge/">https://kno.wled.ge/</a>&gt; controlled LED strip. Use an ESP8266 or ESP32 running the WLED firmware.</p>
+<p>You need a working MQTT broker that receives BLE beacon data in JSON format.
+Each message should contain a unique beacon ID and its RSSI value.</p>
+<p>Ideally, use the <a href="#id1"><span class="problematic" id="id2">``</span></a>ESPresense``_ firmware on ESP32 devices for BLE scanning
+and MQTT publishing to a Mosquitto broker (running on <a href="#id3"><span class="problematic" id="id4">``</span></a>HomeAssistant``_
+for example).</p>
+<p>On the output side, you need a <a href="#id5"><span class="problematic" id="id6">``</span></a>LED``_ controlled LED strip.
+Use an ESP8266 or ESP32 running the WLED firmware.</p>
 </section>
 <section id="architecture">
 <h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h2>
