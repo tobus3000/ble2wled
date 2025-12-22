@@ -36,3 +36,35 @@ This command runs the ``ble2wled`` container in detached mode, using the host ne
 - mDNS (wled.local)
 - UDP output
 - local MQTT brokers
+
+Build and start the container with Docker Compose
+-------------------------------------------------
+
+You can also use Docker Compose to build and start the container.
+Use the ``docker-compose.yml`` file provided in the repository.
+
+.. code-block:: bash
+
+    docker-compose up -d --build
+
+This command builds the Docker image from the Dockerfile (``--build``) and starts the container in detached mode (``-d``).
+
+Viewing Logs
+----------------
+
+To view the logs of the running container, use the following command:
+
+.. code-block:: bash
+
+    docker-compose logs -f
+
+This will stream the logs to your terminal.
+
+Stop the container
+------------------
+
+To stop the running container, use the following command:
+
+.. code-block:: bash
+
+    docker-compose down
