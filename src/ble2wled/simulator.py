@@ -28,8 +28,8 @@ Example:
         )
 """
 
-import threading
 import math
+import threading
 
 from .wled import LEDController
 
