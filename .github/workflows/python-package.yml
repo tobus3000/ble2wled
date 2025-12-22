@@ -56,8 +56,9 @@ jobs:
     # Upload coverage reports (only on Python 3.14)
     - name: Upload coverage reports
       if: matrix.python-version == '3.14'
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         files: ./coverage.xml
         flags: unittests
         name: codecov-umbrella
+        token: ${{ secrets.CODECOV_TOKEN }}
