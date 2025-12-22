@@ -17,6 +17,7 @@ Bluetooth Beacon to WLED Visualizer
 
    guides/configuration
    guides/cli_simulator
+   guides/docker
    guides/mqtt_authentication
    guides/http_retry_logic
 

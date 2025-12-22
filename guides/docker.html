@@ -3,9 +3,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview: module code &mdash; BLE2WLED 1.0.0 documentation</title>
+  <title>Docker &mdash; BLE2WLED 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
@@ -17,7 +18,9 @@
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MQTT Authentication" href="mqtt_authentication.html" />
+    <link rel="prev" title="CLI Simulator Guide" href="cli_simulator.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,12 +49,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../guides/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/cli_simulator.html">CLI Simulator Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/docker.html">Docker</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/mqtt_authentication.html">MQTT Authentication</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/http_retry_logic.html">HTTP Retry Logic</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_simulator.html">CLI Simulator Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-docker-image">Building the Docker Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-with-overridden-environment-variables">Run with overridden environment variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mqtt_authentication.html">MQTT Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_retry_logic.html">HTTP Retry Logic</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -85,8 +92,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Overview: module code</li>
+      <li class="breadcrumb-item active">Docker</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/docker.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -94,19 +102,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="ble2wled/animation.html">ble2wled.animation</a></li>
-<li><a href="ble2wled/colors.html">ble2wled.colors</a></li>
-<li><a href="ble2wled/config.html">ble2wled.config</a></li>
-<li><a href="ble2wled/mqtt.html">ble2wled.mqtt</a></li>
-<li><a href="ble2wled/simulator.html">ble2wled.simulator</a></li>
-<li><a href="ble2wled/states.html">ble2wled.states</a></li>
-<li><a href="ble2wled/wled.html">ble2wled.wled</a></li>
-</ul>
+  <section id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h1>
+<p>Ble2WLED can be run inside a Docker container. This is especially useful for running the application on systems where Python is not installed or where you want to isolate the application from the host system.</p>
+<section id="building-the-docker-image">
+<h2>Building the Docker Image<a class="headerlink" href="#building-the-docker-image" title="Link to this heading"></a></h2>
+<p>To build the Docker image, run the following command in the root directory of the project:</p>
+<p>This will create a Docker image named <cite>ble2wled</cite>.</p>
+</section>
+<section id="run-with-overridden-environment-variables">
+<h2>Run with overridden environment variables<a class="headerlink" href="#run-with-overridden-environment-variables" title="Link to this heading"></a></h2>
+<p>You can run the Docker container with environment variables overridden using the <cite>-e</cite> flag. For example:</p>
+<p>This command runs the <cite>ble2wled</cite> container in detached mode, using the host network, and sets the specified environment variables.</p>
+<p>🔎 Note: <cite>–network host</cite> is often required for:
+- mDNS (wled.local)
+- UDP output
+- local MQTT brokers</p>
+</section>
+</section>
+
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli_simulator.html" class="btn btn-neutral float-left" title="CLI Simulator Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mqtt_authentication.html" class="btn btn-neutral float-right" title="MQTT Authentication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
