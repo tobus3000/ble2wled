@@ -23,7 +23,7 @@ class TestLEDController:
     def test_cannot_instantiate_abstract_class(self):
         """Test that LEDController cannot be instantiated directly."""
         with pytest.raises(TypeError):
-            LEDController(host="192.168.1.100", led_count=60) # type: ignore[reportAbstractUsage]  # pylint: disable=abstract-class-instantiated
+            LEDController(host="192.168.1.100", led_count=60)  # type: ignore[reportAbstractUsage]  # pylint: disable=abstract-class-instantiated
 
     def test_subclass_requires_update_method(self):
         """Test that subclass must implement update method."""
@@ -36,7 +36,7 @@ class TestLEDController:
             """
 
         with pytest.raises(TypeError):
-            IncompleteController(host="192.168.1.100", led_count=60) # type: ignore[reportAbstractUsage]  # pylint: disable=abstract-class-instantiated
+            IncompleteController(host="192.168.1.100", led_count=60)  # type: ignore[reportAbstractUsage]  # pylint: disable=abstract-class-instantiated
 
     def test_subclass_with_update_method_works(self):
         """Test that subclass with update method can be instantiated."""
@@ -47,6 +47,7 @@ class TestLEDController:
             Args:
                 LEDController (LEDController): Abstract base class for LED controllers.
             """
+
             def update(self, leds):
                 pass
 
@@ -196,7 +197,7 @@ class TestWLEDHTTPController:
         leds = [[0, 0, 0]]
 
         with patch("ble2wled.wled.requests.post"):
-            result = controller.update(leds) # pylint: disable=assignment-from-none
+            result = controller.update(leds)  # pylint: disable=assignment-from-none
 
             assert result is None
 
@@ -363,7 +364,7 @@ class TestWLEDUDPController:
             controller = WLEDUDPController(host="test.host", led_count=1)
             leds = [[0, 0, 0]]
 
-            result = controller.update(leds) # pylint: disable=assignment-from-no-return
+            result = controller.update(leds)  # pylint: disable=assignment-from-no-return
 
             assert result is None
 
