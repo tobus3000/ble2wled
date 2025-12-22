@@ -108,16 +108,30 @@
 <section id="building-the-docker-image">
 <h2>Building the Docker Image<a class="headerlink" href="#building-the-docker-image" title="Link to this heading"></a></h2>
 <p>To build the Docker image, run the following command in the root directory of the project:</p>
-<p>This will create a Docker image named <cite>ble2wled</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>ble2wled<span class="w"> </span>.
+</pre></div>
+</div>
+<p>This will create a Docker image named <code class="docutils literal notranslate"><span class="pre">ble2wled</span></code>.</p>
 </section>
 <section id="run-with-overridden-environment-variables">
 <h2>Run with overridden environment variables<a class="headerlink" href="#run-with-overridden-environment-variables" title="Link to this heading"></a></h2>
-<p>You can run the Docker container with environment variables overridden using the <cite>-e</cite> flag. For example:</p>
-<p>This command runs the <cite>ble2wled</cite> container in detached mode, using the host network, and sets the specified environment variables.</p>
-<p>🔎 Note: <cite>–network host</cite> is often required for:
-- mDNS (wled.local)
-- UDP output
-- local MQTT brokers</p>
+<p>You can run the Docker container with environment variables overridden using the <code class="docutils literal notranslate"><span class="pre">-e</span></code> flag. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>ble2wled<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">WLED_HOST</span><span class="o">=</span>wled.local<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">MQTT_BROKER</span><span class="o">=</span><span class="m">192</span>.168.1.10<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">MQTT_PASSWORD</span><span class="o">=</span>supersecret<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ble2wled
+</pre></div>
+</div>
+<p>This command runs the <code class="docutils literal notranslate"><span class="pre">ble2wled</span></code> container in detached mode, using the host network, and sets the specified environment variables.</p>
+<p>🔎 Note: <code class="docutils literal notranslate"><span class="pre">--network</span> <span class="pre">host</span></code> is often required for:</p>
+<ul class="simple">
+<li><p>mDNS (wled.local)</p></li>
+<li><p>UDP output</p></li>
+<li><p>local MQTT brokers</p></li>
+</ul>
 </section>
 </section>
 
