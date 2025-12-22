@@ -7,6 +7,7 @@ Comprehensive tests for the cli_simulator module covering:
 - Main function with mock and MQTT modes
 - Command-line interface and argument validation
 """
+# ruff: noqa: I001
 
 import signal
 import sys
