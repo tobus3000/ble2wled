@@ -29,6 +29,7 @@ Example:
 """
 
 import threading
+import math
 
 from .wled import LEDController
 
@@ -251,8 +252,6 @@ class MockBeaconGenerator:
                     # Update beacon_state with beacons data
                     time.sleep(0.05)
         """
-        import math
-
         self._time += time_delta
         beacons = {}
 

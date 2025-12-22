@@ -21,7 +21,8 @@ Example:
         color = ble_beacon_to_rgb('beacon_1', rssi, life=0.8)
         print(f\"Beacon at {distance:.2f}m: RGB{color}\")
 """
-
+import colorsys
+import hashlib
 
 def estimate_distance_from_rssi(
     rssi: int, tx_power: int = -59, n: float = 2.0
@@ -141,9 +142,6 @@ def ble_beacon_to_rgb(beacon_id: str, rssi: int, life: float) -> tuple[int, int,
             r, g, b = color
             print(f\"Color: RGB({r}, {g}, {b})\")
     """
-    import colorsys
-    import hashlib
-
     distance = estimate_distance_from_rssi(rssi)
     r, g, b = gradient_color(distance)
 

@@ -66,6 +66,7 @@ class TestMQTTStatistics:
         stats.record_message("beacon_001")
         after = time.time()
 
+        assert stats.last_message_time is not None
         assert before <= stats.last_message_time <= after
 
     def test_get_stats_initial(self):
