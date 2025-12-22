@@ -11,14 +11,16 @@ permissions:
 
 jobs:
   publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
+    environment: ${{ github.event.workflow_run.event == 'release' && 'pypi' || 'testpypi' }}
 
     steps:
       # Checkout full history (required for hatch-vcs)
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       # Setup Python
       - uses: actions/setup-python@v5
@@ -63,13 +65,13 @@ jobs:
 
       # Publish
       - name: Publish package
+        env:
+          TRIGGER_EVENT: ${{ github.event.workflow_run.event }}
         run: |
-          if [[ "${{ github.event_name }}" = "push" && "${{ github.actor }}" != "github-actions" ]]; then
-            echo "Publishing to TestPyPI..."
-            twine upload --verbose --repository testpypi dist/*
-          elif [[ "${{ github.event_name }}" = "release" ]]; then
-            echo "Publishing to PyPI..."
-            twine upload --verbose --repository pypi dist/*
+          if [[ "$TRIGGER_EVENT" == "push" ]]; then
+            twine upload --repository testpypi dist/*
+          elif [[ "$TRIGGER_EVENT" == "release" ]]; then
+            twine upload --repository pypi dist/*
           else
             echo "Not publishing."
           fi
