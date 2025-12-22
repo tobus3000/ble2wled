@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
     # Checkout full history and tags for hatch-vcs
@@ -53,9 +53,9 @@ jobs:
       run: |
         pytest tests/ -v --cov=src/ble2wled --cov-report=xml --cov-report=term
 
-    # Upload coverage reports (only on Python 3.11)
+    # Upload coverage reports (only on Python 3.14)
     - name: Upload coverage reports
-      if: matrix.python-version == '3.11'
+      if: matrix.python-version == '3.14'
       uses: codecov/codecov-action@v4
       with:
         files: ./coverage.xml
