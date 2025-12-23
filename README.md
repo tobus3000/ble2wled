@@ -28,7 +28,7 @@ Ideally use [ESPresense](https://espresense.com/) firmware on ESP32 devices for 
 
 ### WLED Device
 
-You need a [WLED](https://kno.wled.ge/) controlled LED strip. Use an ESP8266 or ESP32 running the WLED firmware.
+You need a [WLED](https://kno.wled.ge/) controlled LED strip. Use an ESP8266 or ESP32 running the WLED firmware (code tested with v0.15.0).
 
 ## Changelog
 
