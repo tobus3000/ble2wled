@@ -50,7 +50,7 @@ jobs:
     # Run tests with pytest and coverage
     - name: Test with pytest
       run: |
-        pytest tests/ -v --cov=src/ble2wled --cov-report=xml --cov-report=term
+        pytest
 
     # Upload coverage reports (only on Python 3.14)
     - name: Upload coverage reports

@@ -72,7 +72,7 @@ packages = ["src/ble2wled"]
 minversion = "7.0"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
-addopts = "-v --tb=short"
+addopts = "-v --tb=short --cov=ble2wled --cov-report=term"
 filterwarnings = [
     "ignore::DeprecationWarning",
 ]
