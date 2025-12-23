@@ -49,7 +49,7 @@ and MQTT publishing to a Mosquitto broker (running on HomeAssistant_
 for example).
 
 On the output side, you need a WLED_ controlled LED strip. 
-Use an ESP8266 or ESP32 running the WLED firmware.
+Use an ESP8266 or ESP32 running the WLED firmware (code tested with v0.15.0).
 
 .. _ESPresense: https://espresense.com/
 .. _HomeAssistant: https://www.home-assistant.io/
