@@ -1,5 +1,8 @@
 # BLE2WLED - Bluetooth Beacon to WLED Visualizer
 
+[![CI](https://github.com/tobus3000/ble2wled/actions/workflows/python-package.yml/badge.svg)](https://github.com/tobus3000/ble2wled/actions)
+[![Codecov](https://codecov.io/gh/tobus3000/ble2wled/branch/main/graph/badge.svg)](https://codecov.io/gh/tobus3000/ble2wled)
+
 A Python package that detects Bluetooth Low Energy (BLE) beacons via MQTT and visualizes them in real-time on WLED LED strips using dynamic colors and motion trails.
 
 Read the full documentation on [https://ble2wled.tobotec.ch](https://ble2wled.tobotec.ch).
