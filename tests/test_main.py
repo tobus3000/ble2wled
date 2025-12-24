@@ -13,7 +13,7 @@ from unittest.mock import MagicMock, Mock, call, patch
 
 import pytest
 
-from ble2wled.main import run_wled_beacons
+from ble2wled.main import run_wled_beacons, main
 from ble2wled.states import BeaconState
 
 
@@ -442,3 +442,169 @@ class TestRunWledBeacons:
 
                         # add_trail should only be called in second iteration
                         assert mock_trail.call_count == 1
+
+class TestMainFunction:
+    """Unit tests for the main() function."""
+
+    @patch("ble2wled.main.run_wled_beacons")
+    @patch("ble2wled.main.WLEDUDPController")
+    @patch("ble2wled.main.EspresenseBeaconListener")
+    @patch("ble2wled.main.BeaconState")
+    @patch("ble2wled.main.Config")
+    def test_main_happy_path_udp(
+        self,
+        mock_config_cls,
+        mock_beacon_state_cls,
+        mock_listener_cls,
+        mock_udp_controller_cls,
+        mock_run,
+    ):
+        """Test main() successful startup using UDP output mode."""
+        config = MagicMock()
+        config.log_level = "INFO"
+        config.output_mode = "udp"
+        config.wled_host = "wled.local"
+        config.led_count = 60
+        config.udp_port = 21324
+        config.update_interval = 0.2
+        config.trail_length = 10
+        config.fade_factor = 0.75
+        config.beacon_timeout_seconds = 6.0
+        config.beacon_fade_out_seconds = 4.0
+        config.mqtt_broker = "localhost"
+        config.mqtt_location = "living_room"
+        config.mqtt_port = 1883
+        config.mqtt_username = None
+        config.mqtt_password = None
+        config.to_dict.return_value = {}
+        config.validate.return_value = None
+
+        mock_config_cls.return_value = config
+        beacon_state = mock_beacon_state_cls.return_value
+        controller = mock_udp_controller_cls.return_value
+
+        # Stop infinite loop immediately
+        mock_run.side_effect = KeyboardInterrupt()
+
+        main()
+
+        mock_config_cls.assert_called_once_with(".env")
+        config.validate.assert_called_once()
+
+        mock_beacon_state_cls.assert_called_once_with(
+            timeout_seconds=6.0,
+            fade_out_seconds=4.0,
+        )
+
+        mock_listener_cls.assert_called_once_with(
+            beacon_state,
+            "localhost",
+            location="living_room",
+            port=1883,
+            username=None,
+            password=None,
+        )
+        mock_listener_cls.return_value.start.assert_called_once()
+
+        mock_udp_controller_cls.assert_called_once_with(
+            "wled.local", 60, port=21324
+        )
+
+        mock_run.assert_called_once_with(
+            controller,
+            60,
+            beacon_state,
+            update_interval=0.2,
+            trail_length=10,
+            fade_factor=0.75,
+        )
+
+    @patch("ble2wled.main.run_wled_beacons")
+    @patch("ble2wled.main.WLEDHTTPController")
+    @patch("ble2wled.main.EspresenseBeaconListener")
+    @patch("ble2wled.main.BeaconState")
+    @patch("ble2wled.main.Config")
+    def test_main_http_controller(
+        self,
+        mock_config_cls,
+        mock_beacon_state_cls,
+        mock_listener_cls,
+        mock_http_controller_cls,
+        mock_run,
+    ):
+        """Test main() selects HTTP controller when output_mode != udp."""
+        config = MagicMock()
+        config.log_level = "INFO"
+        config.output_mode = "http"
+        config.wled_host = "wled.local"
+        config.led_count = 30
+        config.update_interval = 1.0
+        config.trail_length = 8
+        config.fade_factor = 0.7
+        config.beacon_timeout_seconds = 5.0
+        config.beacon_fade_out_seconds = 3.0
+        config.mqtt_broker = "localhost"
+        config.mqtt_location = "office"
+        config.mqtt_port = 1883
+        config.mqtt_username = None
+        config.mqtt_password = None
+        config.to_dict.return_value = {}
+        config.validate.return_value = None
+
+        mock_config_cls.return_value = config
+        mock_run.side_effect = KeyboardInterrupt()
+
+        main()
+
+        mock_http_controller_cls.assert_called_once_with("wled.local", 30)
+
+    @patch("ble2wled.main.Config")
+    def test_main_config_validation_error(self, mock_config_cls):
+        """Test main() propagates configuration validation errors."""
+        config = MagicMock()
+        config.validate.side_effect = ValueError("Invalid config")
+        mock_config_cls.return_value = config
+
+        with pytest.raises(ValueError, match="Invalid config"):
+            main()
+
+    @patch("ble2wled.main.run_wled_beacons")
+    @patch("ble2wled.main.WLEDUDPController")
+    @patch("ble2wled.main.EspresenseBeaconListener")
+    @patch("ble2wled.main.BeaconState")
+    @patch("ble2wled.main.Config")
+    def test_main_keyboard_interrupt_handled(
+        self,
+        mock_config_cls,
+        mock_beacon_state_cls,
+        mock_listener_cls,
+        mock_udp_controller_cls,
+        mock_run,
+    ):
+        """Test KeyboardInterrupt inside animation loop is handled gracefully."""
+        config = MagicMock()
+        config.log_level = "INFO"
+        config.output_mode = "udp"
+        config.wled_host = "wled.local"
+        config.led_count = 10
+        config.udp_port = 21324
+        config.update_interval = 0.1
+        config.trail_length = 5
+        config.fade_factor = 0.5
+        config.beacon_timeout_seconds = 5.0
+        config.beacon_fade_out_seconds = 3.0
+        config.mqtt_broker = "localhost"
+        config.mqtt_location = "lab"
+        config.mqtt_port = 1883
+        config.mqtt_username = None
+        config.mqtt_password = None
+        config.to_dict.return_value = {}
+        config.validate.return_value = None
+
+        mock_config_cls.return_value = config
+        mock_run.side_effect = KeyboardInterrupt()
+
+        # Should NOT raise
+        main()
+
+        mock_run.assert_called_once()
