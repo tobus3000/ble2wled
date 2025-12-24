@@ -1,6 +1,8 @@
 name: Publish Python Package
 
 on:
+  release:
+    types: [published]
   workflow_run:
     workflows: ["Python Package Tests"]
     types:
@@ -66,12 +68,10 @@ jobs:
       # Publish
       - name: Publish package
         env:
-          TRIGGER_EVENT: ${{ github.event.workflow_run.event }}
+          IS_RELEASE: ${{ github.event.workflow_run.event == 'release' }}
         run: |
-          if [[ "$TRIGGER_EVENT" == "push" ]]; then
-            twine upload --repository testpypi dist/*
-          elif [[ "$TRIGGER_EVENT" == "release" ]]; then
+          if [[ "$IS_RELEASE" == "true" ]]; then
             twine upload --repository pypi dist/*
           else
-            echo "Not publishing."
+            twine upload --repository testpypi dist/*
           fi
