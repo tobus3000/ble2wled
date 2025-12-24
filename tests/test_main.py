@@ -600,7 +600,6 @@ class TestMainFunction:
         config.to_dict.return_value = {}
         config.validate.return_value = None
 
-
         mock_config_cls.return_value = config
         mock_run.side_effect = KeyboardInterrupt()
 
