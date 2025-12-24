@@ -1,6 +1,9 @@
 BLE2WLED Documentation
 ======================
 
+.. image:: https://codecov.io/github/tobus3000/ble2wled/graph/badge.svg?token=H4PKMJVE0R 
+ :target: https://codecov.io/github/tobus3000/ble2wled
+
 Bluetooth Beacon to WLED Visualizer
 
 .. toctree::
