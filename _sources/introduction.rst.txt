@@ -1,6 +1,9 @@
 Introduction
 =============
 
+.. image:: https://codecov.io/github/tobus3000/ble2wled/graph/badge.svg?token=H4PKMJVE0R 
+ :target: https://codecov.io/github/tobus3000/ble2wled
+
 BLE2WLED bridges the gap between Bluetooth Low Energy beacon detection and visual LED effects. It processes beacon data from MQTT and renders dynamic, real-time visualizations on WLED LED strips.
 
 Overview
