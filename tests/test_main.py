@@ -13,7 +13,7 @@ from unittest.mock import MagicMock, Mock, call, patch
 
 import pytest
 
-from ble2wled.main import run_wled_beacons, main
+from ble2wled.main import main, run_wled_beacons
 from ble2wled.states import BeaconState
 
 
