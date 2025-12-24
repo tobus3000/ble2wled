@@ -443,6 +443,7 @@ class TestRunWledBeacons:
                         # add_trail should only be called in second iteration
                         assert mock_trail.call_count == 1
 
+
 class TestMainFunction:
     """Unit tests for the main() function."""
 
@@ -506,9 +507,7 @@ class TestMainFunction:
         )
         mock_listener_cls.return_value.start.assert_called_once()
 
-        mock_udp_controller_cls.assert_called_once_with(
-            "wled.local", 60, port=21324
-        )
+        mock_udp_controller_cls.assert_called_once_with("wled.local", 60, port=21324)
 
         mock_run.assert_called_once_with(
             controller,
