@@ -9,6 +9,7 @@
 ## 🚀 Quick Start
 
 ### Build Documentation
+
 ```bash
 cd docs
 pip install -e ".[dev]"
@@ -18,9 +19,11 @@ make.bat html                # Windows
 ```
 
 ### View Documentation
+
 Open `docs/_build/html/index.html` in your browser
 
 ### Live Preview
+
 ```bash
 pip install sphinx-autobuild
 sphinx-autobuild docs/source docs/_build/html
@@ -30,17 +33,20 @@ sphinx-autobuild docs/source docs/_build/html
 ## 📖 Documentation Pages
 
 ### Getting Started
+
 - **introduction.rst** - Project overview and architecture
 - **installation.rst** - Installation guide with troubleshooting
 - **quickstart.rst** - 5-minute quick start
 
 ### User Guides
+
 - **guides/configuration.rst** - Complete configuration reference
 - **guides/cli_simulator.rst** - CLI simulator usage (all options)
 - **guides/mqtt_authentication.rst** - MQTT auth setup
 - **guides/http_retry_logic.rst** - HTTP retry behavior
 
 ### API Reference
+
 - **api/modules.rst** - Overview of all modules
 - **api/config.rst** - Configuration management API
 - **api/states.rst** - Beacon state tracking API
@@ -53,18 +59,22 @@ sphinx-autobuild docs/source docs/_build/html
 ## 🔧 Building & Deployment
 
 ### Local Build
+
 ```bash
 cd docs
 make clean html
 ```
 
 ### GitHub Pages Deployment
+
 Automatic via `.github/workflows/docs.yml`:
+
 - Builds on push to main/develop
 - Deploys to gh-pages branch
-- Access at: https://username.github.io/ble2wled
+- Access at: <ble2wled.tobotec.ch>
 
 ### Custom Domain (Optional)
+
 1. Update `.github/workflows/docs.yml` line with `cname:`
 2. Create `CNAME` file with your domain
 3. Configure DNS records
@@ -72,7 +82,7 @@ Automatic via `.github/workflows/docs.yml`:
 ## 📝 Content Statistics
 
 | Section | Files | Pages | Code Examples |
-|---------|-------|-------|----------------|
+| ------- | ----- | ----- | ------------- |
 | Getting Started | 3 | 3 | 15+ |
 | User Guides | 4 | ~30 | 50+ |
 | API Reference | 8 | ~18 | 60+ |
@@ -92,23 +102,29 @@ Automatic via `.github/workflows/docs.yml`:
 ## 🔗 Key Sections
 
 ### Configuration
+
 Everything about .env files, environment variables, properties, validation
 
 ### CLI Simulator
+
 All options, usage examples, MQTT connection, performance tips
 
 ### MQTT Authentication
+
 Setup, .env configuration, CLI usage, security best practices
 
 ### HTTP Retry Logic
+
 How retries work, configuration, typical scenarios, optimization
 
 ### API Documentation
+
 All modules, functions, classes, with examples and cross-references
 
 ## 📚 Files to Consolidate (Optional)
 
 These can be deleted from root directory (content now in Sphinx docs):
+
 - `README.md` (merge relevant parts)
 - `SIMULATOR.md`
 - `SIMULATOR_GUIDE.md`
@@ -137,8 +153,3 @@ These can be deleted from root directory (content now in Sphinx docs):
 - [Sphinx Documentation](https://www.sphinx-doc.org/)
 - [Read the Docs Guide](https://docs.readthedocs.io/)
 - [reStructuredText Primer](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
-
----
-
-**Created:** December 20, 2025
-**Status:** ✅ Complete and Ready for Deployment
