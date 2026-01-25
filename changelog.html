@@ -8,14 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Changelog &mdash; BLE2WLED 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=8d563738"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -102,6 +102,70 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
 <p># Changelog</p>
 <p>All notable changes to this project will be documented in this file.</p>
+<p>## Version v1.0.1</p>
+<ul class="simple">
+<li><p>Markdown clean-up</p></li>
+<li><p>Code improvements and cleanup</p></li>
+<li><p>Ignore pylint messages that cannot be prevented</p></li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Update URL to CHANGELOG in README</p>
+</dd>
+</dl>
+</li>
+<li><dl class="field-list simple">
+<dt class="field-odd">sparkles<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Run ble2wled from inside a Docker container.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Add Docker instructions to project documentation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Update docker documentation</p>
+</dd>
+</dl>
+</li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Update links in documentation</p>
+</dd>
+</dl>
+</li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Fix links in introduction page</p>
+</dd>
+</dl>
+</li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Add tested WLED version to documentation.</p>
+</dd>
+</dl>
+</li>
+<li><p>Get correct code coverage report after adjusting module to be imported.</p></li>
+<li><dl class="field-list simple">
+<dt class="field-odd">memo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Adding GitHub Actions &amp; Coverage status badges to README.</p>
+</dd>
+</dl>
+</li>
+<li><p>Add tested WLED version to README.</p></li>
+<li><dl class="field-list simple">
+<dt class="field-odd">white_check_mark<span class="colon">:</span></dt>
+<dd class="field-odd"><p>New unit test for main function in main.py</p>
+</dd>
+</dl>
+</li>
+<li><p>Add  coverage badge to sphinx documentation</p></li>
+<li><p>Move coverage badge to index page</p></li>
+</ul>
 <p>## Version v1.0.0</p>
 <ul class="simple">
 <li><p>Add prerequisite section and links to ESPresense, HomeAssistant and WLED projects.</p></li>
@@ -111,6 +175,10 @@
 <li><p>Remove –identity-token from twine commands in release.yml</p></li>
 <li><p>Clean dist cache before building new package</p></li>
 <li><p>Change development status to stable</p></li>
+<li><p>Changed git-cliff changelog template</p></li>
+<li><p>Always checkout main</p></li>
+<li><p>Use github token to commit CHANGELOG back to main</p></li>
+<li><p>Remove git-cliff from github action</p></li>
 </ul>
 <p>## Version v0.1.0</p>
 <ul class="simple">
