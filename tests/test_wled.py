@@ -165,7 +165,7 @@ class TestWLEDHTTPController:
             host="192.168.1.100", led_count=1, max_retries=2
         )
         leds = [[100, 100, 100]]
-        
+
         success_response = Mock()
         success_response.raise_for_status.return_value = None
 
@@ -213,7 +213,7 @@ class TestWLEDHTTPController:
             host="192.168.1.100", led_count=1, max_retries=2
         )
         leds = [[0, 0, 0]]
-        
+
         success_response = Mock()
         success_response.raise_for_status.return_value = None
 
