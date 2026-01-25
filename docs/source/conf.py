@@ -12,57 +12,57 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 # -- Project information -------------------------------------------------------
-project = 'BLE2WLED'
-copyright = '2025, BLE2WLED Contributors' # pylint: disable=redefined-builtin
-author = 'Tobias Hildebrand'
-release = '1.0.0'
+project = "BLE2WLED"
+copyright = "2025, BLE2WLED Contributors"  # pylint: disable=redefined-builtin
+author = "Tobias Hildebrand"
+release = "1.0.0"
 
 # -- General configuration -----------------------------------------------------
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-    'sphinx_rtd_theme',
-    'myst_parser',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
+    "sphinx_rtd_theme",
+    "myst_parser",
 ]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # Create _static directory if it doesn't exist
-static_path = Path(__file__).parent / '_static'
+static_path = Path(__file__).parent / "_static"
 static_path.mkdir(exist_ok=True)
 
 # -- Options for HTML output --------------------------------------------------
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]
 html_logo = None
 html_favicon = None
 
 html_theme_options = {
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': False,
-    'vcs_pageview_mode': '',
-    'style_nav_header_background': '#2980B9',
+    "prev_next_buttons_location": "bottom",
+    "style_external_links": False,
+    "vcs_pageview_mode": "",
+    "style_nav_header_background": "#2980B9",
 }
 
 # -- Options for autodoc output -----------------------------------------------
 autodoc_default_options = {
-    'members': True,
-    'member-order': 'bysource',
-    'special-members': '__init__',
-    'undoc-members': True,
-    'show-inheritance': True,
+    "members": True,
+    "member-order": "bysource",
+    "special-members": "__init__",
+    "undoc-members": True,
+    "show-inheritance": True,
 }
 
 autosummary_generate = True
 
 # Suppress expected warnings that don't affect documentation quality
 suppress_warnings = [
-    'autodoc.duplicate_object_description',  # From autodoc generating both explicit and auto docs
-    'toctree.toc-duplicated',  # From modules in both api/modules and index
+    "autodoc.duplicate_object_description",  # From autodoc generating both explicit and auto docs
+    "toctree.toc-duplicated",  # From modules in both api/modules and index
 ]
 
 # -- Options for Napoleon extension -------------------------------------------
@@ -85,7 +85,7 @@ myst_enable_extensions = [
 
 # -- Options for Intersphinx -------------------------------------------------
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
-    'requests': ('https://requests.readthedocs.io/en/latest/', None),
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "requests": ("https://requests.readthedocs.io/en/latest/", None),
 }

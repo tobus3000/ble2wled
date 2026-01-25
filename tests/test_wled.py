@@ -219,7 +219,10 @@ class TestWLEDHTTPController:
 
         with patch("ble2wled.wled.requests.post") as mock_post:
             with patch("ble2wled.wled.time.sleep") as mock_sleep:
-                mock_post.side_effect = [requests.exceptions.Timeout(), success_response]
+                mock_post.side_effect = [
+                    requests.exceptions.Timeout(),
+                    success_response,
+                ]
 
                 controller.update(leds)
 
