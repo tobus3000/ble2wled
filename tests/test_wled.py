@@ -9,7 +9,7 @@ Tests cover HTTP and UDP controllers with various scenarios:
 """
 
 import socket
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 import requests
@@ -128,12 +128,15 @@ class TestWLEDHTTPController:
         )
         leds = [[255, 0, 0], [0, 255, 0]]
 
+        success_response = Mock()
+        success_response.raise_for_status.return_value = None
+
         with patch("ble2wled.wled.requests.post") as mock_post:
             # Fail twice, then succeed
             mock_post.side_effect = [
                 requests.exceptions.Timeout(),
                 requests.exceptions.Timeout(),
-                None,  # Success
+                success_response,  # Success
             ]
 
             controller.update(leds)
@@ -162,12 +165,15 @@ class TestWLEDHTTPController:
             host="192.168.1.100", led_count=1, max_retries=2
         )
         leds = [[100, 100, 100]]
+        
+        success_response = Mock()
+        success_response.raise_for_status.return_value = None
 
         with patch("ble2wled.wled.requests.post") as mock_post:
             # Fail once, then succeed
             mock_post.side_effect = [
                 requests.exceptions.ReadTimeout(),
-                None,
+                success_response,  # Success
             ]
 
             controller.update(leds)
@@ -207,10 +213,13 @@ class TestWLEDHTTPController:
             host="192.168.1.100", led_count=1, max_retries=2
         )
         leds = [[0, 0, 0]]
+        
+        success_response = Mock()
+        success_response.raise_for_status.return_value = None
 
         with patch("ble2wled.wled.requests.post") as mock_post:
             with patch("ble2wled.wled.time.sleep") as mock_sleep:
-                mock_post.side_effect = [requests.exceptions.Timeout(), None]
+                mock_post.side_effect = [requests.exceptions.Timeout(), success_response]
 
                 controller.update(leds)
 
