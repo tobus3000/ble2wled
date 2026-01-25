@@ -114,7 +114,8 @@ class WLEDHTTPController(LEDController):
 
         for attempt in range(self.max_retries):
             try:
-                requests.post(self.url, json=payload, timeout=self.timeout)
+                response = requests.post(self.url, json=payload, timeout=self.timeout)
+                response.raise_for_status()
                 return  # Success
             except (
                 requests.exceptions.Timeout,
